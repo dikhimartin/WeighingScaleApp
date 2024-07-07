@@ -1,19 +1,29 @@
 package com.example.weighingscale.ui.setting;
 
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-public class SettingViewModel extends ViewModel {
+import com.example.weighingscale.data.model.Setting;
+import com.example.weighingscale.data.repository.SettingRepository;
 
-    private final MutableLiveData<String> mText;
+public class SettingViewModel extends AndroidViewModel {
 
-    public SettingViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is setting fragment");
+    private final SettingRepository settingRepository;
+    private final LiveData<Setting> setting;
+
+    public SettingViewModel(Application application) {
+        super(application);
+        settingRepository = SettingRepository.getInstance(application);
+        setting = settingRepository.getSetting();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<Setting> getSetting() {
+        return setting;
+    }
+
+    public void updateSetting(Setting setting) {
+        settingRepository.updateSetting(setting);
     }
 }
