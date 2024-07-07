@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "WeighingScale"
+rootProject.name = "weighingscale"
 include ':app'
