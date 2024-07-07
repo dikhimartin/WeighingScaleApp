@@ -32,23 +32,14 @@ android {
 }
 
 dependencies {
-    implementation libs.appcompat
 
-    // UI
+    implementation libs.appcompat
     implementation libs.material
     implementation libs.constraintlayout
-    implementation libs.navigation.fragment
-    implementation libs.navigation.ui
-
-    // Lifecycle components
     implementation libs.lifecycle.livedata.ktx
     implementation libs.lifecycle.viewmodel.ktx
-
-    // Room components
-    implementation libs.room.runtime
-    annotationProcessor libs.room.compiler
-
-    // Testing
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
