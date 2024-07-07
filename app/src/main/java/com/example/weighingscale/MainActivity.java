@@ -1,6 +1,5 @@
 package com.example.weighingscale;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,7 +13,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.weighingscale.util.BluetoothUtil;
 import com.example.weighingscale.databinding.ActivityMainBinding;
 
 import java.util.Objects;
