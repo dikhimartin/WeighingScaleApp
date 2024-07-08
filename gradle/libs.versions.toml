@@ -11,6 +11,7 @@ lifecycleViewmodelKtx = "2.8.3"
 navigationFragment = "2.7.7"
 navigationUi = "2.7.7"
 room = "2.6.1"
+compiler = "3.2.0-alpha11"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -25,6 +26,7 @@ navigation-fragment = { group = "androidx.navigation", name = "navigation-fragme
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+compiler = { group = "androidx.databinding", name = "compiler", version.ref = "compiler" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
