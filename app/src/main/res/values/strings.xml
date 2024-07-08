@@ -4,9 +4,13 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
-    <string name="title_setting">Setting</string>
-    <string name="action_setting">Setting</string>
+    <string name="title_setting">Pengaturan</string>
+    <string name="action_setting">Pengaturan</string>
 
     <string name="title_bluetooth">Bluetooth</string>
     <string name="action_bluetooth">Bluetooth</string>
+    <string name="pic_name">Nama penanggung jawab</string>
+    <string name="pic_phone_number">Nomor Telepon penanggung jawab</string>
+    <string name="rice_price_per_kilo">Harga beras (per kilo)</string>
+    <string name="update_settings">Ubah pengaturan</string>
 </resources>
