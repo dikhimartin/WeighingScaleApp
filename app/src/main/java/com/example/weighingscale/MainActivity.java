@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.weighingscale.util.BluetoothUtil;
 import com.example.weighingscale.util.ConnectedThread;
+import com.example.weighingscale.ui.shared.SharedViewModel;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mReadBuffer;
 
+    private SharedViewModel sharedViewModel;
     private BluetoothUtil mBluetoothUtil;
     private Handler mHandler;
     private ConnectedThread mConnectedThread;
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -137,7 +142,8 @@ public class MainActivity extends AppCompatActivity {
                 switch (msg.what) {
                     case MESSAGE_READ:
                         // TODO : Baca timbangan
-                        // String readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
+                         String readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
+                        sharedViewModel.setWeight(readMessage);
                         // mReadBuffer.setText(readMessage);
                         // Log.d("Streams Scale", readMessage);
                         break;
@@ -234,17 +240,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }.start();
-    }
-
-
-    private void discover() {
-        if (mBluetoothUtil.getAdapter().isEnabled()) {
-            mBluetoothUtil.startDiscovery();
-            Toast.makeText(getApplicationContext(), getString(R.string.DisStart), Toast.LENGTH_SHORT).show();
-            registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-        } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.BTnotOn), Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
