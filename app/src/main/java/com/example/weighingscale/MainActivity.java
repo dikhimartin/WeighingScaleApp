@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int MESSAGE_READ = 2;
     public static final int CONNECTING_STATUS = 3;
 
-    private TextView mBluetoothStatus;
+//    private TextView mBluetoothStatus;
     private TextView mReadBuffer;
 
     private BluetoothUtil mBluetoothUtil;
@@ -119,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Initialize UI Bluetooth components
     private void initViewBluetooth() {
-        mBluetoothStatus = findViewById(R.id.bluetooth_status);
-        mReadBuffer = findViewById(R.id.read_buffer);
+//        mBluetoothStatus = findViewById(R.id.bluetooth_status);
+//        mReadBuffer = findViewById(R.id.read_buffer);
     }
 
     private void initBluetooth() {
@@ -135,21 +135,22 @@ public class MainActivity extends AppCompatActivity {
                 switch (msg.what) {
                     case MESSAGE_READ:
                         String readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
-                        mReadBuffer.setText(readMessage);
+//                        mReadBuffer.setText(readMessage);
+                        Log.d("Streams Scale", readMessage);
                         break;
                     case CONNECTING_STATUS:
-                        if (msg.arg1 == 1)
-                            mBluetoothStatus.setText(getString(R.string.BTConnected) + msg.obj);
-                        else
-                            mBluetoothStatus.setText(getString(R.string.BTconnFail));
-                        break;
+//                        if (msg.arg1 == 1)
+//                            mBluetoothStatus.setText(getString(R.string.BTConnected) + msg.obj);
+//                        else
+//                            mBluetoothStatus.setText(getString(R.string.BTconnFail));
+//                        break;
                 }
             }
         };
 
         // Check if Bluetooth is supported on this device
         if (mBluetoothUtil.getAdapter() == null) {
-            mBluetoothStatus.setText(getString(R.string.sBTstaNF));
+//            mBluetoothStatus.setText(getString(R.string.sBTstaNF));
             Toast.makeText(getApplicationContext(), getString(R.string.sBTdevNF), Toast.LENGTH_SHORT).show();
         }
     }
@@ -160,11 +161,11 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, Data);
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
-                mBluetoothStatus.setText(getString(R.string.sEnabled));
+//                mBluetoothStatus.setText(getString(R.string.sEnabled));
                 bluetoothMenuItem.setIcon(null);
                 bluetoothMenuItem.setTitle(R.string.connect_to_scale);
             } else {
-                mBluetoothStatus.setText(getString(R.string.sDisabled));
+//                mBluetoothStatus.setText(getString(R.string.sDisabled));
                 bluetoothMenuItem.setIcon(R.drawable.ic_bluetooth_disabled_24dp);
             }
         }
@@ -173,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     private void bluetoothOn() {
         if (!mBluetoothUtil.isBluetoothEnabled()) {
             mBluetoothUtil.enableBluetooth(MainActivity.this, REQUEST_ENABLE_BT);
-            mBluetoothStatus.setText(getString(R.string.BTEnable));
+//            mBluetoothStatus.setText(getString(R.string.BTEnable));
             Toast.makeText(getApplicationContext(), getString(R.string.sBTturON), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.BTisON), Toast.LENGTH_SHORT).show();

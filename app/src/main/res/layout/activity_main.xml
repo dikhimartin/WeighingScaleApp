@@ -30,26 +30,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
 
-        <TextView
-            android:id="@+id/read_buffer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="&lt;Read Buffer"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@id/bluetooth_status"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/bluetooth_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="&lt;Bluetooth Status"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/read_buffer" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
