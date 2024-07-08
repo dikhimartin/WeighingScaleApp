@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -114,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 
-        if (id == R.id.setting) {
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        if (id == R.id.action_settings) {
             navController.navigate(R.id.navigation_setting);
             return true;
         } else {
@@ -227,8 +228,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private final BroadcastReceiver blReceiver = new BroadcastReceiver() {
-        @SuppressLint("MissingPermission")
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -300,12 +301,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(blReceiver);
     }
-
-
 
 }
