@@ -3,8 +3,8 @@ package com.example.weighingscale.ui.device;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -57,7 +57,7 @@ public class DeviceFragment extends Fragment {
             }
             Toast.makeText(requireContext(), getString(R.string.show_paired_devices), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(requireContext(), getString(R.string.BTnotOn), Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.bluetooth_not_on), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -65,15 +65,12 @@ public class DeviceFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (!mBluetoothUtil.getAdapter().isEnabled()) {
-                Toast.makeText(requireContext(), getString(R.string.BTnotOn), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.bluetooth_not_on), Toast.LENGTH_SHORT).show();
                 return;
             }
             String info = ((String) parent.getItemAtPosition(position));
             String address = info.substring(info.length() - 17);
             String name = info.substring(0, info.length() - 17);
-            Log.d("LOG_SAYA(info)", info);
-            Log.d("LOG_SAYA(address)", address);
-            Log.d("LOG_SAYA(name)", name);
             MainActivity mainActivity = (MainActivity) requireActivity();
             connectToDevice(address, name, mainActivity);
         }

@@ -10,6 +10,6 @@
         android:id="@+id/action_bluetooth"
         android:icon="@drawable/ic_bluetooth_disabled_24dp"
         android:title="@string/action_bluetooth"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
 </menu>
