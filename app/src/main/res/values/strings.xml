@@ -13,6 +13,8 @@
     <string name="title_bluetooth">Bluetooth</string>
     <string name="action_bluetooth">Bluetooth</string>
 
+    <string name="connect_to_scale">Connect to scale</string>
+
     <!--TODO : BLUETOOTH MODULE-->
     <string name="BTconnFail">Connection Failed</string>
     <string name="BTConnected">Connected to Device: </string>
