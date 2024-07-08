@@ -1,6 +1,7 @@
 package com.example.weighingscale;
 
 import android.annotation.SuppressLint;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -233,6 +234,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }.start();
+    }
+
+
+    private void discover() {
+        if (mBluetoothUtil.getAdapter().isEnabled()) {
+            mBluetoothUtil.startDiscovery();
+            Toast.makeText(getApplicationContext(), getString(R.string.DisStart), Toast.LENGTH_SHORT).show();
+            registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.BTnotOn), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
