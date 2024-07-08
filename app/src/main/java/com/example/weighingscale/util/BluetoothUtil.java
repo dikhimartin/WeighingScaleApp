@@ -1,5 +1,6 @@
 package com.example.weighingscale.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -38,6 +39,7 @@ public class BluetoothUtil {
         return mBTAdapter != null && mBTAdapter.isEnabled();
     }
 
+    @SuppressLint("MissingPermission")
     public void enableBluetooth(Activity activity, int requestCode) {
         if (mBTAdapter != null && !mBTAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -45,12 +47,14 @@ public class BluetoothUtil {
         }
     }
 
+    @SuppressLint("MissingPermission")
     public void disableBluetooth() {
         if (mBTAdapter != null && mBTAdapter.isEnabled()) {
             mBTAdapter.disable();
         }
     }
 
+    @SuppressLint("MissingPermission")
     public Set<BluetoothDevice> getPairedDevices() {
         if (mBTAdapter != null) {
             return mBTAdapter.getBondedDevices();
@@ -58,18 +62,21 @@ public class BluetoothUtil {
         return null;
     }
 
+    @SuppressLint("MissingPermission")
     public void startDiscovery() {
         if (mBTAdapter != null && !mBTAdapter.isDiscovering()) {
             mBTAdapter.startDiscovery();
         }
     }
 
+    @SuppressLint("MissingPermission")
     public void cancelDiscovery() {
         if (mBTAdapter != null && mBTAdapter.isDiscovering()) {
             mBTAdapter.cancelDiscovery();
         }
     }
 
+    @SuppressLint("MissingPermission")
     public BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
         try {
             final Method m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", UUID.class);

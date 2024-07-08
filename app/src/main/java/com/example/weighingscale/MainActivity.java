@@ -1,16 +1,22 @@
 package com.example.weighingscale;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
 import com.example.weighingscale.databinding.ActivityMainBinding;
+
 import java.util.Objects;
 
 // TODO : BLUETOOTH MODULE
@@ -125,25 +131,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mBluetoothStatus = (TextView) findViewById(R.id.bluetooth_status);
-        mReadBuffer = (TextView) findViewById(R.id.read_buffer);
-        mScanBtn = (Button) findViewById(R.id.scan);
-        mOffBtn = (Button) findViewById(R.id.off);
-        mDiscoverBtn = (Button) findViewById(R.id.discover);
-        mListPairedDevicesBtn = (Button) findViewById(R.id.paired_btn);
-        mLED1 = (CheckBox) findViewById(R.id.checkbox_led_1);
-        mDevicesListView = (ListView) findViewById(R.id.devices_list_view);
+        // Initialize UI Bluetooth components
+        mBluetoothStatus = findViewById(R.id.bluetooth_status);
+        mReadBuffer = findViewById(R.id.read_buffer);
+        mScanBtn = findViewById(R.id.scan);
+        mOffBtn = findViewById(R.id.off);
+        mDiscoverBtn = findViewById(R.id.discover);
+        mListPairedDevicesBtn = findViewById(R.id.paired_btn);
+        mLED1 = findViewById(R.id.checkbox_led_1);
+        mDevicesListView = findViewById(R.id.devices_list_view);
     }
 
     private void initBluetooth() {
+        // Initialize BluetoothUtil instance
         mBluetoothUtil = BluetoothUtil.getInstance();
         mBTArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         mDevicesListView.setAdapter(mBTArrayAdapter);
         mDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
+        // Initialize handler for Bluetooth messages
         mHandler = new Handler(Looper.getMainLooper()) {
+            @SuppressLint("SetTextI18n")
             @Override
-            public void handleMessage(Message msg) {
+            public void handleMessage(@NonNull Message msg) {
                 switch (msg.what) {
                     case MESSAGE_READ:
                         String readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
@@ -159,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        // Check if Bluetooth is supported on this device
         if (mBluetoothUtil.getAdapter() == null) {
             mBluetoothStatus.setText(getString(R.string.sBTstaNF));
             Toast.makeText(getApplicationContext(), getString(R.string.sBTdevNF), Toast.LENGTH_SHORT).show();
@@ -166,17 +177,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
+        // Set listeners for UI buttons
         mLED1.setOnClickListener(v -> {
             if (mConnectedThread != null)
                 mConnectedThread.write("1");
         });
-
         mScanBtn.setOnClickListener(v -> bluetoothOn());
-
         mOffBtn.setOnClickListener(v -> bluetoothOff());
-
         mListPairedDevicesBtn.setOnClickListener(v -> listPairedDevices());
-
         mDiscoverBtn.setOnClickListener(v -> discover());
     }
 
@@ -220,17 +228,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private final BroadcastReceiver blReceiver = new BroadcastReceiver() {
+        @SuppressLint("MissingPermission")
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                assert device != null;
                 mBTArrayAdapter.add(device.getName() + "\n" + device.getAddress());
                 mBTArrayAdapter.notifyDataSetChanged();
             }
         }
     };
 
+    @SuppressLint("MissingPermission")
     private void listPairedDevices() {
         mBTArrayAdapter.clear();
         Set<BluetoothDevice> pairedDevices = mBluetoothUtil.getPairedDevices();
@@ -245,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (!mBluetoothUtil.getAdapter().isEnabled()) {
@@ -257,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
             final String address = info.substring(info.length() - 17);
             final String name = info.substring(0, info.length() - 17);
             new Thread() {
+                @SuppressLint("MissingPermission")
                 @Override
                 public void run() {
                     boolean fail = false;
