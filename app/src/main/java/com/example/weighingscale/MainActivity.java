@@ -1,23 +1,16 @@
 package com.example.weighingscale;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import androidx.navigation.fragment.NavHostFragment;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
 import com.example.weighingscale.databinding.ActivityMainBinding;
-
 import java.util.Objects;
 
 // TODO : BLUETOOTH MODULE
@@ -27,11 +20,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
