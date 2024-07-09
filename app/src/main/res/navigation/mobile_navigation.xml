@@ -19,9 +19,9 @@
 
     <fragment
         android:id="@+id/navigation_data"
-        android:name="com.example.weighingscale.ui.notifications.NotificationsFragment"
+        android:name="com.example.weighingscale.ui.batch.BatchFragment"
         android:label="@string/title_data"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_batch" />
 
     <fragment
         android:id="@+id/navigation_setting"
