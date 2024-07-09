@@ -7,9 +7,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_bluetooth"
+        android:id="@+id/action_device"
         android:icon="@drawable/ic_bluetooth_disabled_24dp"
-        android:title="@string/action_bluetooth"
+        android:title="@string/action_device"
         app:showAsAction="ifRoom" />
 
 </menu>

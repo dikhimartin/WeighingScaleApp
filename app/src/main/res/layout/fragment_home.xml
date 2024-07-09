@@ -25,7 +25,7 @@
             android:text="0"
             android:textSize="64sp"
             android:textStyle="bold"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="?attr/colorSecondary"
             android:layout_marginEnd="8dp"/>
 
         <!-- Unit Display -->

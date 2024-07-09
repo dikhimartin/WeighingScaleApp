@@ -1,7 +1,6 @@
 package com.example.weighingscale;
 
 import android.annotation.SuppressLint;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_data)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_app_bar, menu);
-        bluetoothMenuItem = menu.findItem(R.id.action_bluetooth);
+        bluetoothMenuItem = menu.findItem(R.id.action_device);
 
         // Check and update the Bluetooth menu item when the menu is created
         if (mBluetoothUtil != null && mBluetoothUtil.isBluetoothEnabled()) {
@@ -110,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             navController.navigate(R.id.navigation_setting);
             return true;
-        } else if (id == R.id.action_bluetooth) {
+        } else if (id == R.id.action_device) {
             if (!mBluetoothUtil.isBluetoothEnabled()) {
                 bluetoothOn();
             }else if (stateConnecting.getStatus() == StateConnecting.BLUETOOTH_CONNECTED){
@@ -210,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                     mBTSocket = mBluetoothUtil.createBluetoothSocket(device);
                 } catch (IOException e) {
                     fail = true;
-                    runOnUiThread(() -> Toast.makeText(getBaseContext(), getString(R.string.ErrSockCrea), Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(getBaseContext(), getString(R.string.error_socket_create), Toast.LENGTH_SHORT).show());
                 }
                 try {
                     mBTSocket.connect();
@@ -220,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                         mBTSocket.close();
                         mHandler.obtainMessage(HANDLER_STATUS, -1, -1).sendToTarget();
                     } catch (IOException e2) {
-                        runOnUiThread(() -> Toast.makeText(getBaseContext(), getString(R.string.ErrSockCrea), Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(getBaseContext(), getString(R.string.error_socket_create), Toast.LENGTH_SHORT).show());
                     }
                 }
                 if (!fail) {
@@ -254,22 +253,4 @@ public class MainActivity extends AppCompatActivity {
         // Nullify handler to avoid memory leaks
         mHandler = null;
     }
-
-    // START : BLUETOOTH Select Device
-    //    private final AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
-    //        @Override
-    //        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    //            if (!mBluetoothUtil.getAdapter().isEnabled()) {
-    //                Toast.makeText(getBaseContext(), getString(R.string.BTnotOn), Toast.LENGTH_SHORT).show();
-    //                return;
-    //            }
-    //            mBluetoothStatus.setText(getString(R.string.cConnet));
-    //            String info = ((TextView) view).getText().toString();
-    //            final String address = info.substring(info.length() - 17);
-    //            final String name = info.substring(0, info.length() - 17);
-    //            connectToDevice(address, name);
-    //        }
-    //    };
-    // END : BLUETOOTH MODULE
-
 }
