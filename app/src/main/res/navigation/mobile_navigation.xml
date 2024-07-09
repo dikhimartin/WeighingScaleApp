@@ -29,4 +29,10 @@
         android:label="@string/title_setting"
         tools:layout="@layout/fragment_setting" />
 
+    <fragment
+        android:id="@+id/navigation_device"
+        android:name="com.example.weighingscale.ui.device.DeviceFragment"
+        android:label="@string/title_device"
+        tools:layout="@layout/fragment_device" />
+
 </navigation>
