@@ -10,8 +10,8 @@ public class Batch {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public String picName;
-    public Date datetime;
     public String picPhoneNumber;
+    public Date datetime;
     public String destination;
     public String truckDriver;
     public String truckDriverPhoneNumber;

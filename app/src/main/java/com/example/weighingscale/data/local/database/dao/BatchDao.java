@@ -16,6 +16,9 @@ public interface BatchDao {
     @Query("SELECT * FROM Batch")
     List<Batch> getAllBatches();
 
+    @Query("SELECT * FROM Batch LIMIT 1")
+    Batch getFirstBatch();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertBatch(Batch batch);
 

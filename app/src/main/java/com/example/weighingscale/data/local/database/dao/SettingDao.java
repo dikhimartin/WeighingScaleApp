@@ -14,12 +14,6 @@ public interface SettingDao {
     @Query("SELECT * FROM Setting LIMIT 1")
     LiveData<Setting> getSetting();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertSetting(Setting setting);
-
     @Update
     void updateSetting(Setting setting);
-
-    @Query("UPDATE Setting SET picName = :picName, picPhoneNumber = :picPhoneNumber, ricePrice = :ricePrice WHERE id = :id")
-    int updateSettingFields(int id, String picName, String picPhoneNumber, float ricePrice);
 }
