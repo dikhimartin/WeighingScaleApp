@@ -48,23 +48,30 @@ public class SettingFragment extends Fragment {
     private void saveSetting() {
         String picName = etPicName.getText().toString().trim();
         String picPhoneNumber = etPicPhoneNumber.getText().toString().trim();
-        float ricePrice = Float.parseFloat(etRicePrice.getText().toString().trim());
+        String ricePriceStr = etRicePrice.getText().toString().trim();
 
-        if (validateFields(picName, picPhoneNumber)) {
-            Setting newSetting = new Setting();
-            newSetting.id = 1; // Assuming there's only one row in Setting table
-            newSetting.picName = picName;
-            newSetting.picPhoneNumber = picPhoneNumber;
-            newSetting.ricePrice = ricePrice;
+        if (validateFields(picName, picPhoneNumber, ricePriceStr)) {
+            try {
+                float ricePrice = Float.parseFloat(ricePriceStr);
 
-            settingViewModel.updateSetting(newSetting);
-            Toast.makeText(requireContext(), "Settings updated successfully", Toast.LENGTH_SHORT).show();
+                Setting newSetting = new Setting();
+                newSetting.id = 1; // Assuming there's only one row in Setting table
+                newSetting.picName = picName;
+                newSetting.picPhoneNumber = picPhoneNumber;
+                newSetting.ricePrice = ricePrice;
+
+                settingViewModel.updateSetting(newSetting);
+                Toast.makeText(requireContext(), "Pengaturan berhasil diubah", Toast.LENGTH_SHORT).show();
+            } catch (NumberFormatException e) {
+                Toast.makeText(requireContext(), "Inputan harga beras harus berupa angka ", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(requireContext(), "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Tolong isi semua inputan", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private boolean validateFields(String picName, String picPhoneNumber) {
-        return !picName.isEmpty() && !picPhoneNumber.isEmpty();
+    private boolean validateFields(String picName, String picPhoneNumber, String ricePriceStr) {
+        return !picName.isEmpty() && !picPhoneNumber.isEmpty() && !ricePriceStr.isEmpty();
     }
+
 }

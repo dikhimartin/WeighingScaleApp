@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,28 +29,24 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         TextView textAmount = root.findViewById(R.id.text_amount);
-        TextView textUnit = root.findViewById(R.id.text_unit);
 
         SharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        sharedViewModel.getWeight().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String weight) {
-                textAmount.setText(weight);
-                textUnit.setText("Kg");
-            }
-        });
+        sharedViewModel.getWeight().observe(getViewLifecycleOwner(), weight -> textAmount.setText(weight));
 
-        // Dummy data for log
-        List<String> dummyLogs = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            dummyLogs.add("Tanggal " + i + " - 10 Kg");
-        }
-
+        // Setup RecyclerView with dummy data
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_log);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new LogAdapter(dummyLogs));
+        recyclerView.setAdapter(new LogAdapter(getDummyLogData()));
 
         return root;
+    }
+
+    private List<LogEntry> getDummyLogData() {
+        List<LogEntry> logEntries = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            logEntries.add(new LogEntry("Tanggal " + (i + 1), "10 Kg"));
+        }
+        return logEntries;
     }
 
     @Override
@@ -60,12 +55,31 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
-    // Adapter for RecyclerView
-    private static class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
-        private final List<String> logList;
+    // LogEntry model class
+    public static class LogEntry {
+        private final String date;
+        private final String weight;
 
-        LogAdapter(List<String> logList) {
-            this.logList = logList;
+        public LogEntry(String date, String weight) {
+            this.date = date;
+            this.weight = weight;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public String getWeight() {
+            return weight;
+        }
+    }
+
+    // RecyclerView Adapter
+    public static class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
+        private final List<LogEntry> logEntries;
+
+        public LogAdapter(List<LogEntry> logEntries) {
+            this.logEntries = logEntries;
         }
 
         @NonNull
@@ -77,24 +91,25 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull LogViewHolder holder, int position) {
-            holder.bind(logList.get(position));
+            LogEntry logEntry = logEntries.get(position);
+            holder.dateTextView.setText(logEntry.getDate());
+            holder.weightTextView.setText(logEntry.getWeight());
         }
 
         @Override
         public int getItemCount() {
-            return logList.size();
+            return logEntries.size();
         }
 
-        static class LogViewHolder extends RecyclerView.ViewHolder {
-            private final TextView logText;
+        // ViewHolder for RecyclerView items
+        public static class LogViewHolder extends RecyclerView.ViewHolder {
+            TextView dateTextView;
+            TextView weightTextView;
 
-            LogViewHolder(@NonNull View itemView) {
+            public LogViewHolder(@NonNull View itemView) {
                 super(itemView);
-                logText = itemView.findViewById(R.id.log_text);
-            }
-
-            void bind(String log) {
-                logText.setText(log);
+                dateTextView = itemView.findViewById(R.id.text_view_date);
+                weightTextView = itemView.findViewById(R.id.text_view_weight);
             }
         }
     }

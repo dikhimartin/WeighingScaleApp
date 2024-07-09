@@ -2,10 +2,11 @@ package com.example.weighingscale.ui.device;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
-import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,7 +16,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import android.Manifest;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.util.BluetoothUtil;
@@ -23,6 +27,7 @@ import com.example.weighingscale.MainActivity;
 import java.util.Set;
 
 public class DeviceFragment extends Fragment {
+    private static final int REQUEST_BLUETOOTH_PERMISSIONS = 1;
 
     private ArrayAdapter<String> mBTArrayAdapter;
     private ListView mDevicesListView;
@@ -42,8 +47,21 @@ public class DeviceFragment extends Fragment {
         mDevicesListView.setAdapter(mBTArrayAdapter);
         mDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
-        // Populate paired devices list
-        listPairedDevices();
+        // Check for Bluetooth permissions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_PERMISSIONS);
+            } else {
+                listPairedDevices();
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN}, REQUEST_BLUETOOTH_PERMISSIONS);
+            } else {
+                listPairedDevices();
+            }
+        }
 
         return root;
     }
@@ -79,6 +97,18 @@ public class DeviceFragment extends Fragment {
 
     public void connectToDevice(String address, String name, MainActivity activity) {
         activity.connectToDevice(address, name);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_BLUETOOTH_PERMISSIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                listPairedDevices();
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }
