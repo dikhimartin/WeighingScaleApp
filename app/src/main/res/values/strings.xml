@@ -21,7 +21,6 @@
     <string name="bluetooth_already_on">Bluetooh sudah menyala</string>
     <string name="show_paired_devices">Menampilkan perangkat</string>
 
-
     <!-- Setting -->
     <string name="title_setting">Pengaturan</string>
     <string name="action_setting">Pengaturan</string>
@@ -41,7 +40,7 @@
 <!--    <string name="sEnabled">Enabled</string>-->
 <!--    <string name="sDisabled">Disabled</string>-->
     <string name="sBTdisabl">Bluetooth disabled</string>
-<!--    <string name="BTnotOn">Bluetooth not on</string>-->
+<!-- <string name="BTnotOn">Bluetooth not on</string>-->
     <string name="lt_bluetooth_status">Bluetooth status</string>
     <string name="BTturOff">Bluetooth turned off</string>
     <string name="cConnet">Connecting…</string>

@@ -1,4 +1,3 @@
-// HomeFragment.java
 package com.example.weighingscale.ui.home;
 
 import android.os.Bundle;
@@ -19,16 +18,15 @@ import com.example.weighingscale.ui.shared.SharedViewModel;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private SharedViewModel sharedViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textAmount = root.findViewById(R.id.text_amount);
+        TextView textAmount = root.findViewById(R.id.text_amount);
 
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        SharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         sharedViewModel.getWeight().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String weight) {

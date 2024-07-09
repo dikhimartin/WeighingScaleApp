@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int MESSAGE_READ = 2;
     public static final int HANDLER_STATUS = 3;
 
-    private TextView mReadBuffer;
-
     private SharedViewModel sharedViewModel;
     private BluetoothUtil mBluetoothUtil;
     private Handler mHandler;
@@ -54,15 +52,14 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem bluetoothMenuItem;
 
     private ActivityMainBinding binding;
-
     private StateConnecting stateConnecting;
+
+    private TextView mReadBuffer;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-
-        // Initialize the StateConnecting
         stateConnecting = new StateConnecting();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -156,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
                         sharedViewModel.setWeight(readMessage);
                         // mReadBuffer.setText(readMessage);
                         // Log.d("Streams Scale", readMessage);
-                        Log.d("LOG_SAYA(readMessage)", readMessage);
+                        Log.d("LOG_SAY(readMessage)", readMessage);
+                        Log.d("LOG_SAY(STAT)", String.valueOf(stateConnecting.getStatus()));
                         break;
                     case HANDLER_STATUS:
                         if (msg.arg1 == 1) {
@@ -248,6 +246,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // Clean up Bluetooth resources
+        if (mConnectedThread != null) {
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
+        // Nullify handler to avoid memory leaks
+        mHandler = null;
     }
 
     // START : BLUETOOTH Select Device
