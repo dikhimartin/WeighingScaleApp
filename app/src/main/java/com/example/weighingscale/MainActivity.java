@@ -71,8 +71,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
+        // initView();
+
         // Init Bluetooth
-        initViewBluetooth();
         initBluetooth();
 
         // Listen for destination changes
@@ -93,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_app_bar, menu);
         bluetoothMenuItem = menu.findItem(R.id.action_bluetooth);
+
+        // Check and update the Bluetooth menu item when the menu is created
+        if (mBluetoothUtil != null && mBluetoothUtil.isBluetoothEnabled()) {
+            set_indicator_bt_enable();
+        }
         return true;
     }
 
@@ -122,8 +128,9 @@ public class MainActivity extends AppCompatActivity {
         return navController.navigateUp() || super.onSupportNavigateUp();
     }
 
-    // Initialize UI Bluetooth components
-    private void initViewBluetooth() {
+    // Initialize UI
+    private void initView() {
+        // bluetoothMenuItem = findViewById(R.id.action_bluetooth);
         // mBluetoothStatus = findViewById(R.id.bluetooth_status);
         // mReadBuffer = findViewById(R.id.read_buffer);
     }
@@ -134,18 +141,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize handler for Bluetooth messages
         mHandler = new Handler(Looper.getMainLooper()) {
-            @SuppressLint("SetTextI18n")
+
+
             @Override
             public void handleMessage(@NonNull Message msg) {
-                Log.d("LOG_SAYA(msg)", String.valueOf(msg.arg1));
-                Log.d("LOG_SAYA(what)", String.valueOf(msg.what));
+                //  Log.d("LOG_SAYA(msg)", String.valueOf(msg.arg1));
+                //  Log.d("LOG_SAYA(what)", String.valueOf(msg.what));
+                handler_indicator_check();
                 switch (msg.what) {
                     case MESSAGE_READ:
                         // TODO : Baca timbangan
-                         String readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
+                        String readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
                         sharedViewModel.setWeight(readMessage);
                         // mReadBuffer.setText(readMessage);
                         // Log.d("Streams Scale", readMessage);
+                        Log.d("LOG_SAYA(readMessage)", readMessage);
                         break;
                     case CONNECTING_STATUS:
                         if (msg.arg1 == 1)
@@ -171,12 +181,9 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, Data);
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
-                // mBluetoothStatus.setText(getString(R.string.sEnabled));
-                bluetoothMenuItem.setIcon(null);
-                bluetoothMenuItem.setTitle(R.string.connect_to_scale);
+                set_indicator_bt_enable();
             } else {
-                // mBluetoothStatus.setText(getString(R.string.sDisabled));
-                bluetoothMenuItem.setIcon(R.drawable.ic_bluetooth_disabled_24dp);
+                set_indicator_bt_disable();
             }
         }
     }
@@ -240,6 +247,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }.start();
+    }
+
+    private void set_indicator_bt_enable(){
+        bluetoothMenuItem.setIcon(null);
+        bluetoothMenuItem.setTitle(R.string.connect_to_scale);
+    }
+
+    private void set_indicator_bt_disable(){
+        bluetoothMenuItem.setIcon(R.drawable.ic_bluetooth_disabled_24dp);
+    }
+
+    private void handler_indicator_check(){
+          Log.d("LOG_SAYA(msg)", "Runtime handler_indicator_check()");
     }
 
     @Override
