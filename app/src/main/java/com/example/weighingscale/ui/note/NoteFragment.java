@@ -70,7 +70,7 @@ public class NoteFragment extends Fragment {
             @Override
             public void onDeleteClick(Note note) {
                 noteViewModel.delete(note);
-                Snackbar.make(requireView(), note.getTitle() + " " + R.string.deleted, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), note.getTitle() + " " + getString(R.string.deleted), Snackbar.LENGTH_SHORT).show();
             }
 
             @Override
