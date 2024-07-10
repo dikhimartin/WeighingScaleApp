@@ -2,12 +2,12 @@ package com.example.weighingscale.ui.note;
 
 import android.app.Application;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 
 import com.example.weighingscale.data.repository.NoteRepository;
-import com.example.weighingscale.data.model.Note;
+import  com.example.weighingscale.data.model.Note;
 
 import java.util.List;
 

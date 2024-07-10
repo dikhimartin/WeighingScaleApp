@@ -1,18 +1,14 @@
 package com.example.weighingscale.data.model;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "note_table")
+@Entity(tableName = "Note")
 public class Note {
     @PrimaryKey(autoGenerate = true)
     private int id;
-
     private final String title;
-
     private final String description;
-    //@ColumnInfo(name="priority_column")
     private final int priority;
 
     public Note(String title, String description, int priority) {

@@ -11,4 +11,9 @@
         android:icon="@drawable/ic_dataset_black_24"
         android:title="@string/title_data" />
 
+    <item
+        android:id="@+id/navigation_note"
+        android:icon="@drawable/ic_dataset_black_24"
+        android:title="Note" />
+
 </menu>

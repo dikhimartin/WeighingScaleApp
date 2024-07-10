@@ -29,7 +29,7 @@ public class SettingRepository {
         return settingDao.getSetting();
     }
 
-    public void updateSetting(Setting setting) {
-        executor.execute(() -> settingDao.updateSetting(setting));
+    public void insertOrUpdateSetting(Setting setting) {
+        executor.execute(() -> settingDao.insertOrUpdateSetting(setting));
     }
 }

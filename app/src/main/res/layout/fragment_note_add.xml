@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.note.AddEditNoteActivity">
+    tools:context=".ui.note.AddEditNoteFragment">
 
     <EditText
         android:layout_width="match_parent"

@@ -3,10 +3,11 @@ package com.example.weighingscale.data.repository;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import com.example.weighingscale.data.local.database.AppDatabase;
-import com.example.weighingscale.data.model.Note;
-import com.example.weighingscale.data.local.database.dao.NoteDao;
 import androidx.lifecycle.LiveData;
+
+import com.example.weighingscale.data.local.database.AppDatabase;
+import com.example.weighingscale.data.local.database.dao.NoteDao;
+import com.example.weighingscale.data.model.Note;
 
 import java.util.List;
 
@@ -15,9 +16,8 @@ public class NoteRepository {
     private LiveData<List<Note>> allNotes;
 
     public NoteRepository(Application application) {
-        AppDatabase db = AppDatabase.getInstance(application);
-
-        noteDao = db.noteDao();
+        AppDatabase database = AppDatabase.getInstance(application);
+        noteDao = database.noteDao();
         allNotes = noteDao.getAllNotes();
     }
 

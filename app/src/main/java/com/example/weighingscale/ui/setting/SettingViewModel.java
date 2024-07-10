@@ -23,7 +23,7 @@ public class SettingViewModel extends AndroidViewModel {
         return setting;
     }
 
-    public void updateSetting(Setting setting) {
-        settingRepository.updateSetting(setting);
+    public void insertOrUpdateSetting(Setting setting) {
+        settingRepository.insertOrUpdateSetting(setting);
     }
 }
