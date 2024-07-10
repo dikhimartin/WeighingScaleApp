@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.weighingscale.util.LogModelUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -27,7 +28,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.weighingscale.util.BluetoothUtil;
@@ -37,6 +37,8 @@ import com.example.weighingscale.state.StateConnecting;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+
+import com.example.weighingscale.util.LogModelUtils;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ENABLE_BT = 1;
@@ -52,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private StateConnecting stateConnecting;
-
-    private TextView mReadBuffer;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,13 +130,6 @@ public class MainActivity extends AppCompatActivity {
         return navController.navigateUp() || super.onSupportNavigateUp();
     }
 
-    // Initialize UI
-    private void initView() {
-        // bluetoothMenuItem = findViewById(R.id.action_bluetooth);
-        // mBluetoothStatus = findViewById(R.id.bluetooth_status);
-        // mReadBuffer = findViewById(R.id.read_buffer);
-    }
-
     private void initBluetooth() {
         // Initialize BluetoothUtil instance
         mBluetoothUtil = BluetoothUtil.getInstance();
@@ -150,18 +143,14 @@ public class MainActivity extends AppCompatActivity {
                         // TODO : Baca timbangan
                         String readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
                         sharedViewModel.setWeight(readMessage);
-                        // mReadBuffer.setText(readMessage);
-                        // Log.d("Streams Scale", readMessage);
-                        Log.d("LOG_SAY(readMessage)", readMessage);
-                        Log.d("LOG_SAY(STAT)", String.valueOf(stateConnecting.getStatus()));
                         break;
                     case HANDLER_STATUS:
+                         LogModelUtils.printObjectFields(msg);
                         if (msg.arg1 == 1) {
                             bluetoothMenuItem.setTitle(getString(R.string.connected) + ": " + msg.obj);
                             stateConnecting.setStatus(StateConnecting.BLUETOOTH_CONNECTED);
-                        } else if (msg.arg1 == 4) {
-                            Toast.makeText(getApplicationContext(), getString(R.string.device_already_connected), Toast.LENGTH_SHORT).show();
                         } else {
+                            bluetoothMenuItem.setTitle(R.string.connect_to_scale);
                             Toast.makeText(getApplicationContext(), getString(R.string.connection_fail), Toast.LENGTH_SHORT).show();
                         }
                         break;
@@ -197,7 +186,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void connectToDevice(String address, String name) {
+    public interface ConnectionCallback {
+        void onConnected();
+    }
+
+    public void connectToDevice(String address, String name, ConnectionCallback callback) {
         bluetoothMenuItem.setTitle(R.string.connecting);
         new Thread() {
             @SuppressLint("MissingPermission")
@@ -225,7 +218,12 @@ public class MainActivity extends AppCompatActivity {
                 if (!fail) {
                     mConnectedThread = new ConnectedThread(mBTSocket, mHandler);
                     mConnectedThread.start();
-                    mHandler.obtainMessage(HANDLER_STATUS, 1, -1, name).sendToTarget();
+                    mHandler.post(() -> {
+                        mHandler.obtainMessage(HANDLER_STATUS, 1, -1, name).sendToTarget();
+                        if (callback != null) {
+                            callback.onConnected();
+                        }
+                    });
                 }
             }
         }.start();

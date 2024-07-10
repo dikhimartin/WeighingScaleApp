@@ -19,6 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import android.Manifest;
 
 import com.example.weighingscale.R;
@@ -96,7 +99,13 @@ public class DeviceFragment extends Fragment {
     };
 
     public void connectToDevice(String address, String name, MainActivity activity) {
-        activity.connectToDevice(address, name);
+        activity.connectToDevice(address, name, new MainActivity.ConnectionCallback() {
+            @Override
+            public void onConnected() {
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+                navController.navigate(R.id.navigation_home);
+            }
+        });
     }
 
     @Override
