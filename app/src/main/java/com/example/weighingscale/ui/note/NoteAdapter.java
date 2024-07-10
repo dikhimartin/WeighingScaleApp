@@ -2,14 +2,19 @@ package com.example.weighingscale.ui.note;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
-import com.example.weighingscale.R;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Note;
 
 public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
@@ -19,18 +24,17 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
         super(DIFF_CALLBACK);
     }
 
-    private static final DiffUtil.ItemCallback<Note> DIFF_CALLBACK=new DiffUtil.ItemCallback<Note>() {
+    private static final DiffUtil.ItemCallback<Note> DIFF_CALLBACK = new DiffUtil.ItemCallback<Note>() {
         @Override
         public boolean areItemsTheSame(@NonNull Note oldItem, @NonNull Note newItem) {
-            return oldItem.getId()==newItem.getId();
+            return oldItem.getId() == newItem.getId();
         }
 
         @SuppressLint("DiffUtilEquals")
         @Override
         public boolean areContentsTheSame(@NonNull Note oldItem, @NonNull Note newItem) {
-            return oldItem.getTitle().equals(newItem.getTitle())&&
-                    oldItem.getDescription().equals(newItem.getDescription())&&
-                    oldItem.getPriority()==newItem.getPriority();
+            return oldItem.getTitle().equals(newItem.getTitle()) &&
+                    oldItem.getDescription().equals(newItem.getDescription());
         }
     };
 
@@ -47,7 +51,6 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
         Note currentNote = getItem(position);
         holder.textViewTitle.setText(currentNote.getTitle());
         holder.textViewDescription.setText(currentNote.getDescription());
-        holder.textViewPriority.setText(Integer.toString(currentNote.getPriority()));
     }
 
     public Note getNoteAt(int position) {
@@ -57,21 +60,41 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
     class NoteHolder extends RecyclerView.ViewHolder {
         private TextView textViewTitle;
         private TextView textViewDescription;
-        private TextView textViewPriority;
+        private ImageButton btnMore;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.text_view_title);
             textViewDescription = itemView.findViewById(R.id.text_view_description);
-            textViewPriority = itemView.findViewById(R.id.text_view_priority);
+            btnMore = itemView.findViewById(R.id.btnMore);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            btnMore.setOnClickListener(view -> {
+                PopupMenu popupMenu = new PopupMenu(view.getContext(), btnMore);
+                popupMenu.inflate(R.menu.item_note_menu);
+                popupMenu.setOnMenuItemClickListener(item -> {
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(getItem(position));
+                        int id = item.getItemId();
+                        if (id == R.id.action_edit) {
+                            listener.onEditClick(getItem(position));
+                            return true;
+                        } else if (id == R.id.action_export) {
+                            listener.onExportClick(getItem(position));
+                            return true;
+                        } else if (id == R.id.action_delete) {
+                            listener.onDeleteClick(getItem(position));
+                            return true;
+                        }
                     }
+                    return false;
+                });
+                popupMenu.show();
+            });
+
+            itemView.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(getItem(position));
                 }
             });
         }
@@ -79,6 +102,12 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
 
     public interface OnItemClickListener {
         void onItemClick(Note note);
+
+        void onEditClick(Note note);
+
+        void onExportClick(Note note);
+
+        void onDeleteClick(Note note);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

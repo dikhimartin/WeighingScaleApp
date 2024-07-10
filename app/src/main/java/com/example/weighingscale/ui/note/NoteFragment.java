@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
+import com.example.weighingscale.data.model.Note;
+import com.google.android.material.snackbar.Snackbar;
 
 public class NoteFragment extends Fragment {
 
@@ -37,11 +39,38 @@ public class NoteFragment extends Fragment {
         final NoteAdapter adapter = new NoteAdapter();
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(note -> {
-            Bundle bundle = new Bundle();
-            bundle.putInt("note_id", note.getId());
-            NavHostFragment.findNavController(NoteFragment.this)
-                    .navigate(R.id.action_noteFragment_to_addEditNoteFragment, bundle);
+        adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
+            // @Override
+            // public void onItemClick(Note note) {
+            //     Bundle bundle = new Bundle();
+            //     bundle.putInt("note_id", note.getId());
+            //     NavHostFragment.findNavController(NoteFragment.this)
+            //             .navigate(R.id.action_noteFragment_to_addEditNoteFragment, bundle);
+            //      }
+            @Override
+            public void onItemClick(Note note) {
+                // TODO : Do something when on item click
+            }
+
+            @Override
+            public void onEditClick(Note note) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("note_id", note.getId());
+                NavHostFragment.findNavController(NoteFragment.this)
+                        .navigate(R.id.action_noteFragment_to_addEditNoteFragment, bundle);
+            }
+
+            @Override
+            public void onExportClick(Note note) {
+                // Implement export functionality here
+                Snackbar.make(requireView(), "Export " + note.getTitle(), Snackbar.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDeleteClick(Note note) {
+                noteViewModel.delete(note);
+                Snackbar.make(requireView(), "Deleted " + note.getTitle(), Snackbar.LENGTH_SHORT).show();
+            }
         });
     }
 
