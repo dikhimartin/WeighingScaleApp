@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_chainStyle="packed">
 
-        <!-- Weight Display -->
+        <!-- Weight Display for Auto Input -->
         <TextView
             android:id="@+id/text_amount"
             android:layout_width="wrap_content"
@@ -29,7 +29,19 @@
             android:textSize="64sp"
             android:textStyle="bold"
             android:textColor="?attr/colorSecondary"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            android:visibility="gone" />
+
+        <!-- Manual Input for Amount -->
+        <EditText
+            android:id="@+id/edit_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Enter Amount"
+            android:inputType="numberDecimal"
+            android:textSize="64sp"
+            android:layout_marginEnd="8dp"
+            android:visibility="visible" />
 
         <!-- Unit Display -->
         <TextView

@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                         if (msg.arg1 == 1) {
                             bluetoothMenuItem.setTitle(getString(R.string.connected) + ": " + msg.obj);
                             stateConnecting.setStatus(StateConnecting.BLUETOOTH_CONNECTED);
+                            sharedViewModel.setBluetoothStatus(stateConnecting.getStatus());
                         } else {
                             bluetoothMenuItem.setTitle(R.string.connect_to_scale);
                             if (mConnectedThread != null) {
@@ -273,11 +274,13 @@ public class MainActivity extends AppCompatActivity {
         bluetoothMenuItem.setIcon(null);
         bluetoothMenuItem.setTitle(R.string.connect_to_scale);
         stateConnecting.setStatus(StateConnecting.BLUETOOTH_ENABLED);
+        sharedViewModel.setBluetoothStatus(stateConnecting.getStatus());
     }
 
     private void set_indicator_bt_disable(){
         bluetoothMenuItem.setIcon(R.drawable.ic_bluetooth_disabled_24dp);
         stateConnecting.setStatus(StateConnecting.BLUETOOTH_DISABLED);
+        sharedViewModel.setBluetoothStatus(stateConnecting.getStatus());
     }
 
     @Override

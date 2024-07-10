@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,7 +18,8 @@ import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.repository.BatchDetailRepository;
 import com.example.weighingscale.data.repository.BatchRepository;
 import com.example.weighingscale.databinding.FragmentHomeBinding;
-import android.widget.Toast;
+import com.example.weighingscale.state.StateConnecting;
+import com.example.weighingscale.ui.shared.SharedViewModel;
 
 import java.util.Date;
 
@@ -25,6 +27,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private HomeViewModel homeViewModel;
+    private SharedViewModel sharedViewModel;
     private int currentBatchId = -1;
     private double ricePrice = 1000.0; // Example rice price, replace with actual value
 
@@ -43,6 +46,10 @@ public class HomeFragment extends Fragment {
         // Get the HomeViewModel using the factory
         homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
 
+        // Get the SharedViewModel
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
+        // Observe active batch
         homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), new Observer<Batch>() {
             @Override
             public void onChanged(Batch batch) {
@@ -54,47 +61,90 @@ public class HomeFragment extends Fragment {
                     currentBatchId = -1;
                     // Handle no active batch
                     // Example: binding.textBatchInfo.setText("No active batch");
-                }
-            }
-        });
-
-        homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), new Observer<Batch>() {
-            @Override
-            public void onChanged(Batch batch) {
-                if (batch == null) {
                     showBatchInputDialog();
                 }
             }
         });
 
+        // Observe Bluetooth status
+        sharedViewModel.getBluetoothStatus().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer status) {
+                if (status != null && status == StateConnecting.BLUETOOTH_CONNECTED) {
+                    binding.textAmount.setVisibility(View.VISIBLE);
+                    binding.editAmount.setVisibility(View.GONE);
+                    sharedViewModel.getWeight().observe(getViewLifecycleOwner(), new Observer<String>() {
+                        @Override
+                        public void onChanged(String weight) {
+                            binding.textAmount.setText(weight);
+                        }
+                    });
+                } else {
+                    binding.textAmount.setVisibility(View.GONE);
+                    binding.editAmount.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        // Set up button listeners
         binding.buttonSaveLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentBatchId != -1) {
-                    String amountText = binding.textAmount.getText().toString();
-                    double amount = Double.parseDouble(amountText);
-                    double price = amount * ricePrice;
-                    homeViewModel.insertBatchDetail(currentBatchId, amount, price);
-                    Toast.makeText(requireContext(), "Batch detail saved", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(requireContext(), "No active batch", Toast.LENGTH_SHORT).show();
-                }
+                saveLog();
             }
         });
 
         binding.buttonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentBatchId != -1) {
-                    homeViewModel.completeBatch(currentBatchId);
-                    Toast.makeText(requireContext(), "Batch completed", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(requireContext(), "No active batch", Toast.LENGTH_SHORT).show();
-                }
+                finishBatch();
             }
         });
 
         return root;
+    }
+
+    private void saveLog() {
+        if (currentBatchId == -1) {
+            Toast.makeText(requireContext(), "No active batch", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String amountText;
+        if (Boolean.TRUE.equals(sharedViewModel.getBluetoothStatus().getValue() == StateConnecting.BLUETOOTH_CONNECTED)) {
+            amountText = binding.textAmount.getText().toString();
+        } else {
+            amountText = binding.editAmount.getText().toString();
+        }
+
+        try {
+            double amount = Double.parseDouble(amountText);
+            double price = amount * ricePrice;
+            homeViewModel.insertBatchDetail(currentBatchId, amount, price);
+            Toast.makeText(requireContext(), "Batch detail saved", Toast.LENGTH_SHORT).show();
+            resetAmount();
+        } catch (NumberFormatException e) {
+            Toast.makeText(requireContext(), "Invalid amount", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void resetAmount() {
+        if (Boolean.TRUE.equals(sharedViewModel.getBluetoothStatus().getValue() == StateConnecting.BLUETOOTH_CONNECTED)) {
+            sharedViewModel.setWeight("0");
+        } else {
+            binding.textAmount.setText("0");
+            binding.editAmount.setText("");
+        }
+    }
+
+
+    private void finishBatch() {
+        if (currentBatchId != -1) {
+            homeViewModel.completeBatch(currentBatchId);
+            Toast.makeText(requireContext(), "Batch completed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(requireContext(), "No active batch", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showBatchInputDialog() {
