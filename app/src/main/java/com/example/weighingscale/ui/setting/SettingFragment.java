@@ -62,6 +62,8 @@ public class SettingFragment extends Fragment {
 
                 settingViewModel.insertOrUpdateSetting(newSetting);
                 Toast.makeText(requireContext(), "Pengaturan berhasil diubah", Toast.LENGTH_SHORT).show();
+
+                requireActivity().onBackPressed();
             } catch (NumberFormatException e) {
                 Toast.makeText(requireContext(), "Inputan harga beras harus berupa angka ", Toast.LENGTH_SHORT).show();
             }

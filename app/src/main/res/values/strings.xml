@@ -31,4 +31,7 @@
     <string name="update">Ubah</string>
     <string name="save">Simpan</string>
     <string name="add">Tambah</string>
+    <string name="message_update_success">Data berhasil diubah</string>
+    <string name="message_save_success">Data berhasil disimpan</string>
+    <string name="is_required">Wajib diisi</string>
 </resources>

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -121,7 +122,7 @@ public class FormNoteFragment extends Fragment {
         int priority = numberPickerPriority.getValue();
 
         if (title.isEmpty()) {
-            editTextTitle.setError("Title required");
+            editTextTitle.setError(getString(R.string.is_required));
             editTextTitle.requestFocus();
             return;
         }
@@ -131,9 +132,12 @@ public class FormNoteFragment extends Fragment {
         if (getArguments() != null && getArguments().containsKey("note_id")) {
             note.setId(getArguments().getInt("note_id", -1));
             noteViewModel.update(note);
+            Toast.makeText(requireContext(), R.string.message_update_success, Toast.LENGTH_SHORT).show();
         } else {
             noteViewModel.insert(note);
+            Toast.makeText(requireContext(), R.string.message_save_success, Toast.LENGTH_SHORT).show();
         }
+
 
         requireActivity().onBackPressed();
     }
