@@ -7,6 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.weighingscale.data.local.database.dao.NoteDao;
 import com.example.weighingscale.data.local.database.dao.BatchDao;
 import com.example.weighingscale.data.local.database.dao.BatchDetailDao;
 import com.example.weighingscale.data.local.database.dao.SettingDao;
@@ -23,6 +24,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract SettingDao settingDao();
     public abstract BatchDao batchDao();
     public abstract BatchDetailDao batchDetailDao();
+    public abstract NoteDao noteDao();
 
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
