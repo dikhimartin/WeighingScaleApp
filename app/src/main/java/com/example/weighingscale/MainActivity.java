@@ -2,7 +2,6 @@ package com.example.weighingscale;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +28,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.widget.Toast;
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 
 import com.example.weighingscale.util.BluetoothUtil;
 import com.example.weighingscale.util.ConnectedThread;
@@ -37,8 +41,6 @@ import com.example.weighingscale.state.StateConnecting;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
-import com.example.weighingscale.util.LogModelUtils;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ENABLE_BT = 1;
@@ -134,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
         // Initialize BluetoothUtil instance
         mBluetoothUtil = BluetoothUtil.getInstance();
 
+        // Register for Bluetooth state change broadcasts
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mBluetoothReceiver, filter);
+
         // Initialize handler for Bluetooth messages
         mHandler = new Handler(Looper.getMainLooper()) {
             @Override
@@ -177,10 +183,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private final BroadcastReceiver mBluetoothReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (action != null) {
+                if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                    final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                    switch (state) {
+                        case BluetoothAdapter.STATE_OFF:
+                            Toast.makeText(getApplicationContext(), getString(R.string.bluetooth_not_on), Toast.LENGTH_SHORT).show();
+                            set_indicator_bt_disable();
+                            break;
+                        case BluetoothAdapter.STATE_TURNING_OFF:
+                            // Handle Bluetooth turning off
+                            break;
+                        case BluetoothAdapter.STATE_ON:
+                            Toast.makeText(getApplicationContext(), getString(R.string.bluetooth_turn_on), Toast.LENGTH_SHORT).show();
+                            // Handle Bluetooth on
+                            break;
+                        case BluetoothAdapter.STATE_TURNING_ON:
+                            // Handle Bluetooth turning on
+                            break;
+                    }
+                }
+            }
+        }
+    };
+
     private void bluetoothOn() {
         if (!mBluetoothUtil.isBluetoothEnabled()) {
             mBluetoothUtil.enableBluetooth(MainActivity.this, REQUEST_ENABLE_BT);
-            Toast.makeText(getApplicationContext(), getString(R.string.bluetooth_turn_on), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.bluetooth_already_on), Toast.LENGTH_SHORT).show();
         }
@@ -243,6 +276,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // Unregister the Bluetooth receiver
+        unregisterReceiver(mBluetoothReceiver);
+
         // Clean up Bluetooth resources
         if (mConnectedThread != null) {
             mConnectedThread.cancel();
