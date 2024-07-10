@@ -1,116 +1,92 @@
 package com.example.weighingscale.ui.home;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
+import com.example.weighingscale.data.model.Batch;
+import com.example.weighingscale.data.repository.BatchRepository;
 import com.example.weighingscale.databinding.FragmentHomeBinding;
-import com.example.weighingscale.ui.shared.SharedViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private HomeViewModel homeViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        TextView textAmount = root.findViewById(R.id.text_amount);
+        // Obtain the repository instance (you might want to improve the way you get the repository instance)
+        BatchRepository batchRepository = BatchRepository.getInstance(requireContext());
 
-        SharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        sharedViewModel.getWeight().observe(getViewLifecycleOwner(), weight -> textAmount.setText(weight));
+        // Create the ViewModelFactory
+        HomeViewModelFactory factory = new HomeViewModelFactory(batchRepository);
 
-        // Setup RecyclerView with dummy data
-        RecyclerView recyclerView = root.findViewById(R.id.recycler_view_log);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new LogAdapter(getDummyLogData()));
+        // Get the HomeViewModel using the factory
+        homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
+
+        homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), new Observer<Batch>() {
+            @Override
+            public void onChanged(Batch batch) {
+                if (batch == null) {
+                    showBatchInputDialog();
+                }
+            }
+        });
 
         return root;
     }
 
-    private List<LogEntry> getDummyLogData() {
-        List<LogEntry> logEntries = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            logEntries.add(new LogEntry("Tanggal " + (i + 1), "10 Kg"));
-        }
-        return logEntries;
+    private void showBatchInputDialog() {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_input_batch, null);
+
+        EditText editPicName = dialogView.findViewById(R.id.et_pic_name);
+        EditText editPicPhoneNumber = dialogView.findViewById(R.id.et_pic_phone_number);
+        EditText editDestination = dialogView.findViewById(R.id.et_destination);
+        EditText editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
+        EditText editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setView(dialogView)
+                .setTitle("Input Batch")
+                .setPositiveButton("Save", (dialog, id) -> {
+                    String picName = editPicName.getText().toString();
+                    String picPhoneNumber = editPicPhoneNumber.getText().toString();
+                    String destination = editDestination.getText().toString();
+                    String truckDriver = editTruckDriver.getText().toString();
+                    String truckDriverPhoneNumber = editTruckDriverPhoneNumber.getText().toString();
+                    Batch batch = new Batch();
+                    batch.picName = picName;
+                    batch.picPhoneNumber = picPhoneNumber;
+                    batch.datetime = new Date();
+                    batch.destination = destination;
+                    batch.truckDriver = truckDriver;
+                    batch.truckDriverPhoneNumber = truckDriverPhoneNumber;
+                    homeViewModel.insertBatch(batch);
+                })
+                .setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    // LogEntry model class
-    public static class LogEntry {
-        private final String date;
-        private final String weight;
-
-        public LogEntry(String date, String weight) {
-            this.date = date;
-            this.weight = weight;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public String getWeight() {
-            return weight;
-        }
-    }
-
-    // RecyclerView Adapter
-    public static class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
-        private final List<LogEntry> logEntries;
-
-        public LogAdapter(List<LogEntry> logEntries) {
-            this.logEntries = logEntries;
-        }
-
-        @NonNull
-        @Override
-        public LogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_log, parent, false);
-            return new LogViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull LogViewHolder holder, int position) {
-            LogEntry logEntry = logEntries.get(position);
-            holder.dateTextView.setText(logEntry.getDate());
-            holder.weightTextView.setText(logEntry.getWeight());
-        }
-
-        @Override
-        public int getItemCount() {
-            return logEntries.size();
-        }
-
-        // ViewHolder for RecyclerView items
-        public static class LogViewHolder extends RecyclerView.ViewHolder {
-            TextView dateTextView;
-            TextView weightTextView;
-
-            public LogViewHolder(@NonNull View itemView) {
-                super(itemView);
-                dateTextView = itemView.findViewById(R.id.text_view_date);
-                weightTextView = itemView.findViewById(R.id.text_view_weight);
-            }
-        }
     }
 }

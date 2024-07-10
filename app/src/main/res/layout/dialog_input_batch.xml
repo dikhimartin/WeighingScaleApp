@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -5,37 +6,38 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/input_pic_name"
+        android:id="@+id/et_pic_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="PIC Name" />
 
     <EditText
-        android:id="@+id/input_pic_phone_number"
+        android:id="@+id/et_pic_phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="PIC Phone Number" />
 
     <EditText
-        android:id="@+id/input_datetime"
+        android:id="@+id/et_datetime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Datetime" />
+        android:hint="Datetime"
+        android:enabled="false" />
 
     <EditText
-        android:id="@+id/input_destination"
+        android:id="@+id/et_destination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Destination" />
 
     <EditText
-        android:id="@+id/input_truck_driver"
+        android:id="@+id/et_truck_driver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Truck Driver" />
 
     <EditText
-        android:id="@+id/input_truck_driver_phone_number"
+        android:id="@+id/et_truck_driver_phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Truck Driver Phone Number" />

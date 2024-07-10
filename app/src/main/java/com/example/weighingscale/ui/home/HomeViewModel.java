@@ -1,32 +1,30 @@
 package com.example.weighingscale.ui.home;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 import com.example.weighingscale.data.model.Batch;
-import com.example.weighingscale.state.StateBatch;
+import com.example.weighingscale.data.repository.BatchRepository;
 
 public class HomeViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
-    private MutableLiveData<Batch> currentBatch = new MutableLiveData<>();
-    private MutableLiveData<StateBatch> batchState = new MutableLiveData<>();
+    private final BatchRepository batchRepository;
+    private LiveData<Batch> activeBatch;
 
-    public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+    public HomeViewModel(BatchRepository batchRepository) {
+        this.batchRepository = batchRepository;
+        activeBatch = batchRepository.getActiveBatch();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<Batch> getActiveBatch() {
+        return activeBatch;
     }
 
-    public LiveData<Batch> getCurrentBatch() {
-        return currentBatch;
+    public void insertBatch(Batch batch) {
+        batchRepository.insertBatch(batch);
     }
 
-    public LiveData<StateBatch> getBatchState() {
-        return batchState;
+    public void completeBatch(int batchId) {
+        batchRepository.completeBatch(batchId);
     }
-
 }
