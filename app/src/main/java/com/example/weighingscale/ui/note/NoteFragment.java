@@ -17,9 +17,15 @@ import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Note;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.List;
+import android.app.AlertDialog;
+
 public class NoteFragment extends Fragment {
 
     private NoteViewModel noteViewModel;
+    private NoteAdapter adapter;
+    private View deleteAllButton;
 
     @Nullable
     @Override
@@ -28,6 +34,7 @@ public class NoteFragment extends Fragment {
         setupRecyclerView(view);
         setupViewModel();
         setupAddButton(view);
+        setupDeleteAllButton(view);
         return view;
     }
 
@@ -36,20 +43,14 @@ public class NoteFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        final NoteAdapter adapter = new NoteAdapter();
+        adapter = new NoteAdapter();
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
-            // @Override
-            // public void onItemClick(Note note) {
-            //     Bundle bundle = new Bundle();
-            //     bundle.putInt("note_id", note.getId());
-            //     NavHostFragment.findNavController(NoteFragment.this)
-            //             .navigate(R.id.action_noteFragment_to_addEditNoteFragment, bundle);
-            //      }
             @Override
             public void onItemClick(Note note) {
-                // TODO : Do something when on item click
+                adapter.toggleSelection(note.getId());
+                updateDeleteAllButtonVisibility();
             }
 
             @Override
@@ -69,8 +70,14 @@ public class NoteFragment extends Fragment {
             @Override
             public void onDeleteClick(Note note) {
                 noteViewModel.delete(note);
-                Snackbar.make(requireView(), "Deleted " + note.getTitle(), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), note.getTitle() + " " + R.string.deleted, Snackbar.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void onItemLongClick(Note note) {
+                // TODO : Do something when on item click long click
+            }
+
         });
     }
 
@@ -90,4 +97,42 @@ public class NoteFragment extends Fragment {
                         .navigate(R.id.action_noteFragment_to_addEditNoteFragment)
         );
     }
+
+    private void setupDeleteAllButton(View view) {
+        deleteAllButton = view.findViewById(R.id.button_delete_all);
+        deleteAllButton.setOnClickListener(v -> {
+            if (adapter != null) {
+                List<Integer> selectedNoteIds = new ArrayList<>(adapter.getSelectedItems());
+
+                if (!selectedNoteIds.isEmpty()) {
+                    showDeleteConfirmationDialog(selectedNoteIds);
+                } else {
+                    Snackbar.make(requireView(), "No notes selected to delete", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void showDeleteConfirmationDialog(List<Integer> selectedNoteIds) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.delete_selected_data_title)
+                .setMessage(R.string.delete_selected_data_message)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    noteViewModel.deleteNotesByIds(selectedNoteIds);
+                    adapter.clearSelectedItems();
+                    updateDeleteAllButtonVisibility();
+                    Snackbar.make(requireView(), R.string.message_selected_deleted, Snackbar.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    private void updateDeleteAllButtonVisibility() {
+        if (adapter != null && adapter.getSelectedItems().isEmpty()) {
+            deleteAllButton.setVisibility(View.GONE);
+        } else {
+            deleteAllButton.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

@@ -30,4 +30,7 @@ public interface NoteDao {
 
     @Query("SELECT * FROM Note WHERE id = :id")
     LiveData<Note> getNoteById(int id);
+
+    @Query("DELETE FROM Note WHERE id IN (:ids)")
+    void deleteNotesByIds(List<Integer> ids);
 }

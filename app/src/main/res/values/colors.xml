@@ -2,11 +2,23 @@
 <resources>
     <color name="brown">#5B3F28</color>
     <color name="gold">#E7AD4B</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="amber">#FFB822</color>
+    <color name="mint_green">#34BFA3</color>
+    <color name="sky_blue">#36A3F7</color>
+    <color name="rose_red">#F4516C</color>
+
+    <color name="selectedItem">#E7AD4B</color>
+    <color name="defaultItem">#FFFFFFFF</color>
+
+    <!--  Soon deprecated  -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
 </resources>
+
+

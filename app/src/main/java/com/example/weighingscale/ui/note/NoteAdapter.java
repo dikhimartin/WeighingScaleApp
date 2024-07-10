@@ -1,6 +1,7 @@
 package com.example.weighingscale.ui.note;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Note;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
     private OnItemClickListener listener;
+    private Set<Integer> selectedItems = new HashSet<>();
 
     public NoteAdapter() {
         super(DIFF_CALLBACK);
@@ -50,10 +55,33 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
         Note currentNote = getItem(position);
         holder.textViewTitle.setText(currentNote.getTitle());
         holder.textViewDescription.setText(currentNote.getDescription());
+        holder.itemView.setBackgroundColor(selectedItems.contains(currentNote.getId()) ?
+                holder.itemView.getResources().getColor(R.color.selectedItem) :
+                holder.itemView.getResources().getColor(R.color.defaultItem));
     }
 
     public Note getNoteAt(int position) {
         return getItem(position);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void toggleSelection(int noteId) {
+        if (selectedItems.contains(noteId)) {
+            selectedItems.remove(noteId);
+        } else {
+            selectedItems.add(noteId);
+        }
+        notifyDataSetChanged();
+    }
+
+    public Set<Integer> getSelectedItems() {
+        return selectedItems;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void clearSelectedItems() {
+        selectedItems.clear();
+        notifyDataSetChanged();
     }
 
     class NoteHolder extends RecyclerView.ViewHolder {
@@ -96,17 +124,24 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
                     listener.onItemClick(getItem(position));
                 }
             });
+
+            itemView.setOnLongClickListener(view -> {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemLongClick(getItem(position));
+                    return true;
+                }
+                return false;
+            });
         }
     }
 
     public interface OnItemClickListener {
         void onItemClick(Note note);
-
         void onEditClick(Note note);
-
         void onExportClick(Note note);
-
         void onDeleteClick(Note note);
+        void onItemLongClick(Note note);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
