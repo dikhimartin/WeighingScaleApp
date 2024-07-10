@@ -16,6 +16,6 @@ public class BatchDetail {
     public int id;
     public int batchId;
     public Date datetime;
-    public float amount;
-    public float price;
+    public double amount;
+    public double price;
 }
