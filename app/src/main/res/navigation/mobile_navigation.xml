@@ -41,10 +41,10 @@
 
     <fragment
         android:id="@+id/addEditNoteFragment"
-        android:name="com.example.weighingscale.ui.note.AddEditNoteFragment"
-        android:label="Add/Edit Note"
+        android:name="com.example.weighingscale.ui.note.FormNoteFragment"
         tools:layout="@layout/fragment_note_form" />
 
+    <!-- Deprecated -->
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.weighingscale.ui.dashboard.DashboardFragment"

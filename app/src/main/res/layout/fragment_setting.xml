@@ -9,7 +9,7 @@
     <!-- PIC Name  -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_pic_name"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:boxBackgroundColor="@color/white"
@@ -25,7 +25,7 @@
     <!-- PIC Phone Number -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_pic_phone_number"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/pic_phone_number"
@@ -41,7 +41,7 @@
     <!-- Rice Price (per kilo) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_rice_price"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/rice_price_per_kilo"

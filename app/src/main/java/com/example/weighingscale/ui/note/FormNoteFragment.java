@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
@@ -15,19 +16,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Note;
 
-public class AddEditNoteFragment extends Fragment {
+public class FormNoteFragment extends Fragment {
 
     private EditText editTextTitle;
     private EditText editTextDescription;
     private NumberPicker numberPickerPriority;
-
     private NoteViewModel noteViewModel;
 
     @Nullable
@@ -35,52 +34,72 @@ public class AddEditNoteFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_note_form, container, false);
 
-        // Initialize views
-        editTextTitle = view.findViewById(R.id.edit_text_title);
-        editTextDescription = view.findViewById(R.id.edit_text_description);
-        numberPickerPriority = view.findViewById(R.id.number_picker_priority);
+        initializeViews(view);
+        setupNumberPicker();
+        initializeViewModel();
+        setupMode(view);
 
-        // Set number picker range
-        numberPickerPriority.setMinValue(1);
-        numberPickerPriority.setMaxValue(10);
-
-        // Initialize ViewModel
-        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-
-        // Check if arguments contain a note ID, indicating edit mode
-        if (getArguments() != null && getArguments().containsKey("note_id")) {
-            int noteId = getArguments().getInt("note_id", -1);
-            noteViewModel.getNoteById(noteId).observe(getViewLifecycleOwner(), new Observer<Note>() {
-                @Override
-                public void onChanged(Note note) {
-                    if (note != null) {
-                        editTextTitle.setText(note.getTitle());
-                        editTextDescription.setText(note.getDescription());
-                        numberPickerPriority.setValue(note.getPriority());
-                    }
-                }
-            });
-        }
-
-        // Set up save button click listener
-        view.findViewById(R.id.button_save).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveNote();
-            }
-        });
-
-        // Enable the up button
         setHasOptionsMenu(true);
 
         return view;
     }
 
+    private void initializeViews(View view) {
+        editTextTitle = view.findViewById(R.id.edit_text_title);
+        editTextDescription = view.findViewById(R.id.edit_text_description);
+        numberPickerPriority = view.findViewById(R.id.number_picker_priority);
+    }
+
+    private void setupNumberPicker() {
+        numberPickerPriority.setMinValue(1);
+        numberPickerPriority.setMaxValue(10);
+    }
+
+    private void initializeViewModel() {
+        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
+    }
+
+    private void setupMode(View view) {
+        Bundle args = getArguments();
+        if (args != null && args.containsKey("note_id")) {
+            int noteId = args.getInt("note_id", -1);
+            noteViewModel.getNoteById(noteId).observe(getViewLifecycleOwner(), note -> {
+                if (note != null) {
+                    populateNoteFields(note);
+                    updateActionBarTitle(getString(R.string.update)+ " " + note.getTitle());
+                    updateSaveButtonText(view, getString(R.string.update));
+                }
+            });
+        } else {
+            updateActionBarTitle(getString(R.string.add));
+            updateSaveButtonText(view, getString(R.string.save));
+        }
+
+        view.findViewById(R.id.button_save).setOnClickListener(v -> saveData());
+    }
+
+    private void populateNoteFields(Note note) {
+        editTextTitle.setText(note.getTitle());
+        editTextDescription.setText(note.getDescription());
+        numberPickerPriority.setValue(note.getPriority());
+    }
+
+    private void updateActionBarTitle(String title) {
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(title);
+        }
+    }
+
+    private void updateSaveButtonText(View view, String text) {
+        Button saveButton = view.findViewById(R.id.button_save);
+        saveButton.setText(text);
+    }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        AppCompatActivity activity = (AppCompatActivity) requireActivity();
-        ActionBar actionBar = activity.getSupportActionBar();
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
@@ -96,7 +115,7 @@ public class AddEditNoteFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveNote() {
+    private void saveData() {
         String title = editTextTitle.getText().toString().trim();
         String description = editTextDescription.getText().toString().trim();
         int priority = numberPickerPriority.getValue();
@@ -109,16 +128,13 @@ public class AddEditNoteFragment extends Fragment {
 
         Note note = new Note(title, description, priority);
 
-        // Check if this is an edit or new note
         if (getArguments() != null && getArguments().containsKey("note_id")) {
-            int noteId = getArguments().getInt("note_id", -1);
-            note.setId(noteId);
+            note.setId(getArguments().getInt("note_id", -1));
             noteViewModel.update(note);
         } else {
             noteViewModel.insert(note);
         }
 
-        // Navigate back to NoteFragment
         requireActivity().onBackPressed();
     }
 }

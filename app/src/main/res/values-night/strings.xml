@@ -28,7 +28,4 @@
 
     <string name="error_socket_create">Socket creation failed</string>
     <string name="permission_denied">Permission denied</string>
-    <string name="update">Ubah</string>
-    <string name="save">Simpan</string>
-    <string name="add">Tambah</string>
 </resources>
