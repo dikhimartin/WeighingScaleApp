@@ -15,5 +15,4 @@ public interface SettingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertOrUpdateSetting(Setting setting);
-
 }

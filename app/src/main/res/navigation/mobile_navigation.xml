@@ -33,7 +33,17 @@
         android:id="@+id/navigation_note"
         android:name="com.example.weighingscale.ui.note.NoteFragment"
         android:label="Note"
-        tools:layout="@layout/fragment_note" />
+        tools:layout="@layout/fragment_note">
+        <action
+            android:id="@+id/action_noteFragment_to_addEditNoteFragment"
+            app:destination="@id/addEditNoteFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addEditNoteFragment"
+        android:name="com.example.weighingscale.ui.note.AddEditNoteFragment"
+        android:label="Add/Edit Note"
+        tools:layout="@layout/fragment_note_add" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
