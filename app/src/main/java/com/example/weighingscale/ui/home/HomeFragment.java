@@ -132,7 +132,8 @@ public class HomeFragment extends Fragment {
         }
 
         String amountText;
-        if (Boolean.TRUE.equals(sharedViewModel.getBluetoothStatus().getValue() == StateConnecting.BLUETOOTH_CONNECTED)) {
+        Integer bluetoothStatus = sharedViewModel.getBluetoothStatus().getValue();
+        if (bluetoothStatus != null && bluetoothStatus == StateConnecting.BLUETOOTH_CONNECTED) {
             amountText = binding.textAmount.getText().toString();
         } else {
             amountText = binding.editAmount.getText().toString();
@@ -149,14 +150,17 @@ public class HomeFragment extends Fragment {
         }
     }
 
+
     private void resetAmount() {
-        if (Boolean.TRUE.equals(sharedViewModel.getBluetoothStatus().getValue() == StateConnecting.BLUETOOTH_CONNECTED)) {
+        Integer bluetoothStatus = sharedViewModel.getBluetoothStatus().getValue();
+        if (bluetoothStatus != null && bluetoothStatus == StateConnecting.BLUETOOTH_CONNECTED) {
             sharedViewModel.setWeight("0");
         } else {
             binding.textAmount.setText("0");
             binding.editAmount.setText("");
         }
     }
+
 
     private void finishBatch() {
         if (currentBatchId != -1) {

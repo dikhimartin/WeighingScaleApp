@@ -16,19 +16,12 @@ public class HomeViewModel extends ViewModel {
     private final BatchRepository batchRepository;
     private final BatchDetailRepository batchDetailRepository;
     private LiveData<Batch> activeBatch;
-    private LiveData<List<BatchDetail>> batchDetails;
-
 
     public HomeViewModel(BatchRepository batchRepository, BatchDetailRepository batchDetailRepository) {
         this.batchRepository = batchRepository;
         this.batchDetailRepository = batchDetailRepository;
         this.activeBatch = batchRepository.getActiveBatch();
-//        allNotes = batchDetailRepository.getAllNotes();
     }
-
-//    public LiveData<List<BatchDetail>> getAllNotes() {
-//        return allNotes;
-//    }
 
     public LiveData<List<BatchDetail>> getBatchDetails(int batchId) {
         return batchDetailRepository.getBatchDetails(batchId);

@@ -56,8 +56,6 @@ public class BatchDetailAdapter extends ListAdapter<BatchDetail, BatchDetailAdap
         String formattedDate = dateFormat.format(currentData.getDatetime());
         holder.textViewWeight.setText(String.format(Locale.getDefault(), "%.1f Kg", currentData.getAmount()));
         holder.textViewDate.setText(formattedDate);
-
-        // Atur warna latar belakang untuk posisi 0
         if (position == 0) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.selectedItem));
         } else {
