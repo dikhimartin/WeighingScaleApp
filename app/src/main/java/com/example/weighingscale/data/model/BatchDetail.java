@@ -18,4 +18,24 @@ public class BatchDetail {
     public Date datetime;
     public double amount;
     public double price;
+
+    public int getId() {
+        return id;
+    }
+
+    public int getBatchId() {
+        return batchId;
+    }
+
+    public Date getDatetime() {
+        return datetime;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public double getPrice() {
+        return price;
+    }
 }

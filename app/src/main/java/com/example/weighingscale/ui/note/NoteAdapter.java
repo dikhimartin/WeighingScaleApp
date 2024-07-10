@@ -60,10 +60,6 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
                 holder.itemView.getResources().getColor(R.color.defaultItem));
     }
 
-    public Note getNoteAt(int position) {
-        return getItem(position);
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     public void toggleSelection(int noteId) {
         if (selectedItems.contains(noteId)) {

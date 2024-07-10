@@ -103,6 +103,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_log" />
 
+
     <!-- Finish Button Group -->
     <LinearLayout
         android:id="@+id/finish_button_group"

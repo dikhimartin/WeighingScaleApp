@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Batch;
@@ -20,7 +22,6 @@ import com.example.weighingscale.data.repository.BatchRepository;
 import com.example.weighingscale.databinding.FragmentHomeBinding;
 import com.example.weighingscale.state.StateConnecting;
 import com.example.weighingscale.ui.shared.SharedViewModel;
-
 import java.util.Date;
 
 public class HomeFragment extends Fragment {
@@ -28,6 +29,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private HomeViewModel homeViewModel;
     private SharedViewModel sharedViewModel;
+    private BatchDetailAdapter adapter;
     private int currentBatchId = -1;
     private double ricePrice = 1000.0; // Example rice price, replace with actual value
 
@@ -49,6 +51,14 @@ public class HomeFragment extends Fragment {
         // Get the SharedViewModel
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
+        // Adapter log list
+        RecyclerView recyclerView = root.findViewById(R.id.recycler_view_log);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
+
+        adapter = new BatchDetailAdapter(requireContext());
+        recyclerView.setAdapter(adapter);
+
         // Observe active batch
         homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), new Observer<Batch>() {
             @Override
@@ -57,10 +67,21 @@ public class HomeFragment extends Fragment {
                     currentBatchId = batch.id;
                     // Display batch information on the screen
                     // Example: binding.textBatchInfo.setText(batch.toString());
+                    homeViewModel.getBatchDetails(currentBatchId).observe(getViewLifecycleOwner(), data -> {
+                        BatchDetailAdapter adapter = (BatchDetailAdapter) ((RecyclerView) requireView().findViewById(R.id.recycler_view_log)).getAdapter();
+                        if (adapter != null) {
+                            adapter.submitList(data);
+                            // Auto scroll to top after submitting list
+                            if (data != null && !data.isEmpty()) {
+                                recyclerView.smoothScrollToPosition(0);
+                            }
+                        }
+                    });
                 } else {
                     currentBatchId = -1;
                     // Handle no active batch
                     // Example: binding.textBatchInfo.setText("No active batch");
+                    adapter.submitList(null);
                     showBatchInputDialog();
                 }
             }
@@ -136,7 +157,6 @@ public class HomeFragment extends Fragment {
             binding.editAmount.setText("");
         }
     }
-
 
     private void finishBatch() {
         if (currentBatchId != -1) {
