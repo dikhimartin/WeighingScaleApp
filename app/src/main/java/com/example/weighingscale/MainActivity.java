@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
         // Check if Bluetooth is supported on this device
         if (mBluetoothUtil.getAdapter() == null) {
             Toast.makeText(getApplicationContext(), getString(R.string.bluetooth_device_not_found), Toast.LENGTH_SHORT).show();
