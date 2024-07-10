@@ -89,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
                 // Disable the up button
                 Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
             }
+            // Back action
+            if (destination.getId() == R.id.form_note_fragment){
+                Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+            }
         });
     }
 
@@ -157,6 +161,10 @@ public class MainActivity extends AppCompatActivity {
                             stateConnecting.setStatus(StateConnecting.BLUETOOTH_CONNECTED);
                         } else {
                             bluetoothMenuItem.setTitle(R.string.connect_to_scale);
+                            if (mConnectedThread != null) {
+                                mConnectedThread.cancel();
+                                mConnectedThread = null;
+                            }
                             Toast.makeText(getApplicationContext(), getString(R.string.connection_fail), Toast.LENGTH_SHORT).show();
                         }
                         break;

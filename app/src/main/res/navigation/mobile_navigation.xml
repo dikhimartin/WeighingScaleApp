@@ -36,11 +36,11 @@
         tools:layout="@layout/fragment_note">
         <action
             android:id="@+id/action_noteFragment_to_addEditNoteFragment"
-            app:destination="@id/addEditNoteFragment" />
+            app:destination="@id/form_note_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/addEditNoteFragment"
+        android:id="@+id/form_note_fragment"
         android:name="com.example.weighingscale.ui.note.FormNoteFragment"
         tools:layout="@layout/fragment_note_form" />
 

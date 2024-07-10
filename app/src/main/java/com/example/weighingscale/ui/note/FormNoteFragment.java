@@ -40,8 +40,6 @@ public class FormNoteFragment extends Fragment {
         initializeViewModel();
         setupMode(view);
 
-        setHasOptionsMenu(true);
-
         return view;
     }
 
@@ -97,25 +95,6 @@ public class FormNoteFragment extends Fragment {
         saveButton.setText(text);
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            Navigation.findNavController(requireView()).navigateUp();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void saveData() {
         String title = editTextTitle.getText().toString().trim();
         String description = editTextDescription.getText().toString().trim();
@@ -137,7 +116,6 @@ public class FormNoteFragment extends Fragment {
             noteViewModel.insert(note);
             Toast.makeText(requireContext(), R.string.message_save_success, Toast.LENGTH_SHORT).show();
         }
-
 
         requireActivity().onBackPressed();
     }

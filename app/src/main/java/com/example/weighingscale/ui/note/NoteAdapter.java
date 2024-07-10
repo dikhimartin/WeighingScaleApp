@@ -2,7 +2,6 @@ package com.example.weighingscale.ui.note;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -70,7 +69,7 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
 
             btnMore.setOnClickListener(view -> {
                 PopupMenu popupMenu = new PopupMenu(view.getContext(), btnMore);
-                popupMenu.inflate(R.menu.item_note_menu);
+                popupMenu.inflate(R.menu.item_action_menu);
                 popupMenu.setOnMenuItemClickListener(item -> {
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
