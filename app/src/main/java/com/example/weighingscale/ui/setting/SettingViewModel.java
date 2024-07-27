@@ -35,6 +35,10 @@ public class SettingViewModel extends AndroidViewModel {
         settingRepository.insertOrUpdateSetting(setting);
     }
 
+    public boolean isValidUnit(String unit) {
+        return unitMap.containsValue(unit);
+    }
+
     public LiveData<List<String>> getUnitOptions() {
         return unitOptions;
     }

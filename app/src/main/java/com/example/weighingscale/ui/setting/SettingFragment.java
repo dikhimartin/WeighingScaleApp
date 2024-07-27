@@ -60,36 +60,44 @@ public class SettingFragment extends Fragment {
     }
 
     private void saveSetting() {
+        // Get input values
         String picName = etPicName.getText().toString().trim();
         String picPhoneNumber = etPicPhoneNumber.getText().toString().trim();
         String ricePriceStr = etRicePrice.getText().toString().trim();
         String selectedDisplayText = actvUnit.getText().toString().trim();
         String selectedValue = settingViewModel.getUnitValue(selectedDisplayText);
 
-        if (validateFields(picName, picPhoneNumber, ricePriceStr, selectedValue)) {
+        // Validate and process input
+        if (validateInputs(picName, picPhoneNumber, ricePriceStr, selectedValue)) {
             try {
                 float ricePrice = Float.parseFloat(ricePriceStr);
-
-                Setting newSetting = new Setting();
-                newSetting.picName = picName;
-                newSetting.picPhoneNumber = picPhoneNumber;
-                newSetting.ricePrice = ricePrice;
-                newSetting.unit = selectedValue;
-
+                Setting newSetting = createSetting(picName, picPhoneNumber, ricePrice, selectedValue);
                 settingViewModel.insertOrUpdateSetting(newSetting);
-                Toast.makeText(requireContext(), "Pengaturan berhasil diubah", Toast.LENGTH_SHORT).show();
-
+                showToast("Pengaturan berhasil diubah");
                 requireActivity().onBackPressed();
             } catch (NumberFormatException e) {
-                Toast.makeText(requireContext(), "Inputan harga beras harus berupa angka ", Toast.LENGTH_SHORT).show();
+                showToast("Inputan harga beras harus berupa angka");
             }
         } else {
-            Toast.makeText(requireContext(), "Tolong isi semua inputan", Toast.LENGTH_SHORT).show();
+            showToast("Tolong isi semua inputan");
         }
     }
 
-    private boolean validateFields(String picName, String picPhoneNumber, String ricePriceStr, String unit) {
-        return !picName.isEmpty() && !picPhoneNumber.isEmpty() && !ricePriceStr.isEmpty() && !unit.isEmpty();
+    private boolean validateInputs(String picName, String picPhoneNumber, String ricePriceStr, String unit) {
+        return !picName.isEmpty() && !picPhoneNumber.isEmpty() && !ricePriceStr.isEmpty() && settingViewModel.isValidUnit(unit);
+    }
+
+    private Setting createSetting(String picName, String picPhoneNumber, float ricePrice, String unit) {
+        Setting setting = new Setting();
+        setting.picName = picName;
+        setting.picPhoneNumber = picPhoneNumber;
+        setting.ricePrice = ricePrice;
+        setting.unit = unit;
+        return setting;
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
 
