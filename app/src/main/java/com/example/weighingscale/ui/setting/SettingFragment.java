@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Setting;
+import com.example.weighingscale.ui.shared.SharedAdapter;
 
 public class SettingFragment extends Fragment {
 
@@ -37,7 +38,7 @@ public class SettingFragment extends Fragment {
 
         // Setup AutoCompleteTextView with adapter
         settingViewModel.getUnitOptions().observe(getViewLifecycleOwner(), units -> {
-            UnitAdapter adapter = new UnitAdapter(requireContext(), units);
+            SharedAdapter adapter = new SharedAdapter(requireContext(), units);
             actvUnit.setAdapter(adapter);
         });
 

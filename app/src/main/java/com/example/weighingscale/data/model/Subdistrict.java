@@ -24,4 +24,11 @@ public class Subdistrict {
     public String province_id;
     public String city_id;
     public String name;
+
+    public String getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
 }

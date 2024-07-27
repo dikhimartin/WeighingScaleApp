@@ -7,22 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Batch;
+import com.example.weighingscale.data.model.City;
+import com.example.weighingscale.data.model.Province;
+import com.example.weighingscale.data.model.Subdistrict;
+import com.example.weighingscale.data.repository.AddressRepository;
 import com.example.weighingscale.data.repository.BatchDetailRepository;
 import com.example.weighingscale.data.repository.BatchRepository;
 import com.example.weighingscale.databinding.FragmentHomeBinding;
 import com.example.weighingscale.state.StateConnecting;
+import com.example.weighingscale.ui.shared.EntityAdapter;
+import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -31,7 +40,6 @@ public class HomeFragment extends Fragment {
     private SharedViewModel sharedViewModel;
     private BatchDetailAdapter adapter;
     private String currentBatchId = null;
-    private double ricePrice = 1000.0; // Example rice price, replace with actual value
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,9 +49,10 @@ public class HomeFragment extends Fragment {
         // Obtain the repository instances
         BatchRepository batchRepository = BatchRepository.getInstance(requireContext());
         BatchDetailRepository batchDetailRepository = BatchDetailRepository.getInstance(requireContext());
+        AddressRepository addressRepository = AddressRepository.getInstance(requireContext());
 
         // Create the ViewModelFactory
-        HomeViewModelFactory factory = new HomeViewModelFactory(batchRepository, batchDetailRepository);
+        HomeViewModelFactory factory = new HomeViewModelFactory(batchRepository, batchDetailRepository, addressRepository);
 
         // Get the HomeViewModel using the factory
         homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
@@ -125,6 +134,7 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+
     private void saveLog() {
         if (currentBatchId == null) {
             Toast.makeText(requireContext(), "No active batch", Toast.LENGTH_SHORT).show();
@@ -141,6 +151,8 @@ public class HomeFragment extends Fragment {
 
         try {
             double amount = Double.parseDouble(amountText);
+            // Example rice price, replace with actual value
+            double ricePrice = 1000.0;
             double price = amount * ricePrice;
             homeViewModel.insertBatchDetail(currentBatchId, amount, price);
             Toast.makeText(requireContext(), "Batch detail saved", Toast.LENGTH_SHORT).show();
@@ -177,9 +189,14 @@ public class HomeFragment extends Fragment {
 
         EditText editPicName = dialogView.findViewById(R.id.et_pic_name);
         EditText editPicPhoneNumber = dialogView.findViewById(R.id.et_pic_phone_number);
-//        EditText editDestination = dialogView.findViewById(R.id.et_destination);
-//        EditText editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
-//        EditText editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
+        EditText editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
+        EditText editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
+
+        MaterialAutoCompleteTextView actvProvince = dialogView.findViewById(R.id.actv_province);
+        MaterialAutoCompleteTextView actvCity = dialogView.findViewById(R.id.actv_city);
+        MaterialAutoCompleteTextView actvSubdistrict = dialogView.findViewById(R.id.actv_subdistrict);
+
+        setupAutoCompleteTextViews(actvProvince, actvCity, actvSubdistrict);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setView(dialogView)
@@ -187,23 +204,73 @@ public class HomeFragment extends Fragment {
                 .setPositiveButton("Simpan", (dialog, id) -> {
                     String picName = editPicName.getText().toString();
                     String picPhoneNumber = editPicPhoneNumber.getText().toString();
-//                    String destination = editDestination.getText().toString();
-//                    String truckDriver = editTruckDriver.getText().toString();
-//                    String truck_driver_phone_number = editTruckDriverPhoneNumber.getText().toString();
+                    String truckDriver = editTruckDriver.getText().toString();
+                    String truckDriverPhoneNumber = editTruckDriverPhoneNumber.getText().toString();
 
                     Batch batch = new Batch();
                     batch.pic_name = picName;
                     batch.pic_phone_number = picPhoneNumber;
                     batch.datetime = new Date();
-//                    batch.destination = destination;
-//                    batch.truckDriver = truckDriver;
-//                    batch.truck_driver_phone_number = truck_driver_phone_number;
+                    batch.truck_driver_name = truckDriver;
+                    batch.truck_driver_phone_number = truckDriverPhoneNumber;
                     homeViewModel.insertBatch(batch);
                 })
                 .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void setupAutoCompleteTextViews(MaterialAutoCompleteTextView actvProvince, MaterialAutoCompleteTextView actvCity, MaterialAutoCompleteTextView actvSubdistrict) {
+        // Setup Province Adapter
+        homeViewModel.getAllProvinces().observe(getViewLifecycleOwner(), provinces -> {
+            if (provinces != null && !provinces.isEmpty()) {
+                List<SelectOptionWrapper> provinceWrappers = new ArrayList<>();
+                for (Province province : provinces) {
+                    provinceWrappers.add(new SelectOptionWrapper(province.getId(), province.getName()));
+                }
+                EntityAdapter provinceAdapter = new EntityAdapter(requireContext(), provinceWrappers);
+                actvProvince.setAdapter(provinceAdapter);
+                actvProvince.setOnItemClickListener((parent, view, position, id) -> {
+                    SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
+                    if (selectedWrapper != null) {
+                        loadCities(selectedWrapper.getId(), actvCity, actvSubdistrict);
+                    }
+                });
+            }
+        });
+    }
+
+    private void loadCities(String provinceId, MaterialAutoCompleteTextView actvCity, MaterialAutoCompleteTextView actvSubdistrict) {
+        homeViewModel.getCitiesByProvinceId(provinceId).observe(getViewLifecycleOwner(), cities -> {
+            if (cities != null && !cities.isEmpty()) {
+                List<SelectOptionWrapper> cityWrappers = new ArrayList<>();
+                for (City city : cities) {
+                    cityWrappers.add(new SelectOptionWrapper(city.getId(), city.getType() +" "+ city.getName()));
+                }
+                EntityAdapter cityAdapter = new EntityAdapter(requireContext(), cityWrappers);
+                actvCity.setAdapter(cityAdapter);
+                actvCity.setOnItemClickListener((parent, view, position, id) -> {
+                    SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
+                    if (selectedWrapper != null) {
+                        loadSubdistricts(selectedWrapper.getId(), actvSubdistrict);
+                    }
+                });
+            }
+        });
+    }
+
+    private void loadSubdistricts(String cityId, MaterialAutoCompleteTextView actvSubdistrict) {
+        homeViewModel.getSubdistrictsByCityId(cityId).observe(getViewLifecycleOwner(), subdistricts -> {
+            if (subdistricts != null && !subdistricts.isEmpty()) {
+                List<SelectOptionWrapper> subdistrictWrappers = new ArrayList<>();
+                for (Subdistrict subdistrict : subdistricts) {
+                    subdistrictWrappers.add(new SelectOptionWrapper(subdistrict.getId(), subdistrict.getName()));
+                }
+                EntityAdapter subdistrictAdapter = new EntityAdapter(requireContext(), subdistrictWrappers);
+                actvSubdistrict.setAdapter(subdistrictAdapter);
+            }
+        });
     }
 
     @Override

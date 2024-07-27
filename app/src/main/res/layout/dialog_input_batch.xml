@@ -39,19 +39,6 @@
             android:inputType="phone"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <EditText-->
-<!--        android:id="@+id/et_datetime"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:hint="Datetime"-->
-<!--        android:enabled="false" />-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/et_destination"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:hint="Destination" />-->
-
     <!-- Truck Driver  -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_truck_driver"
@@ -82,6 +69,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <!-- Province -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_province"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Pilih Provinsi"
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/actv_province"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- City -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_city"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Pilih Kota"
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/actv_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Subdistrict -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_subdistrict"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Pilih Kecamatan"
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/actv_subdistrict"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>
