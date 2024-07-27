@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -38,14 +39,30 @@
             android:inputType="phone"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Rice Price (per kilo) -->
+    <!-- Unit Selection -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_unit"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/select_unit"
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/actv_unit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Rice Price (per unit) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_rice_price"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/rice_price_per_kilo"
+        android:hint="@string/rice_price_per_unit"
         app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp"
         app:boxStrokeWidth="2dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_rice_price"

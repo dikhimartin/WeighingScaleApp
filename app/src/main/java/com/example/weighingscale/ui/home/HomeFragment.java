@@ -30,7 +30,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private SharedViewModel sharedViewModel;
     private BatchDetailAdapter adapter;
-    private int currentBatchId = -1;
+    private String currentBatchId = null;
     private double ricePrice = 1000.0; // Example rice price, replace with actual value
 
     @Override
@@ -78,7 +78,7 @@ public class HomeFragment extends Fragment {
                         }
                     });
                 } else {
-                    currentBatchId = -1;
+                    currentBatchId = null;
                     // Handle no active batch
                     // Example: binding.textBatchInfo.setText("No active batch");
                     adapter.submitList(null);
@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void saveLog() {
-        if (currentBatchId == -1) {
+        if (currentBatchId == null) {
             Toast.makeText(requireContext(), "No active batch", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -163,7 +163,7 @@ public class HomeFragment extends Fragment {
 
 
     private void finishBatch() {
-        if (currentBatchId != -1) {
+        if (currentBatchId != null) {
             homeViewModel.completeBatch(currentBatchId);
             Toast.makeText(requireContext(), "Batch completed", Toast.LENGTH_SHORT).show();
         } else {
@@ -177,9 +177,9 @@ public class HomeFragment extends Fragment {
 
         EditText editPicName = dialogView.findViewById(R.id.et_pic_name);
         EditText editPicPhoneNumber = dialogView.findViewById(R.id.et_pic_phone_number);
-        EditText editDestination = dialogView.findViewById(R.id.et_destination);
-        EditText editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
-        EditText editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
+//        EditText editDestination = dialogView.findViewById(R.id.et_destination);
+//        EditText editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
+//        EditText editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setView(dialogView)
@@ -187,16 +187,17 @@ public class HomeFragment extends Fragment {
                 .setPositiveButton("Save", (dialog, id) -> {
                     String picName = editPicName.getText().toString();
                     String picPhoneNumber = editPicPhoneNumber.getText().toString();
-                    String destination = editDestination.getText().toString();
-                    String truckDriver = editTruckDriver.getText().toString();
-                    String truckDriverPhoneNumber = editTruckDriverPhoneNumber.getText().toString();
+//                    String destination = editDestination.getText().toString();
+//                    String truckDriver = editTruckDriver.getText().toString();
+//                    String truckDriverPhoneNumber = editTruckDriverPhoneNumber.getText().toString();
+
                     Batch batch = new Batch();
                     batch.picName = picName;
                     batch.picPhoneNumber = picPhoneNumber;
                     batch.datetime = new Date();
-                    batch.destination = destination;
-                    batch.truckDriver = truckDriver;
-                    batch.truckDriverPhoneNumber = truckDriverPhoneNumber;
+//                    batch.destination = destination;
+//                    batch.truckDriver = truckDriver;
+//                    batch.truckDriverPhoneNumber = truckDriverPhoneNumber;
                     homeViewModel.insertBatch(batch);
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss());

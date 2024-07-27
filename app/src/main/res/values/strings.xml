@@ -23,8 +23,12 @@
     <string name="action_setting">Pengaturan</string>
     <string name="pic_name">Nama penanggung jawab</string>
     <string name="pic_phone_number">Nomor Telepon penanggung jawab</string>
-    <string name="rice_price_per_kilo">Harga beras (per kilo)</string>
+    <string name="rice_price_per_unit">Harga beras (per unit)</string>
     <string name="update_settings">Ubah pengaturan</string>
+    <string-array name="unit_array">
+        <item>g</item>
+        <item>kg</item>
+    </string-array>
 
     <!--  main  -->
     <string name="error_socket_create">Socket creation failed</string>
@@ -46,4 +50,6 @@
     <string name="yes">Ya</string>
     <string name="no">Tidak</string>
     <string name="deleted">Dihapus</string>
+    <string name="unit">Unit</string>
+    <string name="select_unit">Pilih Unit</string>
 </resources>

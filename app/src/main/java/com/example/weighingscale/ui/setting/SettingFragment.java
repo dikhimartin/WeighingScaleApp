@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ public class SettingFragment extends Fragment {
     private SettingViewModel settingViewModel;
     private EditText etPicName, etPicPhoneNumber, etRicePrice;
     private Button btnSave;
+    private AutoCompleteTextView actvUnit;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -31,12 +33,24 @@ public class SettingFragment extends Fragment {
         etPicPhoneNumber = root.findViewById(R.id.et_pic_phone_number);
         etRicePrice = root.findViewById(R.id.et_rice_price);
         btnSave = root.findViewById(R.id.btn_save);
+        actvUnit = root.findViewById(R.id.actv_unit);
 
+        // Setup AutoCompleteTextView with adapter
+        settingViewModel.getUnitOptions().observe(getViewLifecycleOwner(), units -> {
+            UnitAdapter adapter = new UnitAdapter(requireContext(), units);
+            actvUnit.setAdapter(adapter);
+        });
+
+        // Observe setting data
         settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
             if (setting != null) {
                 etPicName.setText(setting.picName);
                 etPicPhoneNumber.setText(setting.picPhoneNumber);
                 etRicePrice.setText(String.valueOf(setting.ricePrice));
+
+                // Autofill unit if available
+                String displayText = settingViewModel.getUnitDisplayText(setting.unit);
+                actvUnit.setText(displayText, false);
             }
         });
 
@@ -49,16 +63,18 @@ public class SettingFragment extends Fragment {
         String picName = etPicName.getText().toString().trim();
         String picPhoneNumber = etPicPhoneNumber.getText().toString().trim();
         String ricePriceStr = etRicePrice.getText().toString().trim();
+        String selectedDisplayText = actvUnit.getText().toString().trim();
+        String selectedValue = settingViewModel.getUnitValue(selectedDisplayText);
 
-        if (validateFields(picName, picPhoneNumber, ricePriceStr)) {
+        if (validateFields(picName, picPhoneNumber, ricePriceStr, selectedValue)) {
             try {
                 float ricePrice = Float.parseFloat(ricePriceStr);
 
                 Setting newSetting = new Setting();
-                newSetting.id = 1; // Assuming there's only one row in Setting table
                 newSetting.picName = picName;
                 newSetting.picPhoneNumber = picPhoneNumber;
                 newSetting.ricePrice = ricePrice;
+                newSetting.unit = selectedValue;
 
                 settingViewModel.insertOrUpdateSetting(newSetting);
                 Toast.makeText(requireContext(), "Pengaturan berhasil diubah", Toast.LENGTH_SHORT).show();
@@ -72,8 +88,8 @@ public class SettingFragment extends Fragment {
         }
     }
 
-    private boolean validateFields(String picName, String picPhoneNumber, String ricePriceStr) {
-        return !picName.isEmpty() && !picPhoneNumber.isEmpty() && !ricePriceStr.isEmpty();
+    private boolean validateFields(String picName, String picPhoneNumber, String ricePriceStr, String unit) {
+        return !picName.isEmpty() && !picPhoneNumber.isEmpty() && !ricePriceStr.isEmpty() && !unit.isEmpty();
     }
-
 }
+

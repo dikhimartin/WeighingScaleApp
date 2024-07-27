@@ -24,7 +24,7 @@ public interface BatchDao {
 
     @Transaction
     @Query("UPDATE Batch SET status = 0 WHERE id = :batchId")
-    void completeBatch(int batchId);
+    void completeBatch(String batchId);
 
     @Transaction
     @Query("UPDATE Batch SET status = 0 WHERE status = 1")

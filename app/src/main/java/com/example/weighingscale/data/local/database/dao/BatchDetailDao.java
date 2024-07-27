@@ -12,8 +12,8 @@ import java.util.List;
 @Dao
 public interface BatchDetailDao {
 
-    @Query("SELECT * FROM BatchDetail WHERE batchId = :batchId ORDER BY datetime DESC")
-    LiveData<List<BatchDetail>> getBatchDetails(int batchId);
+    @Query("SELECT * FROM BatchDetail WHERE batch_id = :batchId ORDER BY datetime DESC")
+    LiveData<List<BatchDetail>> getBatchDetails(String batchId);
 
     @Query("SELECT * FROM BatchDetail ORDER BY datetime DESC")
     LiveData<List<BatchDetail>> getAllNotes();

@@ -37,7 +37,7 @@ public class BatchRepository {
         });
     }
 
-    public void completeBatch(int batchId) {
+    public void completeBatch(String batchId) {
         executor.execute(() -> batchDao.completeBatch(batchId));
     }
 }

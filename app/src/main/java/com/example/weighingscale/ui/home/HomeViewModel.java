@@ -23,7 +23,7 @@ public class HomeViewModel extends ViewModel {
         this.activeBatch = batchRepository.getActiveBatch();
     }
 
-    public LiveData<List<BatchDetail>> getBatchDetails(int batchId) {
+    public LiveData<List<BatchDetail>> getBatchDetails(String batchId) {
         return batchDetailRepository.getBatchDetails(batchId);
     }
 
@@ -35,7 +35,7 @@ public class HomeViewModel extends ViewModel {
         batchRepository.insertBatch(batch);
     }
 
-    public void insertBatchDetail(int batchId, double amount, double price) {
+    public void insertBatchDetail(String batchId, double amount, double price) {
         BatchDetail batchDetail = new BatchDetail();
         batchDetail.batchId = batchId;
         batchDetail.datetime = new Date();
@@ -44,7 +44,7 @@ public class HomeViewModel extends ViewModel {
         batchDetailRepository.insert(batchDetail);
     }
 
-    public void completeBatch(int batchId) {
+    public void completeBatch(String batchId) {
         batchRepository.completeBatch(batchId);
     }
 }

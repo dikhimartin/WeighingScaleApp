@@ -35,7 +35,7 @@ public class BatchDetailRepository {
         return allNotes;
     }
 
-    public LiveData<List<BatchDetail>> getBatchDetails(int batchId) {
+    public LiveData<List<BatchDetail>> getBatchDetails(String batchId) {
         return batchDetailDao.getBatchDetails(batchId);
     }
 }
