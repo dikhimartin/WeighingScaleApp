@@ -26,7 +26,6 @@ import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.DateTimeUtil;
-import com.google.android.material.snackbar.Snackbar;
 
 import android.widget.AutoCompleteTextView;
 import java.util.ArrayList;
@@ -126,14 +125,19 @@ public class HomeFragment extends Fragment {
         binding.buttonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(requireContext())
-                        .setTitle("Selesaikan Batch muatan")
-                        .setMessage("Apakah kamu yakin ingin menyelesaikan Batch muatan ini ?")
-                        .setPositiveButton(R.string.yes, (dialog, which) -> {
-                            finishBatch();
-                        })
-                        .setNegativeButton(R.string.no, null)
-                        .show();
+                if (currentBatchId != null) {
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle("Selesaikan batch muatan")
+                            .setMessage("Apakah kamu yakin ingin menyelesaikan batch muatan ini ?")
+                            .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                homeViewModel.completeBatch(currentBatchId);
+                                Toast.makeText(requireContext(), "Batch muatan sudah selesai", Toast.LENGTH_SHORT).show();
+                            })
+                            .setNegativeButton(R.string.no, null)
+                            .show();
+                }else{
+                    Toast.makeText(requireContext(), "Tidak ada batch muatan yang aktif", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -142,7 +146,7 @@ public class HomeFragment extends Fragment {
 
     private void saveLog() {
         if (currentBatchId == null) {
-            Toast.makeText(requireContext(), "Tidak ada Batch muatan yang aktif", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Tidak ada batch muatan yang aktif", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -167,7 +171,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-
     private void resetAmount() {
         Integer bluetoothStatus = sharedViewModel.getBluetoothStatus().getValue();
         if (bluetoothStatus != null && bluetoothStatus == StateConnecting.BLUETOOTH_CONNECTED) {
@@ -175,15 +178,6 @@ public class HomeFragment extends Fragment {
         } else {
             binding.textAmount.setText("0");
             binding.editAmount.setText("");
-        }
-    }
-
-    private void finishBatch() {
-        if (currentBatchId != null) {
-            homeViewModel.completeBatch(currentBatchId);
-            Toast.makeText(requireContext(), "Batch muatan sudah selesai", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(requireContext(), "Tidak ada Batch muatan yang aktif", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -229,7 +223,7 @@ public class HomeFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setView(dialogView)
-                .setTitle("Silahkan masukan data Batch muatan")
+                .setTitle("Silahkan masukan data batch muatan")
                 .setPositiveButton("Simpan", (dialog, id) -> {
                     String picName = editPicName.getText().toString();
                     String picPhoneNumber = editPicPhoneNumber.getText().toString();
