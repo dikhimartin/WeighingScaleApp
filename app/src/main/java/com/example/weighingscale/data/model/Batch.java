@@ -10,10 +10,16 @@ import java.util.UUID;
 import java.util.Date;
 
 @Entity(tableName = "Batch",
-        foreignKeys = @ForeignKey(entity = Subdistrict.class,
-                parentColumns = "id",
-                childColumns = "weighing_location_id",
-                onDelete = ForeignKey.CASCADE))
+        foreignKeys = {
+                @ForeignKey(entity = City.class,
+                        parentColumns = "id",
+                        childColumns = "weighing_location_id",
+                        onDelete = ForeignKey.CASCADE),
+                @ForeignKey(entity = City.class,
+                        parentColumns = "id",
+                        childColumns = "delivery_destination_id",
+                        onDelete = ForeignKey.CASCADE)
+        })
 public class Batch {
     @PrimaryKey
     @NonNull
