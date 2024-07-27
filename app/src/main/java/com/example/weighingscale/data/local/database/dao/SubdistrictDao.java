@@ -15,5 +15,5 @@ public interface SubdistrictDao {
     List<Subdistrict> getAllSubdistricts();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertSubdistrict(Subdistrict subdistrict);
+    void insertAll(List<Subdistrict> subdistricts);
 }

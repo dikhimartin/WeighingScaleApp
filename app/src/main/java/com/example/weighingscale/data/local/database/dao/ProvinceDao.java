@@ -15,5 +15,5 @@ public interface ProvinceDao {
     List<Province> getAllProvinces();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertProvince(Province province);
+    void insertAll(List<Province> provinces);
 }

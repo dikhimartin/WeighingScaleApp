@@ -21,13 +21,7 @@ public class Subdistrict {
     @PrimaryKey
     @NonNull
     public String id;
-
-    @ColumnInfo(name = "province_id")
-    public String provinceId;
-
-    @ColumnInfo(name = "city_id")
-    public String cityId;
-
-    @ColumnInfo(name = "name")
+    public String province_id;
+    public String city_id;
     public String name;
 }
