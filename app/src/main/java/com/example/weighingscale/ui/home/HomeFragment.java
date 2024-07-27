@@ -206,9 +206,9 @@ public class HomeFragment extends Fragment {
 
         MaterialAutoCompleteTextView actsProvince = dialogView.findViewById(R.id.actv_province);
         MaterialAutoCompleteTextView actsCity = dialogView.findViewById(R.id.actv_city);
-        MaterialAutoCompleteTextView actsDistrict = dialogView.findViewById(R.id.actv_subdistrict);
+//        MaterialAutoCompleteTextView actsDistrict = dialogView.findViewById(R.id.actv_subdistrict);
 
-        setupAutoCompleteTextViews(actsProvince, actsCity, actsDistrict);
+        setupAutoCompleteTextViews(actsProvince, actsCity);
 
         // Set up datetime picker
         tvDateTime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDateTime));
@@ -237,7 +237,7 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
-    private void setupAutoCompleteTextViews(MaterialAutoCompleteTextView actvProvince, MaterialAutoCompleteTextView actvCity, MaterialAutoCompleteTextView actvSubdistrict) {
+    private void setupAutoCompleteTextViews(MaterialAutoCompleteTextView actvProvince, MaterialAutoCompleteTextView actvCity) {
         // Setup Province Adapter
         homeViewModel.getAllProvinces().observe(getViewLifecycleOwner(), provinces -> {
             if (provinces != null && !provinces.isEmpty()) {
@@ -250,14 +250,14 @@ public class HomeFragment extends Fragment {
                 actvProvince.setOnItemClickListener((parent, view, position, id) -> {
                     SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
                     if (selectedWrapper != null) {
-                        loadCities(selectedWrapper.getId(), actvCity, actvSubdistrict);
+                        loadCities(selectedWrapper.getId(), actvCity);
                     }
                 });
             }
         });
     }
 
-    private void loadCities(String provinceId, MaterialAutoCompleteTextView actvCity, MaterialAutoCompleteTextView actvSubdistrict) {
+    private void loadCities(String provinceId, MaterialAutoCompleteTextView actvCity) {
         homeViewModel.getCitiesByProvinceId(provinceId).observe(getViewLifecycleOwner(), cities -> {
             if (cities != null && !cities.isEmpty()) {
                 List<SelectOptionWrapper> cityWrappers = new ArrayList<>();
@@ -266,12 +266,12 @@ public class HomeFragment extends Fragment {
                 }
                 EntityAdapter cityAdapter = new EntityAdapter(requireContext(), cityWrappers);
                 actvCity.setAdapter(cityAdapter);
-                actvCity.setOnItemClickListener((parent, view, position, id) -> {
-                    SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
-                    if (selectedWrapper != null) {
-                        loadSubdistricts(selectedWrapper.getId(), actvSubdistrict);
-                    }
-                });
+//                actvCity.setOnItemClickListener((parent, view, position, id) -> {
+//                    SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
+//                    if (selectedWrapper != null) {
+//                        loadSubdistricts(selectedWrapper.getId(), actvSubdistrict);
+//                    }
+//                });
             }
         });
     }

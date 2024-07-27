@@ -1,139 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp">
-
-    <!-- PIC Name  -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_pic_name"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_pic_name"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- PIC Name  -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_pic_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/pic_name"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:boxBackgroundColor="@color/white"
+            android:layout_marginBottom="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_pic_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pic_name"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- PIC Phone Number -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_pic_phone_number"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/pic_phone_number"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_pic_phone_number"
+        <!-- PIC Phone Number -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_pic_phone_number"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/pic_phone_number"
+            app:boxBackgroundColor="@color/white"
+            android:layout_marginBottom="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_pic_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Truck Driver  -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_truck_driver"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_truck_driver"
+        <!-- Truck Driver  -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_truck_driver"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/truck_driver"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:boxBackgroundColor="@color/white"
+            android:layout_marginBottom="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_truck_driver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/truck_driver"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Truck Driver Phone Number -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_truck_driver_phone_number"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/truck_driver_phone_number"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_truck_driver_phone_number"
+        <!-- Truck Driver Phone Number -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_truck_driver_phone_number"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/truck_driver_phone_number"
+            app:boxBackgroundColor="@color/white"
+            android:layout_marginBottom="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_truck_driver_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-
-    <!-- Datetime -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_datetime"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/choose_datetime"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tv_datetime"
+        <!-- Datetime -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_datetime"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:clickable="true" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/choose_datetime"
+            app:boxBackgroundColor="@color/white"
+            android:layout_marginBottom="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_datetime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:clickable="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Province -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_province"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/choose_province"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/actv_province"
+        <TextView
+            android:id="@+id/til_destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tujuan Pengiriman"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="18sp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Province -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_province"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:hint="Pilih Provinsi Tujuan"
+            app:boxBackgroundColor="@color/white"
+            android:layout_marginBottom="16dp">
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/actv_province"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- City -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_city"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/choose_city"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/actv_city"
+        <!-- City -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_city"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:hint="Pilih Kota Tujuan"
+            app:boxBackgroundColor="@color/white"
+            android:layout_marginBottom="16dp">
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/actv_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Subdistrict -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_subdistrict"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/choose_subdistrict"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/actv_subdistrict"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-</LinearLayout>
+        <!-- Subdistrict -->
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/til_subdistrict"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="@string/choose_subdistrict"-->
+<!--            app:boxBackgroundColor="@color/white"-->
+<!--            android:layout_marginBottom="16dp">-->
+<!--            <com.google.android.material.textfield.MaterialAutoCompleteTextView-->
+<!--                android:id="@+id/actv_subdistrict"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
+    </LinearLayout>
+</ScrollView>
