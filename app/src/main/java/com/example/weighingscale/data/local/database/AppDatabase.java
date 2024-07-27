@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
             City.class,
             Province.class,
             Subdistrict.class
-        }, version = 3)
+        }, version = 1)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract SettingDao settingDao();
