@@ -26,6 +26,8 @@ import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.DateTimeUtil;
+import com.google.android.material.snackbar.Snackbar;
+
 import android.widget.AutoCompleteTextView;
 import java.util.ArrayList;
 import java.util.List;
@@ -124,7 +126,14 @@ public class HomeFragment extends Fragment {
         binding.buttonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishBatch();
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Selesaikan Batch muatan")
+                        .setMessage("Apakah kamu yakin ingin menyelesaikan Batch muatan ini ?")
+                        .setPositiveButton(R.string.yes, (dialog, which) -> {
+                            finishBatch();
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .show();
             }
         });
 
@@ -133,7 +142,7 @@ public class HomeFragment extends Fragment {
 
     private void saveLog() {
         if (currentBatchId == null) {
-            Toast.makeText(requireContext(), "No active batch", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Tidak ada Batch muatan yang aktif", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -151,10 +160,10 @@ public class HomeFragment extends Fragment {
             double ricePrice = 1000.0;
             double price = amount * ricePrice;
             homeViewModel.insertBatchDetail(currentBatchId, amount, price);
-            Toast.makeText(requireContext(), "Batch detail saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Log sudah disimpan", Toast.LENGTH_SHORT).show();
             resetAmount();
         } catch (NumberFormatException e) {
-            Toast.makeText(requireContext(), "Invalid amount", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Nilai yang kamu input tidak valid", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -172,9 +181,9 @@ public class HomeFragment extends Fragment {
     private void finishBatch() {
         if (currentBatchId != null) {
             homeViewModel.completeBatch(currentBatchId);
-            Toast.makeText(requireContext(), "Batch completed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Batch muatan sudah selesai", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(requireContext(), "No active batch", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Tidak ada Batch muatan yang aktif", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -220,7 +229,7 @@ public class HomeFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setView(dialogView)
-                .setTitle("Silahkan masukan data muatan")
+                .setTitle("Silahkan masukan data Batch muatan")
                 .setPositiveButton("Simpan", (dialog, id) -> {
                     String picName = editPicName.getText().toString();
                     String picPhoneNumber = editPicPhoneNumber.getText().toString();
