@@ -54,4 +54,8 @@
     <string name="select_unit">Pilih Unit</string>
     <string name="truck_driver">Driver Truk</string>
     <string name="truck_driver_phone_number">Nomor Telepon Driver Truk</string>
+    <string name="choose_province">Pilih Provinsi</string>
+    <string name="choose_city">Pilih Kota</string>
+    <string name="choose_subdistrict">Pilih Kecamatan</string>
+    <string name="choose_datetime">Tanggal dan Waktu</string>
 </resources>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,12 +27,22 @@ import com.example.weighingscale.state.StateConnecting;
 import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
+import com.example.weighingscale.util.DateTimeUtil;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class HomeFragment extends Fragment {
 
@@ -187,16 +198,20 @@ public class HomeFragment extends Fragment {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_input_batch, null);
 
-        EditText editPicName = dialogView.findViewById(R.id.et_pic_name);
-        EditText editPicPhoneNumber = dialogView.findViewById(R.id.et_pic_phone_number);
-        EditText editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
-        EditText editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
+        TextView editPicName = dialogView.findViewById(R.id.et_pic_name);
+        TextView editPicPhoneNumber = dialogView.findViewById(R.id.et_pic_phone_number);
+        TextView editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
+        TextView editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
+        TextView tvDateTime = dialogView.findViewById(R.id.tv_datetime);
 
-        MaterialAutoCompleteTextView actvProvince = dialogView.findViewById(R.id.actv_province);
-        MaterialAutoCompleteTextView actvCity = dialogView.findViewById(R.id.actv_city);
-        MaterialAutoCompleteTextView actvSubdistrict = dialogView.findViewById(R.id.actv_subdistrict);
+        MaterialAutoCompleteTextView actsProvince = dialogView.findViewById(R.id.actv_province);
+        MaterialAutoCompleteTextView actsCity = dialogView.findViewById(R.id.actv_city);
+        MaterialAutoCompleteTextView actsDistrict = dialogView.findViewById(R.id.actv_subdistrict);
 
-        setupAutoCompleteTextViews(actvProvince, actvCity, actvSubdistrict);
+        setupAutoCompleteTextViews(actsProvince, actsCity, actsDistrict);
+
+        // Set up datetime picker
+        tvDateTime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDateTime));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setView(dialogView)
@@ -206,11 +221,12 @@ public class HomeFragment extends Fragment {
                     String picPhoneNumber = editPicPhoneNumber.getText().toString();
                     String truckDriver = editTruckDriver.getText().toString();
                     String truckDriverPhoneNumber = editTruckDriverPhoneNumber.getText().toString();
+                    String dateTime = tvDateTime.getText().toString();
 
                     Batch batch = new Batch();
                     batch.pic_name = picName;
                     batch.pic_phone_number = picPhoneNumber;
-                    batch.datetime = new Date();
+                    batch.datetime = DateTimeUtil.parseDateTime(dateTime);
                     batch.truck_driver_name = truckDriver;
                     batch.truck_driver_phone_number = truckDriverPhoneNumber;
                     homeViewModel.insertBatch(batch);

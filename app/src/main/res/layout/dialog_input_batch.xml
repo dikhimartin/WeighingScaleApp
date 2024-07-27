@@ -72,13 +72,32 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
+    <!-- Datetime -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_datetime"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/choose_datetime"
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tv_datetime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <!-- Province -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_province"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Pilih Provinsi"
+        android:hint="@string/choose_province"
         app:boxBackgroundColor="@color/white"
         android:layout_marginBottom="16dp">
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -93,7 +112,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Pilih Kota"
+        android:hint="@string/choose_city"
         app:boxBackgroundColor="@color/white"
         android:layout_marginBottom="16dp">
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -108,7 +127,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Pilih Kecamatan"
+        android:hint="@string/choose_subdistrict"
         app:boxBackgroundColor="@color/white"
         android:layout_marginBottom="16dp">
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
