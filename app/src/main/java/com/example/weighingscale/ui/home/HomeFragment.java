@@ -189,15 +189,15 @@ public class HomeFragment extends Fragment {
                     String picPhoneNumber = editPicPhoneNumber.getText().toString();
 //                    String destination = editDestination.getText().toString();
 //                    String truckDriver = editTruckDriver.getText().toString();
-//                    String truckDriverPhoneNumber = editTruckDriverPhoneNumber.getText().toString();
+//                    String truck_driver_phone_number = editTruckDriverPhoneNumber.getText().toString();
 
                     Batch batch = new Batch();
-                    batch.picName = picName;
-                    batch.picPhoneNumber = picPhoneNumber;
+                    batch.pic_name = picName;
+                    batch.pic_phone_number = picPhoneNumber;
                     batch.datetime = new Date();
 //                    batch.destination = destination;
 //                    batch.truckDriver = truckDriver;
-//                    batch.truckDriverPhoneNumber = truckDriverPhoneNumber;
+//                    batch.truck_driver_phone_number = truck_driver_phone_number;
                     homeViewModel.insertBatch(batch);
                 })
                 .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss());

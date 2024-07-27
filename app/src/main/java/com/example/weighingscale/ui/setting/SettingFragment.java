@@ -44,9 +44,9 @@ public class SettingFragment extends Fragment {
         // Observe setting data
         settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
             if (setting != null) {
-                etPicName.setText(setting.picName);
-                etPicPhoneNumber.setText(setting.picPhoneNumber);
-                etRicePrice.setText(String.valueOf(setting.ricePrice));
+                etPicName.setText(setting.pic_name);
+                etPicPhoneNumber.setText(setting.pic_phone_number);
+                etRicePrice.setText(String.valueOf(setting.rice_price));
 
                 // Autofill unit if available
                 String displayText = settingViewModel.getUnitDisplayText(setting.unit);
@@ -89,9 +89,9 @@ public class SettingFragment extends Fragment {
 
     private Setting createSetting(String picName, String picPhoneNumber, float ricePrice, String unit) {
         Setting setting = new Setting();
-        setting.picName = picName;
-        setting.picPhoneNumber = picPhoneNumber;
-        setting.ricePrice = ricePrice;
+        setting.pic_name = picName;
+        setting.pic_phone_number = picPhoneNumber;
+        setting.rice_price = ricePrice;
         setting.unit = unit;
         return setting;
     }

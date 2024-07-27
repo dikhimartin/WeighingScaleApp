@@ -37,7 +37,7 @@ public class HomeViewModel extends ViewModel {
 
     public void insertBatchDetail(String batchId, double amount, double price) {
         BatchDetail batchDetail = new BatchDetail();
-        batchDetail.batchId = batchId;
+        batchDetail.batch_id = batchId;
         batchDetail.datetime = new Date();
         batchDetail.amount = amount;
         batchDetail.price = price;

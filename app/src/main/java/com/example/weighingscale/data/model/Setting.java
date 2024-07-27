@@ -9,14 +9,8 @@ import androidx.room.PrimaryKey;
 public class Setting {
     @PrimaryKey
     @NonNull
-    public String picName;
-
-    @ColumnInfo(name = "pic_phone_number")
-    public String picPhoneNumber;
-
-    @ColumnInfo(name = "rice_price")
-    public float ricePrice;
-
-    @ColumnInfo(name = "unit")
+    public String pic_name;
+    public String pic_phone_number;
+    public float rice_price;
     public String unit; // 'g' or 'kg'
 }
