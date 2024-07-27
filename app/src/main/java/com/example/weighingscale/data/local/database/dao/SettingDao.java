@@ -5,7 +5,6 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.example.weighingscale.data.model.Setting;
 
@@ -15,11 +14,5 @@ public interface SettingDao {
     LiveData<Setting> getSetting();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertSetting(Setting setting);
-
-    @Update
-    void updateSetting(Setting setting);
-
-    @Query("UPDATE Setting SET picName = :picName, picPhoneNumber = :picPhoneNumber, ricePrice = :ricePrice WHERE id = :id")
-    int updateSettingFields(int id, String picName, String picPhoneNumber, float ricePrice);
+    void insertOrUpdateSetting(Setting setting);
 }

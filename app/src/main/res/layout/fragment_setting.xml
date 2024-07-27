@@ -1,35 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/et_pic_name"
+    <!-- PIC Name  -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_pic_name"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="PIC Name"
-        android:inputType="text"/>
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_pic_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pic_name"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/et_pic_phone_number"
+    <!-- PIC Phone Number -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_pic_phone_number"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="PIC Phone Number"
-        android:inputType="phone"/>
+        android:hint="@string/pic_phone_number"
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_pic_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/et_rice_price"
+    <!-- Unit Selection -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_unit"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Rice Price (per kilo)"
-        android:inputType="numberDecimal"/>
+        android:hint="@string/select_unit"
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/actv_unit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Rice Price (per unit) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_rice_price"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/rice_price_per_unit"
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeWidth="2dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_rice_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_save"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update"
-        android:layout_marginTop="16dp"/>
+        android:text="@string/update_settings"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        style="@style/Widget.MaterialComponents.Button"/>
+
 </LinearLayout>
+

@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">weighingscale</string>
+    <string name="title_home">Timbangan</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_data">Data</string>
+
+    <!--  Perangkat  -->
+    <string name="title_device">Perangkat</string>
+    <string name="action_device">Bluetooth</string>
+    <string name="connect_to_scale">Hubungkan perangkat</string>
+    <string name="connecting">Menghubungkan</string>
+    <string name="connected">Terhubung</string>
+    <string name="device_already_connected">Perangkat sudah terhubung</string>
+    <string name="connection_fail">Gagal menghubungkan</string>
+    <string name="bluetooth_device_not_found">Perangkat Bluetooh tidak ditemukan</string>
+    <string name="bluetooth_turn_on">Bluetooh dinyalakan</string>
+    <string name="bluetooth_not_on">Bluetooh tidak menyala</string>
+    <string name="bluetooth_already_on">Bluetooh sudah menyala</string>
+    <string name="show_paired_devices">Menampilkan perangkat</string>
+
+    <!-- Setting -->
+    <string name="title_setting">Pengaturan</string>
+    <string name="action_setting">Pengaturan</string>
+    <string name="pic_name">Nama penanggung jawab</string>
+    <string name="pic_phone_number">Nomor Telepon penanggung jawab</string>
+    <string name="rice_price_per_unit">Harga beras (per kilo)</string>
+    <string name="update_settings">Ubah pengaturan</string>
+
+    <string name="error_socket_create">Socket creation failed</string>
+    <string name="permission_denied">Permission denied</string>
+</resources>

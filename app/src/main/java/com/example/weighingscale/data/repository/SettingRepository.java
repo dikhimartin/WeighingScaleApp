@@ -15,7 +15,7 @@ public class SettingRepository {
     private final SettingDao settingDao;
     private final ExecutorService executor;
 
-    private SettingRepository(SettingDao settingDao, ExecutorService executor) {
+    public SettingRepository(SettingDao settingDao, ExecutorService executor) {
         this.settingDao = settingDao;
         this.executor = executor;
     }
@@ -29,19 +29,7 @@ public class SettingRepository {
         return settingDao.getSetting();
     }
 
-    public void updateSetting(Setting setting) {
-        executor.execute(() -> settingDao.updateSetting(setting));
-    }
-
-    public void updateSettingFields(int id, String picName, String picPhoneNumber, float ricePrice) {
-        executor.execute(() -> {
-            int rowsAffected = settingDao.updateSettingFields(id, picName, picPhoneNumber, ricePrice);
-            // Check if update was successful
-            if (rowsAffected > 0) {
-                // Success
-            } else {
-                // Failure
-            }
-        });
+    public void insertOrUpdateSetting(Setting setting) {
+        executor.execute(() -> settingDao.insertOrUpdateSetting(setting));
     }
 }

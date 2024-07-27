@@ -1,12 +1,55 @@
 <resources>
-    <string name="app_name">weighingscale</string>
-    <string name="title_home">Home</string>
+    <string name="app_name">Weighing Scale</string>
+    <string name="title_home">Timbangan</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_data">Data</string>
 
-    <string name="title_setting">Setting</string>
-    <string name="action_setting">Setting</string>
+    <!--  Perangkat  -->
+    <string name="title_device">Perangkat</string>
+    <string name="action_device">Bluetooth</string>
+    <string name="connect_to_scale">Hubungkan perangkat</string>
+    <string name="connecting">Menghubungkan</string>
+    <string name="connected">Terhubung</string>
+    <string name="device_already_connected">Perangkat sudah terhubung</string>
+    <string name="connection_fail">Gagal menghubungkan</string>
+    <string name="bluetooth_device_not_found">Perangkat Bluetooh tidak ditemukan</string>
+    <string name="bluetooth_turn_on">Bluetooh dinyalakan</string>
+    <string name="bluetooth_not_on">Bluetooh tidak menyala</string>
+    <string name="bluetooth_already_on">Bluetooh sudah menyala</string>
+    <string name="show_paired_devices">Menampilkan perangkat</string>
 
-    <string name="title_bluetooth">Bluetooth</string>
-    <string name="action_bluetooth">Bluetooth</string>
+    <!-- Setting -->
+    <string name="title_setting">Pengaturan</string>
+    <string name="action_setting">Pengaturan</string>
+    <string name="pic_name">Nama penanggung jawab</string>
+    <string name="pic_phone_number">Nomor Telepon penanggung jawab</string>
+    <string name="rice_price_per_unit">Harga beras (per unit)</string>
+    <string name="update_settings">Ubah pengaturan</string>
+    <string-array name="unit_array">
+        <item>g</item>
+        <item>kg</item>
+    </string-array>
+
+    <!--  main  -->
+    <string name="error_socket_create">Socket creation failed</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="update">Ubah</string>
+    <string name="save">Simpan</string>
+    <string name="add">Tambah</string>
+    <string name="export">Export</string>
+    <string name="delete">Hapus</string>
+    <string name="message_update_success">Data berhasil diubah</string>
+    <string name="message_save_success">Data berhasil disimpan</string>
+    <string name="is_required">Wajib diisi</string>
+    <string name="more">Selengkapnya</string>
+    <string name="delete_all">Hapus semua</string>
+    <string name="delete_selected_data_title">Hapus semua data</string>
+    <string name="delete_selected_data_message">Apakah kamu yakin ingin menghapus semua data yang dipilih?</string>
+    <string name="message_selected_deleted">Data yang dipilih sudah dihapus</string>
+    <string name="message_deleted">Data sudah dihapus</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+    <string name="deleted">Dihapus</string>
+    <string name="unit">Unit</string>
+    <string name="select_unit">Pilih Unit</string>
 </resources>

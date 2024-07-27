@@ -1,16 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/setting"
+        android:id="@+id/action_settings"
         android:title="@string/action_setting"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_bluetooth"
+        android:id="@+id/action_device"
         android:icon="@drawable/ic_bluetooth_disabled_24dp"
-        android:title="@string/action_bluetooth"
-        app:showAsAction="always" />
+        android:title="@string/action_device"
+        app:showAsAction="ifRoom" />
 
 </menu>
