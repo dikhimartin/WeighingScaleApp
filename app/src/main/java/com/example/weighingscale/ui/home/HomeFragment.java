@@ -184,7 +184,7 @@ public class HomeFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setView(dialogView)
                 .setTitle("Input Batch")
-                .setPositiveButton("Save", (dialog, id) -> {
+                .setPositiveButton("Simpan", (dialog, id) -> {
                     String picName = editPicName.getText().toString();
                     String picPhoneNumber = editPicPhoneNumber.getText().toString();
 //                    String destination = editDestination.getText().toString();
@@ -200,7 +200,7 @@ public class HomeFragment extends Fragment {
 //                    batch.truckDriverPhoneNumber = truckDriverPhoneNumber;
                     homeViewModel.insertBatch(batch);
                 })
-                .setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss());
+                .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();

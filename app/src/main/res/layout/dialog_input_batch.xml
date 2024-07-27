@@ -1,45 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/et_pic_name"
+    <!-- PIC Name  -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_pic_name"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="PIC Name" />
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_pic_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pic_name"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/et_pic_phone_number"
+    <!-- PIC Phone Number -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_pic_phone_number"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="PIC Phone Number" />
+        android:hint="@string/pic_phone_number"
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_pic_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/et_datetime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Datetime"
-        android:enabled="false" />
+<!--    <EditText-->
+<!--        android:id="@+id/et_datetime"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="Datetime"-->
+<!--        android:enabled="false" />-->
 
-    <EditText
-        android:id="@+id/et_destination"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Destination" />
+<!--    <EditText-->
+<!--        android:id="@+id/et_destination"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="Destination" />-->
 
-    <EditText
-        android:id="@+id/et_truck_driver"
+    <!-- Truck Driver  -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_truck_driver"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Truck Driver" />
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_truck_driver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/truck_driver"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/et_truck_driver_phone_number"
+    <!-- Truck Driver Phone Number -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_truck_driver_phone_number"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Truck Driver Phone Number" />
+        android:hint="@string/truck_driver_phone_number"
+        app:boxBackgroundColor="@color/white"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_truck_driver_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>
