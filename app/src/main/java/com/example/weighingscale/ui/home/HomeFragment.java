@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -18,7 +17,6 @@ import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.City;
 import com.example.weighingscale.data.model.Province;
-import com.example.weighingscale.data.model.Subdistrict;
 import com.example.weighingscale.data.repository.AddressRepository;
 import com.example.weighingscale.data.repository.BatchDetailRepository;
 import com.example.weighingscale.data.repository.BatchRepository;
@@ -28,21 +26,9 @@ import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.DateTimeUtil;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.timepicker.MaterialTimePicker;
-import com.google.android.material.timepicker.TimeFormat;
-
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import android.widget.AutoCompleteTextView;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class HomeFragment extends Fragment {
 
@@ -145,7 +131,6 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-
     private void saveLog() {
         if (currentBatchId == null) {
             Toast.makeText(requireContext(), "No active batch", Toast.LENGTH_SHORT).show();
@@ -184,7 +169,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-
     private void finishBatch() {
         if (currentBatchId != null) {
             homeViewModel.completeBatch(currentBatchId);
@@ -204,18 +188,39 @@ public class HomeFragment extends Fragment {
         TextView editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
         TextView tvDateTime = dialogView.findViewById(R.id.tv_datetime);
 
-        MaterialAutoCompleteTextView actsProvince = dialogView.findViewById(R.id.actv_province);
-        MaterialAutoCompleteTextView actsCity = dialogView.findViewById(R.id.actv_city);
-//        MaterialAutoCompleteTextView actsDistrict = dialogView.findViewById(R.id.actv_subdistrict);
+        // Setup AutoCompleteTextView Weighing Location with adapter
+        AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
+        AutoCompleteTextView selectLocCity = dialogView.findViewById(R.id.select_weighing_location_city);
+        setupOptionLocation(selectLocProvince, selectLocCity);
 
-        setupAutoCompleteTextViews(actsProvince, actsCity);
+        // Setup AutoCompleteTextView Destination with adapter
+        AutoCompleteTextView selectDestProvince = dialogView.findViewById(R.id.select_destination_province);
+        AutoCompleteTextView selectDestCity = dialogView.findViewById(R.id.select_destination_city);
+        setupOptionLocation(selectDestProvince, selectDestCity);
 
         // Set up datetime picker
         tvDateTime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDateTime));
 
+        // Variable to store selected city's ID
+        final String[] deliveryDestinationID = new String[1];
+        selectDestCity.setOnItemClickListener((parent, view, position, id) -> {
+            SelectOptionWrapper selectedCity = (SelectOptionWrapper) parent.getAdapter().getItem(position);
+            if (selectedCity != null) {
+                deliveryDestinationID[0] = selectedCity.getId();
+            }
+        });
+
+        final String[] weighingLocationID = new String[1];
+        selectLocCity.setOnItemClickListener((parent, view, position, id) -> {
+            SelectOptionWrapper selectedCity = (SelectOptionWrapper) parent.getAdapter().getItem(position);
+            if (selectedCity != null) {
+                weighingLocationID[0] = selectedCity.getId();
+            }
+        });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setView(dialogView)
-                .setTitle("Input Batch")
+                .setTitle("Silahkan masukan data muatan")
                 .setPositiveButton("Simpan", (dialog, id) -> {
                     String picName = editPicName.getText().toString();
                     String picPhoneNumber = editPicPhoneNumber.getText().toString();
@@ -229,6 +234,12 @@ public class HomeFragment extends Fragment {
                     batch.datetime = DateTimeUtil.parseDateTime(dateTime);
                     batch.truck_driver_name = truckDriver;
                     batch.truck_driver_phone_number = truckDriverPhoneNumber;
+                    if (deliveryDestinationID[0] != null) {
+                        batch.delivery_destination_id = deliveryDestinationID[0];
+                    }
+                    if (weighingLocationID[0] != null) {
+                        batch.weighing_location_id = weighingLocationID[0];
+                    }
                     homeViewModel.insertBatch(batch);
                 })
                 .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss());
@@ -237,8 +248,7 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
-    private void setupAutoCompleteTextViews(MaterialAutoCompleteTextView actvProvince, MaterialAutoCompleteTextView actvCity) {
-        // Setup Province Adapter
+    private void setupOptionLocation(AutoCompleteTextView selectProvince, AutoCompleteTextView selectCity) {
         homeViewModel.getAllProvinces().observe(getViewLifecycleOwner(), provinces -> {
             if (provinces != null && !provinces.isEmpty()) {
                 List<SelectOptionWrapper> provinceWrappers = new ArrayList<>();
@@ -246,48 +256,27 @@ public class HomeFragment extends Fragment {
                     provinceWrappers.add(new SelectOptionWrapper(province.getId(), province.getName()));
                 }
                 EntityAdapter provinceAdapter = new EntityAdapter(requireContext(), provinceWrappers);
-                actvProvince.setAdapter(provinceAdapter);
-                actvProvince.setOnItemClickListener((parent, view, position, id) -> {
+                selectProvince.setAdapter(provinceAdapter);
+
+                selectProvince.setOnItemClickListener((parent, view, position, id) -> {
                     SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
                     if (selectedWrapper != null) {
-                        loadCities(selectedWrapper.getId(), actvCity);
+                        homeViewModel.getCitiesByProvinceId(selectedWrapper.getId()).observe(getViewLifecycleOwner(), cities -> {
+                            if (cities != null && !cities.isEmpty()) {
+                                List<SelectOptionWrapper> cityWrappers = new ArrayList<>();
+                                for (City city : cities) {
+                                    cityWrappers.add(new SelectOptionWrapper(city.getId(), city.getType() + " " + city.getName()));
+                                }
+                                EntityAdapter cityAdapter = new EntityAdapter(requireContext(), cityWrappers);
+                                selectCity.setAdapter(cityAdapter);
+                            }
+                        });
                     }
                 });
             }
         });
     }
 
-    private void loadCities(String provinceId, MaterialAutoCompleteTextView actvCity) {
-        homeViewModel.getCitiesByProvinceId(provinceId).observe(getViewLifecycleOwner(), cities -> {
-            if (cities != null && !cities.isEmpty()) {
-                List<SelectOptionWrapper> cityWrappers = new ArrayList<>();
-                for (City city : cities) {
-                    cityWrappers.add(new SelectOptionWrapper(city.getId(), city.getType() +" "+ city.getName()));
-                }
-                EntityAdapter cityAdapter = new EntityAdapter(requireContext(), cityWrappers);
-                actvCity.setAdapter(cityAdapter);
-//                actvCity.setOnItemClickListener((parent, view, position, id) -> {
-//                    SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
-//                    if (selectedWrapper != null) {
-//                        loadSubdistricts(selectedWrapper.getId(), actvSubdistrict);
-//                    }
-//                });
-            }
-        });
-    }
-
-    private void loadSubdistricts(String cityId, MaterialAutoCompleteTextView actvSubdistrict) {
-        homeViewModel.getSubdistrictsByCityId(cityId).observe(getViewLifecycleOwner(), subdistricts -> {
-            if (subdistricts != null && !subdistricts.isEmpty()) {
-                List<SelectOptionWrapper> subdistrictWrappers = new ArrayList<>();
-                for (Subdistrict subdistrict : subdistricts) {
-                    subdistrictWrappers.add(new SelectOptionWrapper(subdistrict.getId(), subdistrict.getName()));
-                }
-                EntityAdapter subdistrictAdapter = new EntityAdapter(requireContext(), subdistrictWrappers);
-                actvSubdistrict.setAdapter(subdistrictAdapter);
-            }
-        });
-    }
 
     @Override
     public void onDestroyView() {
