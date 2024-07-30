@@ -22,6 +22,7 @@ import com.example.weighingscale.data.repository.BatchDetailRepository;
 import com.example.weighingscale.data.repository.BatchRepository;
 import com.example.weighingscale.databinding.FragmentHomeBinding;
 import com.example.weighingscale.state.StateConnecting;
+import com.example.weighingscale.ui.setting.SettingViewModel;
 import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
@@ -35,6 +36,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private HomeViewModel homeViewModel;
+    private SettingViewModel settingViewModel;
     private SharedViewModel sharedViewModel;
     private BatchDetailAdapter adapter;
     private String currentBatchId = null;
@@ -52,11 +54,14 @@ public class HomeFragment extends Fragment {
         // Create the ViewModelFactory
         HomeViewModelFactory factory = new HomeViewModelFactory(batchRepository, batchDetailRepository, addressRepository);
 
-        // Get the HomeViewModel using the factory
+        // Init instance HomeViewModel
         homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
 
-        // Get the SharedViewModel
+        // Init instance SharedViewModel
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
+        // Init instance settingViewModel
+        settingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
 
         // Adapter log list
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_log);
@@ -114,6 +119,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
+            binding.textUnit.setText(setting.unit);
+        });
+
         // Set up button listeners
         binding.buttonSaveLog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,12 +169,17 @@ public class HomeFragment extends Fragment {
 
         try {
             double amount = Double.parseDouble(amountText);
-            // Example rice price, replace with actual value
-            double ricePrice = 1000.0;
-            double price = amount * ricePrice;
-            homeViewModel.insertBatchDetail(currentBatchId, amount, price);
-            Toast.makeText(requireContext(), "Log sudah disimpan", Toast.LENGTH_SHORT).show();
-            resetAmount();
+            settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
+                if (setting != null) {
+                    double ricePrice = setting.rice_price;
+                    double price = amount * ricePrice;
+                    homeViewModel.insertBatchDetail(currentBatchId, amount, price);
+                    Toast.makeText(requireContext(), "Log sudah disimpan", Toast.LENGTH_SHORT).show();
+                    resetAmount();
+                } else {
+                    Toast.makeText(requireContext(), "Setting not found", Toast.LENGTH_SHORT).show();
+                }
+            });
         } catch (NumberFormatException e) {
             Toast.makeText(requireContext(), "Nilai yang kamu input tidak valid", Toast.LENGTH_SHORT).show();
         }
@@ -190,6 +204,14 @@ public class HomeFragment extends Fragment {
         TextView editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
         TextView editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
         TextView tvDateTime = dialogView.findViewById(R.id.tv_datetime);
+
+        // Autofill value from setting
+        settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
+            if (setting != null) {
+                editPicName.setText(setting.pic_name);
+                editPicPhoneNumber.setText(setting.pic_phone_number);
+            }
+        });
 
         // Setup AutoCompleteTextView Weighing Location with adapter
         AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
