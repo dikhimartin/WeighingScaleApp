@@ -127,8 +127,6 @@ public class HomeFragment extends Fragment {
             if (setting != null) {
                 currentSetting = setting;
                 binding.textUnit.setText(setting.unit);
-            } else {
-                Toast.makeText(requireContext(), "Setting not found", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -155,6 +153,7 @@ public class HomeFragment extends Fragment {
                             .show();
                 }else{
                     Toast.makeText(requireContext(), "Tidak ada batch muatan yang aktif", Toast.LENGTH_SHORT).show();
+                    showBatchInputDialog();
                 }
             }
         });
@@ -165,6 +164,7 @@ public class HomeFragment extends Fragment {
     private void saveLog() {
         if (currentBatchId == null) {
             Toast.makeText(requireContext(), "Tidak ada batch muatan yang aktif", Toast.LENGTH_SHORT).show();
+            showBatchInputDialog();
             return;
         }
 
@@ -177,16 +177,10 @@ public class HomeFragment extends Fragment {
         }
 
         try {
-            double amount = Double.parseDouble(amountText);
-                if (currentSetting != null) {
-                    double ricePrice = currentSetting.rice_price;
-                    double price = amount * ricePrice;
-                    homeViewModel.insertBatchDetail(currentBatchId, amount, price);
-                    Toast.makeText(requireContext(), "Log sudah disimpan", Toast.LENGTH_SHORT).show();
-                    resetAmount();
-                } else {
-                    Toast.makeText(requireContext(), "Setting not found", Toast.LENGTH_SHORT).show();
-                }
+            int amount = Integer.parseInt(amountText);
+            homeViewModel.insertBatchDetail(currentBatchId, amount, currentSetting);
+            Toast.makeText(requireContext(), "Log sudah disimpan", Toast.LENGTH_SHORT).show();
+            resetAmount();
         } catch (NumberFormatException e) {
             Toast.makeText(requireContext(), "Nilai yang kamu input tidak valid", Toast.LENGTH_SHORT).show();
         }
@@ -271,6 +265,7 @@ public class HomeFragment extends Fragment {
                         batch.weighing_location_id = weighingLocationID[0];
                     }
                     homeViewModel.insertBatch(batch);
+                    Toast.makeText(requireContext(), "Batch muatan sudah aktif", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss());
 

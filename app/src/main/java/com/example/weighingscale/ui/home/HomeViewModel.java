@@ -7,6 +7,7 @@ import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.data.model.Province;
 import com.example.weighingscale.data.model.City;
+import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.data.model.Subdistrict;
 import com.example.weighingscale.data.repository.AddressRepository;
 import com.example.weighingscale.data.repository.BatchRepository;
@@ -41,11 +42,19 @@ public class HomeViewModel extends ViewModel {
         batchRepository.insertBatch(batch);
     }
 
-    public void insertBatchDetail(String batchId, double amount, double price) {
+    public void insertBatchDetail(String batchId, int amount, Setting setting) {
         BatchDetail batchDetail = new BatchDetail();
+        double price = 0.0;
+        String unit = "kg";
+        if (setting != null) {
+            double ricePrice = setting.rice_price;
+            price = amount * ricePrice;
+            unit = setting.unit;
+        }
         batchDetail.batch_id = batchId;
         batchDetail.datetime = new Date();
         batchDetail.amount = amount;
+        batchDetail.unit = unit;
         batchDetail.price = price;
         batchDetailRepository.insert(batchDetail);
     }

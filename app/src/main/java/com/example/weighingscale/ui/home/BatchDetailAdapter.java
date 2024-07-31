@@ -52,10 +52,18 @@ public class BatchDetailAdapter extends ListAdapter<BatchDetail, BatchDetailAdap
     @Override
     public void onBindViewHolder(@NonNull BatchDetailHolder holder, int position) {
         BatchDetail currentData = getItem(position);
+        if (currentData == null) {
+            return; // Return early if data at position is null
+        }
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         String formattedDate = dateFormat.format(currentData.getDatetime());
-        holder.textViewWeight.setText(String.format(Locale.getDefault(), "%.1f Kg", currentData.getAmount()));
+
+        // Format the amount text including the unit
+        String amountText = String.format(Locale.getDefault(), "%.0f %s", currentData.getAmount(), currentData.getUnit());
+        holder.textViewWeight.setText(amountText);
         holder.textViewDate.setText(formattedDate);
+
+        // Change background color based on position
         if (position == 0) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.selectedItem));
         } else {
@@ -63,10 +71,10 @@ public class BatchDetailAdapter extends ListAdapter<BatchDetail, BatchDetailAdap
         }
     }
 
-    public class BatchDetailHolder extends RecyclerView.ViewHolder {
-        private TextView textViewDate;
-        private TextView textViewWeight;
-        private CardView cardView;
+    public static class BatchDetailHolder extends RecyclerView.ViewHolder {
+        private final TextView textViewDate;
+        private final TextView textViewWeight;
+        private final CardView cardView;
 
         public BatchDetailHolder(@NonNull View itemView) {
             super(itemView);

@@ -7,6 +7,7 @@
     android:padding="16dp"
     tools:context=".ui.home.HomeFragment">
 
+
     <!-- Container for amount and unit -->
     <LinearLayout
         android:id="@+id/llAmountUnit"
@@ -30,18 +31,21 @@
             android:textStyle="bold"
             android:textColor="?attr/colorSecondary"
             android:layout_marginEnd="8dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="HardcodedText" />
 
         <!-- Manual Input for Amount -->
         <EditText
             android:id="@+id/edit_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autofillHints="0"
             android:hint="0"
             android:inputType="numberDecimal"
             android:textSize="64sp"
             android:layout_marginEnd="8dp"
-            android:visibility="visible" />
+            android:visibility="visible"
+            tools:ignore="HardcodedText" />
 
         <!-- Unit Display -->
         <TextView
@@ -50,7 +54,8 @@
             android:layout_height="wrap_content"
             android:text="Kg"
             android:textSize="24sp"
-            android:textColor="?attr/colorPrimary" />
+            android:textColor="?attr/colorPrimary"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
     <!-- Button Group -->
@@ -72,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="Simpan"
+            android:text="@string/save"
             android:backgroundTint="?attr/colorPrimary" />
 
     </LinearLayout>
@@ -89,20 +94,62 @@
         android:layout_marginTop="32dp"
         app:layout_constraintTop_toBottomOf="@id/button_group"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="HardcodedText"/>
 
     <!-- Log List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_log"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/text_log_title"
-        app:layout_constraintBottom_toTopOf="@id/finish_button_group"
+        app:layout_constraintBottom_toTopOf="@id/card_total"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_log" />
 
+    <!-- Card View for Total Display -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_total"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="1dp"
+        app:layout_constraintTop_toBottomOf="@id/recycler_view_log"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="13dp">
+            <!-- Left Side: "Total" Label -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total"
+                android:textSize="18sp"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+            <!-- Right Side: Display id/total_weight -->
+            <TextView
+                android:id="@+id/text_total_weight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="1500 Kg"
+                android:textSize="18sp"
+                android:textColor="?attr/colorSecondary"
+                android:textStyle="bold"
+                android:gravity="end"
+                tools:ignore="HardcodedText"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- Finish Button Group -->
     <LinearLayout
@@ -111,7 +158,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/recycler_view_log"
+        app:layout_constraintTop_toBottomOf="@id/card_total"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Selesai"
-            android:backgroundTint="?attr/colorSecondary" />
+            android:backgroundTint="?attr/colorSecondary"
+            tools:ignore="HardcodedText"/>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

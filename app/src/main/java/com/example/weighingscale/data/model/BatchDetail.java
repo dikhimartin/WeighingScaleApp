@@ -20,15 +20,13 @@ public class BatchDetail {
     public String id;
     public String batch_id;
     public Date datetime;
-    public double amount;
+    public String unit;
+    public int amount;
     public double price;
 
+    @NonNull
     public String getId() {
         return id;
-    }
-
-    public String getBatch_id() {
-        return batch_id;
     }
 
     public Date getDatetime() {
@@ -39,8 +37,8 @@ public class BatchDetail {
         return amount;
     }
 
-    public double getPrice() {
-        return price;
+    public String getUnit(){
+        return unit;
     }
 
     // Constructor
