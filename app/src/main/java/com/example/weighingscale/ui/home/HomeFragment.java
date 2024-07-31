@@ -17,6 +17,7 @@ import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.City;
 import com.example.weighingscale.data.model.Province;
+import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.data.repository.AddressRepository;
 import com.example.weighingscale.data.repository.BatchDetailRepository;
 import com.example.weighingscale.data.repository.BatchRepository;
@@ -39,7 +40,9 @@ public class HomeFragment extends Fragment {
     private SettingViewModel settingViewModel;
     private SharedViewModel sharedViewModel;
     private BatchDetailAdapter adapter;
+
     private String currentBatchId = null;
+    private Setting currentSetting;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -119,8 +122,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Observe setting once
         settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
-            binding.textUnit.setText(setting.unit);
+            if (setting != null) {
+                currentSetting = setting;
+                binding.textUnit.setText(setting.unit);
+            } else {
+                Toast.makeText(requireContext(), "Setting not found", Toast.LENGTH_SHORT).show();
+            }
         });
 
         // Set up button listeners
@@ -169,9 +178,8 @@ public class HomeFragment extends Fragment {
 
         try {
             double amount = Double.parseDouble(amountText);
-            settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
-                if (setting != null) {
-                    double ricePrice = setting.rice_price;
+                if (currentSetting != null) {
+                    double ricePrice = currentSetting.rice_price;
                     double price = amount * ricePrice;
                     homeViewModel.insertBatchDetail(currentBatchId, amount, price);
                     Toast.makeText(requireContext(), "Log sudah disimpan", Toast.LENGTH_SHORT).show();
@@ -179,7 +187,6 @@ public class HomeFragment extends Fragment {
                 } else {
                     Toast.makeText(requireContext(), "Setting not found", Toast.LENGTH_SHORT).show();
                 }
-            });
         } catch (NumberFormatException e) {
             Toast.makeText(requireContext(), "Nilai yang kamu input tidak valid", Toast.LENGTH_SHORT).show();
         }
@@ -206,12 +213,10 @@ public class HomeFragment extends Fragment {
         TextView tvDateTime = dialogView.findViewById(R.id.tv_datetime);
 
         // Autofill value from setting
-        settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
-            if (setting != null) {
-                editPicName.setText(setting.pic_name);
-                editPicPhoneNumber.setText(setting.pic_phone_number);
-            }
-        });
+        if (currentSetting != null) {
+            editPicName.setText(currentSetting.pic_name);
+            editPicPhoneNumber.setText(currentSetting.pic_phone_number);
+        }
 
         // Setup AutoCompleteTextView Weighing Location with adapter
         AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
