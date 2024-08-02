@@ -1,5 +1,6 @@
 package com.example.weighingscale.ui.home;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Batch;
+import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.data.model.City;
 import com.example.weighingscale.data.model.Province;
 import com.example.weighingscale.data.model.Setting;
@@ -32,6 +34,7 @@ import com.example.weighingscale.util.DateTimeUtil;
 import android.widget.AutoCompleteTextView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class HomeFragment extends Fragment {
 
@@ -44,6 +47,7 @@ public class HomeFragment extends Fragment {
     private String currentBatchId = null;
     private Setting currentSetting;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -74,31 +78,48 @@ public class HomeFragment extends Fragment {
         adapter = new BatchDetailAdapter(requireContext());
         recyclerView.setAdapter(adapter);
 
+        // Observe setting once
+        settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
+            if (setting != null) {
+                currentSetting = setting;
+                binding.textUnit.setText(setting.unit);
+            }
+        });
+
         // Observe active batch
-        homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), new Observer<Batch>() {
-            @Override
-            public void onChanged(Batch batch) {
-                if (batch != null) {
-                    currentBatchId = batch.id;
-                    // Display batch information on the screen
-                    // Example: binding.textBatchInfo.setText(batch.toString());
-                    homeViewModel.getBatchDetails(currentBatchId).observe(getViewLifecycleOwner(), data -> {
-                        BatchDetailAdapter adapter = (BatchDetailAdapter) ((RecyclerView) requireView().findViewById(R.id.recycler_view_log)).getAdapter();
-                        if (adapter != null) {
-                            adapter.submitList(data);
-                            // Auto scroll to top after submitting list
-                            if (data != null && !data.isEmpty()) {
-                                recyclerView.smoothScrollToPosition(0);
-                            }
+        homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
+            if (batch != null) {
+                currentBatchId = batch.id;
+                homeViewModel.getBatchDetails(currentBatchId).observe(getViewLifecycleOwner(), data -> {
+                    adapter.submitList(data);
+
+                    if (data != null && !data.isEmpty()) {
+                        recyclerView.smoothScrollToPosition(0);
+
+                        // Calculate total weight
+                        double totalWeight = 0.0;
+                        for (BatchDetail detail : data) {
+                            totalWeight += detail.getAmount();
                         }
-                    });
-                } else {
-                    currentBatchId = null;
-                    // Handle no active batch
-                    // Example: binding.textBatchInfo.setText("No active batch");
-                    adapter.submitList(null);
-                    showBatchInputDialog();
-                }
+                        String totalWeightText = String.format(Locale.getDefault(), "%.0f %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
+                        binding.textTotalWeight.setText(totalWeightText);
+
+                        // Update item count
+                        String itemCountText = String.format(Locale.getDefault(), "%d Item", data.size());
+                        binding.textTotalItems.setText(itemCountText);
+
+                        binding.cardTotal.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.cardTotal.setVisibility(View.GONE);
+                        binding.textTotalItems.setText("0 Item");
+                    }
+                });
+            } else {
+                currentBatchId = null;
+                binding.cardTotal.setVisibility(View.GONE);
+                binding.textTotalItems.setText("0 Item");
+                adapter.submitList(null);
+                showBatchInputDialog();
             }
         });
 
@@ -119,14 +140,6 @@ public class HomeFragment extends Fragment {
                     binding.textAmount.setVisibility(View.GONE);
                     binding.editAmount.setVisibility(View.VISIBLE);
                 }
-            }
-        });
-
-        // Observe setting once
-        settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
-            if (setting != null) {
-                currentSetting = setting;
-                binding.textUnit.setText(setting.unit);
             }
         });
 
