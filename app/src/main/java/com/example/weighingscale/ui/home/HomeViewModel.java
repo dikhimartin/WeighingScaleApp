@@ -75,13 +75,4 @@ public class HomeViewModel extends ViewModel {
     public LiveData<List<Subdistrict>> getSubdistrictsByCityId(String cityId) {
         return addressRepository.getSubdistrictsByCityId(cityId);
     }
-
-//    public void setSelectedProvinceId(String provinceId) {
-//        selectedProvinceId.setValue(provinceId);
-//    }
-//
-//    public void setSelectedCityId(String cityId) {
-//        selectedCityId.setValue(cityId);
-//    }
-
 }

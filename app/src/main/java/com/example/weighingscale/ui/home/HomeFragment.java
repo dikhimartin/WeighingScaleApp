@@ -115,10 +115,7 @@ public class HomeFragment extends Fragment {
                     }
                 });
             } else {
-                currentBatchId = null;
-                binding.cardTotal.setVisibility(View.GONE);
-                binding.textTotalItems.setText("0 Item");
-                adapter.submitList(null);
+                clearBatchDetails();
                 showBatchInputDialog();
             }
         });
@@ -313,6 +310,14 @@ public class HomeFragment extends Fragment {
                 });
             }
         });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void clearBatchDetails() {
+        currentBatchId = null;
+        binding.cardTotal.setVisibility(View.GONE);
+        binding.textTotalItems.setText("0 Item");
+        adapter.submitList(null);
     }
 
     @Override
