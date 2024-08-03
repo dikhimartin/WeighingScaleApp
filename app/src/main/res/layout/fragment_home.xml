@@ -8,6 +8,53 @@
     tools:context=".ui.home.HomeFragment">
 
 
+     <!-- Summary Batch -->
+    <LinearLayout
+        android:id="@+id/summary_batch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/icon_mode"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_circle_danger" />
+
+        <TextView
+            android:id="@+id/text_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mode Manual"
+            android:textSize="15sp"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/text_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Kirim ke : Jakarta"
+            android:textSize="15sp"
+            android:gravity="end"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
+
+
     <!-- Container for amount and unit -->
     <LinearLayout
         android:id="@+id/llAmountUnit"
