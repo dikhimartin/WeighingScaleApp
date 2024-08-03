@@ -55,13 +55,14 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // Init instance HomeViewModel
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         // Init instance SharedViewModel
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         // Init instance settingViewModel
-        settingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
+        settingViewModel = new ViewModelProvider(requireActivity()).get(SettingViewModel.class);
 
         // Adapter log list
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_log);
