@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.ui.shared.SharedAdapter;
+import com.example.weighingscale.util.ValidationUtil;
 
 public class SettingFragment extends Fragment {
 
@@ -85,7 +86,37 @@ public class SettingFragment extends Fragment {
     }
 
     private boolean validateInputs(String picName, String picPhoneNumber, String ricePriceStr, String unit) {
-        return !picName.isEmpty() && !picPhoneNumber.isEmpty() && !ricePriceStr.isEmpty() && settingViewModel.isValidUnit(unit);
+        boolean isValid = true;
+
+        if (ValidationUtil.isFieldEmpty(picName)) {
+            ValidationUtil.setFieldError(etPicName, requireContext(), R.string.is_required);
+            isValid = false;
+        } else {
+            etPicName.setError(null);
+        }
+
+        if (ValidationUtil.isFieldEmpty(picPhoneNumber)) {
+            ValidationUtil.setFieldError(etPicPhoneNumber, requireContext(), R.string.is_required);
+            isValid = false;
+        } else {
+            etPicPhoneNumber.setError(null);
+        }
+
+        if (ValidationUtil.isFieldEmpty(ricePriceStr) || !ValidationUtil.isNumeric(ricePriceStr)) {
+            ValidationUtil.setFieldError(etRicePrice, requireContext(), R.string.is_required);
+            isValid = false;
+        } else {
+            etRicePrice.setError(null);
+        }
+
+        if (!settingViewModel.isValidUnit(unit)) {
+            ValidationUtil.setFieldError(actvUnit, requireContext(), R.string.is_required);
+            isValid = false;
+        } else {
+            actvUnit.setError(null);
+        }
+
+        return isValid;
     }
 
     private Setting createSetting(String picName, String picPhoneNumber, float ricePrice, String unit) {
@@ -100,5 +131,6 @@ public class SettingFragment extends Fragment {
     private void showToast(String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
+
 }
 

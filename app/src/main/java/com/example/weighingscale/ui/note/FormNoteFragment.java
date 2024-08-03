@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Note;
+import com.example.weighingscale.util.ValidationUtil;
 
 public class FormNoteFragment extends Fragment {
 
@@ -96,27 +97,35 @@ public class FormNoteFragment extends Fragment {
     }
 
     private void saveData() {
+        // Get input values
         String title = editTextTitle.getText().toString().trim();
         String description = editTextDescription.getText().toString().trim();
         int priority = numberPickerPriority.getValue();
 
-        if (title.isEmpty()) {
-            editTextTitle.setError(getString(R.string.is_required));
-            editTextTitle.requestFocus();
-            return;
+        // Validate inputs
+        if (ValidationUtil.isFieldEmpty(title)) {
+            ValidationUtil.setFieldError(editTextTitle, requireContext(), R.string.is_required);
+            return; // Exit early if validation fails
         }
 
+        // Create Note object
         Note note = new Note(title, description, priority);
 
+        // Insert or update note based on existence of note_id
         if (getArguments() != null && getArguments().containsKey("note_id")) {
             note.setId(getArguments().getInt("note_id", -1));
             noteViewModel.update(note);
-            Toast.makeText(requireContext(), R.string.message_update_success, Toast.LENGTH_SHORT).show();
+            showToast(R.string.message_update_success);
         } else {
             noteViewModel.insert(note);
-            Toast.makeText(requireContext(), R.string.message_save_success, Toast.LENGTH_SHORT).show();
+            showToast(R.string.message_save_success);
         }
 
+        // Go back to previous activity/fragment
         requireActivity().onBackPressed();
+    }
+
+    private void showToast(int messageResId) {
+        Toast.makeText(requireContext(), messageResId, Toast.LENGTH_SHORT).show();
     }
 }
