@@ -42,15 +42,15 @@
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/text_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Kirim ke : Jakarta"
-            android:textSize="15sp"
-            android:gravity="end"
-            tools:ignore="HardcodedText" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/text_location"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_weight="1"-->
+        <!--            android:text="Kirim ke : Jakarta"-->
+        <!--            android:textSize="15sp"-->
+        <!--            android:gravity="end"-->
+        <!--            tools:ignore="HardcodedText" />-->
     </LinearLayout>
 
 
