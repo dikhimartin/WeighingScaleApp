@@ -1,8 +1,12 @@
 package com.example.weighingscale.ui.home;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+import com.example.weighingscale.data.local.database.AppDatabase;
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.data.model.Province;
@@ -16,26 +20,24 @@ import com.example.weighingscale.data.repository.BatchDetailRepository;
 import java.util.Date;
 import java.util.List;
 
-public class HomeViewModel extends ViewModel {
+public class HomeViewModel extends AndroidViewModel {
+    private BatchRepository batchRepository;
+    private BatchDetailRepository batchDetailRepository;
+    private AddressRepository addressRepository;
 
-    private final BatchRepository batchRepository;
-    private final BatchDetailRepository batchDetailRepository;
-    private final AddressRepository addressRepository;
-    private LiveData<Batch> activeBatch;
-
-    public HomeViewModel(BatchRepository batchRepository, BatchDetailRepository batchDetailRepository, AddressRepository addressRepository) {
-        this.batchRepository = batchRepository;
-        this.batchDetailRepository = batchDetailRepository;
-        this.addressRepository = addressRepository;
-        this.activeBatch = batchRepository.getActiveBatch();
+    public HomeViewModel(@NonNull Application application) {
+        super(application);
+        batchRepository = new BatchRepository(application);
+        batchDetailRepository = new BatchDetailRepository(application);
+        addressRepository = new AddressRepository(application);
     }
 
     public LiveData<List<BatchDetail>> getBatchDetails(String batchId) {
-        return batchDetailRepository.getBatchDetails(batchId);
+        return batchDetailRepository.getDatasByBatchID(batchId);
     }
 
     public LiveData<Batch> getActiveBatch() {
-        return activeBatch;
+        return batchRepository.getActiveBatch();
     }
 
     public void insertBatch(Batch batch) {
@@ -56,7 +58,9 @@ public class HomeViewModel extends ViewModel {
         batchDetail.amount = amount;
         batchDetail.unit = unit;
         batchDetail.price = price;
-        batchDetailRepository.insert(batchDetail);
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            batchDetailRepository.insert(batchDetail);
+        });
     }
 
     public void completeBatch(String batchId) {
@@ -76,3 +80,4 @@ public class HomeViewModel extends ViewModel {
         return addressRepository.getSubdistrictsByCityId(cityId);
     }
 }
+

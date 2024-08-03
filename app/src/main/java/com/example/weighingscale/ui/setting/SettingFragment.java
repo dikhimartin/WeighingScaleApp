@@ -22,7 +22,6 @@ public class SettingFragment extends Fragment {
 
     private SettingViewModel settingViewModel;
     private EditText etPicName, etPicPhoneNumber, etRicePrice;
-    private Button btnSave;
     private AutoCompleteTextView actvUnit;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -34,7 +33,7 @@ public class SettingFragment extends Fragment {
         etPicName = root.findViewById(R.id.et_pic_name);
         etPicPhoneNumber = root.findViewById(R.id.et_pic_phone_number);
         etRicePrice = root.findViewById(R.id.et_rice_price);
-        btnSave = root.findViewById(R.id.btn_save);
+        Button btnSave = root.findViewById(R.id.btn_save);
         actvUnit = root.findViewById(R.id.actv_unit);
 
         // Setup AutoCompleteTextView with adapter

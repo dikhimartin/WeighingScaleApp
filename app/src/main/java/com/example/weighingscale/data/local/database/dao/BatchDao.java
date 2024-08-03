@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface BatchDao {
     @Query("SELECT * FROM Batch")
-    List<Batch> getAllBatches();
+    LiveData<List<Batch>> getDatas();
 
     @Query("SELECT * FROM Batch WHERE status = 1 LIMIT 1")
     LiveData<Batch> getActiveBatch();
@@ -28,5 +28,5 @@ public interface BatchDao {
 
     @Transaction
     @Query("UPDATE Batch SET status = 0 WHERE status = 1")
-    void completeAllBatches();
+    void completeBatch();
 }

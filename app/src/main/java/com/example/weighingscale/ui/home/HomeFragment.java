@@ -55,16 +55,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Obtain the repository instances
-        BatchRepository batchRepository = BatchRepository.getInstance(requireContext());
-        BatchDetailRepository batchDetailRepository = BatchDetailRepository.getInstance(requireContext());
-        AddressRepository addressRepository = AddressRepository.getInstance(requireContext());
-
-        // Create the ViewModelFactory
-        HomeViewModelFactory factory = new HomeViewModelFactory(batchRepository, batchDetailRepository, addressRepository);
-
-        // Init instance HomeViewModel
-        homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         // Init instance SharedViewModel
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);

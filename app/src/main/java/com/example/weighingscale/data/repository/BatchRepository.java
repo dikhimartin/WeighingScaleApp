@@ -1,28 +1,26 @@
 package com.example.weighingscale.data.repository;
 
-import android.content.Context;
+import android.app.Application;
 
 import androidx.lifecycle.LiveData;
-
 import com.example.weighingscale.data.local.database.AppDatabase;
 import com.example.weighingscale.data.local.database.dao.BatchDao;
 import com.example.weighingscale.data.model.Batch;
 
-import java.util.concurrent.ExecutorService;
+import java.util.List;
 
 public class BatchRepository {
+    private BatchDao batchDao;
+    private LiveData<List<Batch>> listBatch;
 
-    private final BatchDao batchDao;
-    private final ExecutorService executor;
-
-    public BatchRepository(BatchDao batchDao, ExecutorService executor) {
-        this.batchDao = batchDao;
-        this.executor = executor;
+    public BatchRepository(Application application) {
+        AppDatabase database = AppDatabase.getInstance(application);
+        batchDao = database.batchDao();
+        listBatch = batchDao.getDatas();
     }
 
-    public static BatchRepository getInstance(Context context) {
-        AppDatabase db = AppDatabase.getInstance(context);
-        return new BatchRepository(db.batchDao(), AppDatabase.databaseWriteExecutor);
+    public LiveData<List<Batch>> getDatas() {
+        return listBatch;
     }
 
     public LiveData<Batch> getActiveBatch() {
@@ -30,14 +28,16 @@ public class BatchRepository {
     }
 
     public void insertBatch(Batch batch) {
-        executor.execute(() -> {
-            batchDao.completeAllBatches(); // Complete any existing active batch
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            batchDao.completeBatch(); // Complete any existing active batch
             batch.status = 1; // Set the new batch as active
             batchDao.insertBatch(batch);
         });
     }
 
     public void completeBatch(String batchId) {
-        executor.execute(() -> batchDao.completeBatch(batchId));
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            batchDao.completeBatch(batchId);
+        });
     }
 }

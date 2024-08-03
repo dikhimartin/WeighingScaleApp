@@ -1,36 +1,28 @@
 package com.example.weighingscale.data.repository;
 
-import android.content.Context;
+import android.app.Application;
+
 import androidx.lifecycle.LiveData;
 import com.example.weighingscale.data.local.database.AppDatabase;
-import com.example.weighingscale.data.local.database.dao.BatchDetailDao;
-import com.example.weighingscale.data.local.database.dao.ProvinceDao;
 import com.example.weighingscale.data.local.database.dao.CityDao;
+import com.example.weighingscale.data.local.database.dao.ProvinceDao;
 import com.example.weighingscale.data.local.database.dao.SubdistrictDao;
 import com.example.weighingscale.data.model.Province;
 import com.example.weighingscale.data.model.City;
 import com.example.weighingscale.data.model.Subdistrict;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 public class AddressRepository {
+    private ProvinceDao provinceDao;
+    private CityDao cityDao;
+    private SubdistrictDao subdistrictDao;
 
-    private final ProvinceDao provinceDao;
-    private final CityDao cityDao;
-    private final SubdistrictDao subdistrictDao;
-    private final ExecutorService executor;
-
-    public AddressRepository(ProvinceDao provinceDao, CityDao cityDao, SubdistrictDao subdistrictDao, ExecutorService executor) {
-        this.provinceDao = provinceDao;
-        this.cityDao = cityDao;
-        this.subdistrictDao = subdistrictDao;
-        this.executor = executor;
-    }
-
-    public static AddressRepository getInstance(Context context) {
-        AppDatabase db = AppDatabase.getInstance(context);
-        return new AddressRepository(db.provinceDao(), db.cityDao(), db.subdistrictDao(), AppDatabase.databaseWriteExecutor);
+    public AddressRepository(Application application) {
+        AppDatabase database = AppDatabase.getInstance(application);
+        provinceDao = database.provinceDao();
+        cityDao = database.cityDao();
+        subdistrictDao = database.subdistrictDao();
     }
 
     public LiveData<List<Province>> getAllProvinces() {
@@ -44,4 +36,5 @@ public class AddressRepository {
     public LiveData<List<Subdistrict>> getSubdistrictsByCityId(String cityId) {
         return subdistrictDao.getSubdistrictsByCityId(cityId);
     }
+
 }

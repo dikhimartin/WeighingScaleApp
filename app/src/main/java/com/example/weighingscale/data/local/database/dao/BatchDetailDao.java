@@ -13,10 +13,10 @@ import java.util.List;
 public interface BatchDetailDao {
 
     @Query("SELECT * FROM BatchDetail WHERE batch_id = :batchId ORDER BY datetime DESC")
-    LiveData<List<BatchDetail>> getBatchDetails(String batchId);
+    LiveData<List<BatchDetail>> getDatasByBatchID(String batchId);
 
     @Query("SELECT * FROM BatchDetail ORDER BY datetime DESC")
-    LiveData<List<BatchDetail>> getAllNotes();
+    LiveData<List<BatchDetail>> getDatas();
 
     @Insert
     void insert(BatchDetail batchDetail);
