@@ -209,7 +209,7 @@
                 android:layout_weight="1"
                 android:text="0 Kg"
                 android:textSize="15sp"
-                android:textColor="?attr/colorSecondary"
+                android:textColor="@color/sky_blue"
                 android:textStyle="bold"
                 android:gravity="end"
                 tools:ignore="HardcodedText"/>
