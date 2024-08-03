@@ -10,39 +10,28 @@ import java.util.UUID;
 import java.util.Date;
 
 @Entity(tableName = "Batch",
-        foreignKeys = @ForeignKey(entity = Subdistrict.class,
-                parentColumns = "id",
-                childColumns = "weighing_location_id",
-                onDelete = ForeignKey.CASCADE))
+        foreignKeys = {
+                @ForeignKey(entity = City.class,
+                        parentColumns = "id",
+                        childColumns = "weighing_location_id",
+                        onDelete = ForeignKey.CASCADE),
+                @ForeignKey(entity = City.class,
+                        parentColumns = "id",
+                        childColumns = "delivery_destination_id",
+                        onDelete = ForeignKey.CASCADE)
+        })
 public class Batch {
     @PrimaryKey
     @NonNull
     public String id;
-
-    @ColumnInfo(name = "pic_name")
-    public String picName;
-
-    @ColumnInfo(name = "pic_phone_number")
-    public String picPhoneNumber;
-
-    @ColumnInfo(name = "datetime")
+    public String pic_name;
+    public String pic_phone_number;
     public Date datetime;
-
-    @ColumnInfo(name = "weighing_location_id")
-    public String weighingLocationId;
-
-    @ColumnInfo(name = "weighing_location_geo")
-    public String weighingLocationGeo;
-
-    @ColumnInfo(name = "delivery_destination_id")
-    public String deliveryDestinationId;
-
-    @ColumnInfo(name = "truck_driver_name")
-    public String truckDriverName;
-
-    @ColumnInfo(name = "truck_driver_phone_number")
-    public String truckDriverPhoneNumber;
-
+    public String weighing_location_id;
+    public String weighing_location_geo;
+    public String delivery_destination_id;
+    public String truck_driver_name;
+    public String truck_driver_phone_number;
     public int status; // 1 for active, 0 for completed
 
     // Constructor

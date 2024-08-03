@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Setting;
+import com.example.weighingscale.ui.shared.SharedAdapter;
 
 public class SettingFragment extends Fragment {
 
@@ -37,16 +38,16 @@ public class SettingFragment extends Fragment {
 
         // Setup AutoCompleteTextView with adapter
         settingViewModel.getUnitOptions().observe(getViewLifecycleOwner(), units -> {
-            UnitAdapter adapter = new UnitAdapter(requireContext(), units);
+            SharedAdapter adapter = new SharedAdapter(requireContext(), units);
             actvUnit.setAdapter(adapter);
         });
 
         // Observe setting data
         settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
             if (setting != null) {
-                etPicName.setText(setting.picName);
-                etPicPhoneNumber.setText(setting.picPhoneNumber);
-                etRicePrice.setText(String.valueOf(setting.ricePrice));
+                etPicName.setText(setting.pic_name);
+                etPicPhoneNumber.setText(setting.pic_phone_number);
+                etRicePrice.setText(String.valueOf(setting.rice_price));
 
                 // Autofill unit if available
                 String displayText = settingViewModel.getUnitDisplayText(setting.unit);
@@ -89,9 +90,9 @@ public class SettingFragment extends Fragment {
 
     private Setting createSetting(String picName, String picPhoneNumber, float ricePrice, String unit) {
         Setting setting = new Setting();
-        setting.picName = picName;
-        setting.picPhoneNumber = picPhoneNumber;
-        setting.ricePrice = ricePrice;
+        setting.pic_name = picName;
+        setting.pic_phone_number = picPhoneNumber;
+        setting.rice_price = ricePrice;
         setting.unit = unit;
         return setting;
     }

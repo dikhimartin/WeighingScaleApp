@@ -33,6 +33,7 @@ android {
 
 dependencies {
     implementation libs.appcompat
+    implementation libs.gson;
 
     // UI
     implementation libs.material

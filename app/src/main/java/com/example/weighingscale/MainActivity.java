@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.LogModelUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -152,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
                     case MESSAGE_READ:
                         // TODO : Baca timbangan
                         String readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
-                        sharedViewModel.setWeight(readMessage);
+                        int weightValue = FormatterUtil.sanitizeAndConvertToInteger(readMessage);
+                        sharedViewModel.setWeight(weightValue);
                         break;
                     case HANDLER_STATUS:
                          LogModelUtils.printObjectFields(msg);

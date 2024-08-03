@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class SharedViewModel extends ViewModel {
-    private final MutableLiveData<String> weight = new MutableLiveData<>();
+    private final MutableLiveData<Integer> weight = new MutableLiveData<>();
     private final MutableLiveData<Integer> bluetoothStatus = new MutableLiveData<>();
 
-    public void setWeight(String weight) {
+    public void setWeight(int weight) {
         this.weight.setValue(weight);
     }
 
-    public LiveData<String> getWeight() {
+    public LiveData<Integer> getWeight() {
         return weight;
     }
 
@@ -23,7 +23,6 @@ public class SharedViewModel extends ViewModel {
     public LiveData<Integer> getBluetoothStatus() {
         return bluetoothStatus;
     }
-
 }
 
 

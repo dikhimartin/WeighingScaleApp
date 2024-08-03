@@ -7,6 +7,54 @@
     android:padding="16dp"
     tools:context=".ui.home.HomeFragment">
 
+
+     <!-- Summary Batch -->
+    <LinearLayout
+        android:id="@+id/summary_batch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/icon_mode"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_circle_danger" />
+
+        <TextView
+            android:id="@+id/text_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mode Manual"
+            android:textSize="15sp"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/text_location"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_weight="1"-->
+        <!--            android:text="Kirim ke : Jakarta"-->
+        <!--            android:textSize="15sp"-->
+        <!--            android:gravity="end"-->
+        <!--            tools:ignore="HardcodedText" />-->
+    </LinearLayout>
+
+
+
     <!-- Container for amount and unit -->
     <LinearLayout
         android:id="@+id/llAmountUnit"
@@ -30,18 +78,21 @@
             android:textStyle="bold"
             android:textColor="?attr/colorSecondary"
             android:layout_marginEnd="8dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="HardcodedText" />
 
         <!-- Manual Input for Amount -->
         <EditText
             android:id="@+id/edit_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Enter Amount"
+            android:autofillHints="0"
+            android:hint="0"
             android:inputType="numberDecimal"
             android:textSize="64sp"
             android:layout_marginEnd="8dp"
-            android:visibility="visible" />
+            android:visibility="visible"
+            tools:ignore="HardcodedText" />
 
         <!-- Unit Display -->
         <TextView
@@ -50,7 +101,8 @@
             android:layout_height="wrap_content"
             android:text="Kg"
             android:textSize="24sp"
-            android:textColor="?attr/colorPrimary" />
+            android:textColor="?attr/colorPrimary"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
     <!-- Button Group -->
@@ -72,37 +124,97 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="Simpan"
+            android:text="@string/save"
             android:backgroundTint="?attr/colorPrimary" />
-
     </LinearLayout>
 
     <!-- Log Title -->
-    <TextView
-        android:id="@+id/text_log_title"
-        android:layout_width="wrap_content"
+     <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Log Timbangan"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintTop_toBottomOf="@id/button_group"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Log Timbangan"
+            android:textSize="18sp"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+        <TextView
+            android:id="@+id/text_total_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0 Item"
+            android:textSize="15sp"
+            android:gravity="end"
+            tools:ignore="HardcodedText"/>
+    </LinearLayout>
 
     <!-- Log List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_log"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/text_log_title"
-        app:layout_constraintBottom_toTopOf="@id/finish_button_group"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintBottom_toTopOf="@id/card_total"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_log" />
 
+    <!-- Card View for Total Display -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_total"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="1dp"
+        app:layout_constraintTop_toBottomOf="@id/recycler_view_log"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <!-- Left Side: "Total" Label -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total Berat"
+                android:textSize="15sp"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+            <!-- Right Side: Display id/total_weight -->
+            <TextView
+                android:id="@+id/text_total_weight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0 Kg"
+                android:textSize="15sp"
+                android:textColor="@color/sky_blue"
+                android:textStyle="bold"
+                android:gravity="end"
+                tools:ignore="HardcodedText"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- Finish Button Group -->
     <LinearLayout
@@ -111,7 +223,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/recycler_view_log"
+        app:layout_constraintTop_toBottomOf="@id/card_total"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +237,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Selesai"
-            android:backgroundTint="?attr/colorSecondary" />
+            android:backgroundTint="?attr/colorSecondary"
+            tools:ignore="HardcodedText"/>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

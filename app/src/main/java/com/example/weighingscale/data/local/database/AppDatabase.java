@@ -1,11 +1,14 @@
 package com.example.weighingscale.data.local.database;
 
 import android.content.Context;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.weighingscale.data.local.database.dao.BatchDao;
 import com.example.weighingscale.data.local.database.dao.BatchDetailDao;
@@ -33,7 +36,7 @@ import java.util.concurrent.Executors;
             City.class,
             Province.class,
             Subdistrict.class
-        }, version = 2)
+        }, version = 1)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract SettingDao settingDao();
@@ -46,22 +49,38 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
-
-    // Change visibility to public
     public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static AppDatabase getInstance(Context context) {
+        Log.d("DatabaseINSTANCE", "PONG");
+
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "weighing_scale_database")
                             .fallbackToDestructiveMigration()
+                            .addCallback(new RoomDatabase.Callback() {
+                                @Override
+                                public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                    super.onCreate(db);
+                                    // Log that the database has been created
+                                    Log.d("DatabaseCallback", "Database created. Starting seeding...");
+
+                                    // Start seeding after database creation
+                                    databaseWriteExecutor.execute(() -> {
+                                        // Create an instance of your seeder
+                                        Seeder seeder = new Seeder(context);
+                                        seeder.seedDatabase();
+                                    });
+                                }
+                            })
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
+
 }
