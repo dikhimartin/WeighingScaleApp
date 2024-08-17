@@ -14,7 +14,7 @@
     <fragment
         android:id="@+id/navigation_data"
         android:name="com.example.weighingscale.ui.dashboard.DashboardFragment"
-        android:label="@string/title_data"
+        android:label="@string/title_history"
         tools:layout="@layout/fragment_batch" />
 
     <fragment
