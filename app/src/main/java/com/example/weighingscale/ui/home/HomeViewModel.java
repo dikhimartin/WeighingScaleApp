@@ -75,9 +75,5 @@ public class HomeViewModel extends AndroidViewModel {
     public LiveData<List<City>> getCitiesByProvinceId(String provinceId) {
         return addressRepository.getCitiesByProvinceId(provinceId);
     }
-
-    public LiveData<List<Subdistrict>> getSubdistrictsByCityId(String cityId) {
-        return addressRepository.getSubdistrictsByCityId(cityId);
-    }
 }
 

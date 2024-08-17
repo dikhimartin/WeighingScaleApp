@@ -13,8 +13,9 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        app:boxBackgroundColor="@color/white">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_pic_name"
             android:layout_width="match_parent"
@@ -29,14 +30,15 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:hint="@string/pic_phone_number"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
+        app:boxBackgroundColor="@color/white">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_pic_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone"/>
+            android:inputType="phone" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Unit Selection -->
@@ -45,14 +47,25 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:hint="@string/select_unit"
-        app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp">
+        app:boxBackgroundColor="@color/white">
+
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/actv_unit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- show message when unit input is disabled -->
+    <TextView
+        android:id="@+id/tv_unit_disabled_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/rose_red"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        android:text="@string/unit_disabled_message" />
 
     <!-- Rice Price (per unit) -->
     <com.google.android.material.textfield.TextInputLayout
@@ -60,25 +73,26 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:hint="@string/rice_price_per_unit"
         app:boxBackgroundColor="@color/white"
-        android:layout_marginBottom="16dp"
         app:boxStrokeWidth="2dp">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_rice_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_save"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/update_settings"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        style="@style/Widget.MaterialComponents.Button"/>
+        android:text="@string/update_settings" />
 
 </LinearLayout>
 

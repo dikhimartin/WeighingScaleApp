@@ -37,7 +37,6 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private HomeViewModel homeViewModel;
-    private SettingViewModel settingViewModel;
     private SharedViewModel sharedViewModel;
     private BatchDetailAdapter adapter;
 
@@ -57,7 +56,7 @@ public class HomeFragment extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         // Init instance settingViewModel
-        settingViewModel = new ViewModelProvider(requireActivity()).get(SettingViewModel.class);
+        SettingViewModel settingViewModel = new ViewModelProvider(requireActivity()).get(SettingViewModel.class);
 
         // Adapter log list
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_log);
@@ -99,8 +98,10 @@ public class HomeFragment extends Fragment {
                         binding.textTotalItems.setText(itemCountText);
 
                         binding.cardTotal.setVisibility(View.VISIBLE);
+                        binding.finishButtonGroup.setVisibility(View.VISIBLE);
                     } else {
                         binding.cardTotal.setVisibility(View.GONE);
+                        binding.finishButtonGroup.setVisibility(View.GONE);
                         binding.textTotalItems.setText("0 Item");
                     }
                 });
@@ -306,6 +307,7 @@ public class HomeFragment extends Fragment {
         binding.cardTotal.setVisibility(View.GONE);
         binding.textTotalItems.setText("0 Item");
         binding.summaryBatch.setVisibility(View.GONE);
+        binding.finishButtonGroup.setVisibility(View.GONE);
         adapter.submitList(null);
     }
 

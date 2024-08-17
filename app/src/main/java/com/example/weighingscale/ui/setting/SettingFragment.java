@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Setting;
+import com.example.weighingscale.ui.home.HomeViewModel;
 import com.example.weighingscale.ui.shared.SharedAdapter;
 import com.example.weighingscale.util.ValidationUtil;
 
@@ -23,23 +25,39 @@ public class SettingFragment extends Fragment {
     private SettingViewModel settingViewModel;
     private EditText etPicName, etPicPhoneNumber, etRicePrice;
     private AutoCompleteTextView actvUnit;
+    private TextView tvUnitDisabledMessage;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        settingViewModel =
-                new ViewModelProvider(this).get(SettingViewModel.class);
+
+        settingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
         View root = inflater.inflate(R.layout.fragment_setting, container, false);
 
+        // Init instance HomeViewModel
+        HomeViewModel homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+
+        // Initialize views
         etPicName = root.findViewById(R.id.et_pic_name);
         etPicPhoneNumber = root.findViewById(R.id.et_pic_phone_number);
         etRicePrice = root.findViewById(R.id.et_rice_price);
-        Button btnSave = root.findViewById(R.id.btn_save);
         actvUnit = root.findViewById(R.id.actv_unit);
+        Button btnSave = root.findViewById(R.id.btn_save);
 
         // Setup AutoCompleteTextView with adapter
         settingViewModel.getUnitOptions().observe(getViewLifecycleOwner(), units -> {
             SharedAdapter adapter = new SharedAdapter(requireContext(), units);
             actvUnit.setAdapter(adapter);
+        });
+
+        // Observe active batch and disable input if needed
+        homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
+            if (batch != null) {
+                root.findViewById(R.id.til_unit).setVisibility(View.GONE);
+                root.findViewById(R.id.tv_unit_disabled_message).setVisibility(View.VISIBLE);
+            } else {
+                root.findViewById(R.id.til_unit).setVisibility(View.VISIBLE);
+                root.findViewById(R.id.tv_unit_disabled_message).setVisibility(View.GONE);
+            }
         });
 
         // Observe setting data
@@ -65,14 +83,14 @@ public class SettingFragment extends Fragment {
         String picName = etPicName.getText().toString().trim();
         String picPhoneNumber = etPicPhoneNumber.getText().toString().trim();
         String ricePriceStr = etRicePrice.getText().toString().trim();
-        String selectedDisplayText = actvUnit.getText().toString().trim();
-        String selectedValue = settingViewModel.getUnitValue(selectedDisplayText);
+        String unitText = actvUnit.getText().toString().trim();
+        String UnitValue = settingViewModel.getUnitValue(unitText);
 
         // Validate and process input
-        if (validateInputs(picName, picPhoneNumber, ricePriceStr, selectedValue)) {
+        if (validateInputs(picName, picPhoneNumber, ricePriceStr, UnitValue)) {
             try {
                 float ricePrice = Float.parseFloat(ricePriceStr);
-                Setting newSetting = createSetting(picName, picPhoneNumber, ricePrice, selectedValue);
+                Setting newSetting = createSetting(picName, picPhoneNumber, ricePrice, UnitValue);
                 settingViewModel.insertOrUpdateSetting(newSetting);
                 showToast("Pengaturan berhasil diubah");
                 requireActivity().onBackPressed();
