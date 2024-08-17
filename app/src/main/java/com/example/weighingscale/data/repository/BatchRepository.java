@@ -1,6 +1,7 @@
 package com.example.weighingscale.data.repository;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 import com.example.weighingscale.data.local.database.AppDatabase;
@@ -23,6 +24,10 @@ public class BatchRepository {
         return listBatch;
     }
 
+    public LiveData<Batch> getDataById(String id) {
+        return batchDao.getDataById(id);
+    }
+
     public LiveData<Batch> getActiveBatch() {
         return batchDao.getActiveBatch();
     }
@@ -39,5 +44,53 @@ public class BatchRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             batchDao.completeBatch(batchId);
         });
+    }
+
+    public void delete(Batch batch) {
+        new DeleteAsyncTask(batchDao).execute(batch);
+    }
+
+    public void deleteAll() {
+        new DeleteAllAsyncTask(batchDao).execute();
+    }
+
+    public void deleteByIds(List<String> ids) {
+        new DeleteByIdsAsyncTask(batchDao).execute(ids);
+    }
+
+    private static class DeleteAsyncTask extends AsyncTask<Batch,Void,Void> {
+        private BatchDao batchDao;
+        private DeleteAsyncTask(BatchDao batchDao){
+            this.batchDao=batchDao;
+        }
+        @Override
+        protected Void doInBackground(Batch... batches) {
+            batchDao.delete(batches[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteAllAsyncTask extends AsyncTask<Batch,Void,Void>{
+        private BatchDao batchDao;
+        private DeleteAllAsyncTask(BatchDao batchDao){
+            this.batchDao= this.batchDao;
+        }
+        @Override
+        protected Void doInBackground(Batch... batches) {
+            batchDao.deleteAll();
+            return null;
+        }
+    }
+
+    private static class DeleteByIdsAsyncTask extends AsyncTask<List<String>, Void, Void> {
+        private BatchDao batchDao;
+        private DeleteByIdsAsyncTask(BatchDao batchDao) {
+            this.batchDao = batchDao;
+        }
+        @Override
+        protected Void doInBackground(List<String>... lists) {
+            batchDao.deleteByIds(lists[0]);
+            return null;
+        }
     }
 }

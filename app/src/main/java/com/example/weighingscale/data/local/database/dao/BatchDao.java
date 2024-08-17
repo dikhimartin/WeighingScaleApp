@@ -3,6 +3,7 @@ package com.example.weighingscale.data.local.database.dao;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.Delete;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -15,6 +16,9 @@ import java.util.List;
 public interface BatchDao {
     @Query("SELECT * FROM Batch")
     LiveData<List<Batch>> getDatas();
+
+    @Query("SELECT * FROM Batch WHERE id = :id")
+    LiveData<Batch> getDataById(String id);
 
     @Query("SELECT * FROM Batch WHERE status = 1 LIMIT 1")
     LiveData<Batch> getActiveBatch();
@@ -29,4 +33,13 @@ public interface BatchDao {
     @Transaction
     @Query("UPDATE Batch SET status = 0 WHERE status = 1")
     void completeBatch();
+
+    @Query("DELETE FROM Batch WHERE id IN (:ids)")
+    void deleteByIds(List<String> ids);
+
+    @Delete
+    void delete(Batch batch);
+
+    @Query("DELETE FROM Batch")
+    void deleteAll();
 }

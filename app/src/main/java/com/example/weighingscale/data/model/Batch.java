@@ -38,4 +38,16 @@ public class Batch {
     public Batch() {
         this.id = UUID.randomUUID().toString();
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getPicName() {
+        return pic_name;
+    }
+
+    public String getPicPhoneNumber() {
+        return pic_phone_number;
+    }
 }

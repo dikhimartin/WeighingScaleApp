@@ -12,6 +12,11 @@ import java.util.List;
 
 @Dao
 public interface NoteDao {
+    @Query("SELECT * FROM Note ORDER BY priority DESC")
+    LiveData<List<Note>> getAllNotes();
+
+    @Query("SELECT * FROM Note WHERE id = :id")
+    LiveData<Note> getNoteById(int id);
 
     @Insert
     void insert(Note note);
@@ -19,18 +24,13 @@ public interface NoteDao {
     @Update
     void update(Note note);
 
+    @Query("DELETE FROM Note WHERE id IN (:ids)")
+    void deleteNotesByIds(List<Integer> ids);
+
     @Delete
     void delete(Note note);
 
     @Query("DELETE FROM Note")
     void deleteAllNotes();
 
-    @Query("SELECT * FROM Note ORDER BY priority DESC")
-    LiveData<List<Note>> getAllNotes();
-
-    @Query("SELECT * FROM Note WHERE id = :id")
-    LiveData<Note> getNoteById(int id);
-
-    @Query("DELETE FROM Note WHERE id IN (:ids)")
-    void deleteNotesByIds(List<Integer> ids);
 }

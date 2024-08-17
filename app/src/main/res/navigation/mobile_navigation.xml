@@ -5,30 +5,35 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
+    <!-- Timbangan -->
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.weighingscale.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
+    <!-- Riwayat -->
     <fragment
-        android:id="@+id/navigation_data"
-        android:name="com.example.weighingscale.ui.dashboard.DashboardFragment"
+        android:id="@+id/navigation_history"
+        android:name="com.example.weighingscale.ui.history.HistoryFragment"
         android:label="@string/title_history"
-        tools:layout="@layout/fragment_batch" />
+        tools:layout="@layout/fragment_history" />
 
+    <!-- Pengaturan -->
     <fragment
         android:id="@+id/navigation_setting"
         android:name="com.example.weighingscale.ui.setting.SettingFragment"
         android:label="@string/title_setting"
         tools:layout="@layout/fragment_setting" />
 
+    <!-- Perangkat -->
     <fragment
         android:id="@+id/navigation_device"
         android:name="com.example.weighingscale.ui.device.DeviceFragment"
         android:label="@string/title_device"
         tools:layout="@layout/fragment_device" />
 
+    <!-- Note -->
     <fragment
         android:id="@+id/navigation_note"
         android:name="com.example.weighingscale.ui.note.NoteFragment"
@@ -38,19 +43,8 @@
             android:id="@+id/action_noteFragment_to_addEditNoteFragment"
             app:destination="@id/form_note_fragment" />
     </fragment>
-
     <fragment
         android:id="@+id/form_note_fragment"
         android:name="com.example.weighingscale.ui.note.FormNoteFragment"
         tools:layout="@layout/fragment_note_form" />
-
-    <!-- Deprecated -->
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.weighingscale.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-
-
 </navigation>
