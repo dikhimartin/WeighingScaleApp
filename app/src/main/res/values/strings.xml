@@ -58,5 +58,5 @@
     <string name="choose_city">Pilih Kota</string>
     <string name="choose_subdistrict">Pilih Kecamatan</string>
     <string name="choose_datetime">Tanggal dan Waktu</string>
-    <string name="unit_disabled_message">Masih ada batch yang aktif, tidak diperbolehkan merubah unit</string>
+    <string name="unit_disabled_message">Tidak diperbolehkan merubah unit, apabila masih ada batch muatan yang aktif.</string>
 </resources>
