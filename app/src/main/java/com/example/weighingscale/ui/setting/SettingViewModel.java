@@ -1,6 +1,8 @@
 package com.example.weighingscale.ui.setting;
 
 import android.app.Application;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -15,15 +17,15 @@ import java.util.Map;
 
 public class SettingViewModel extends AndroidViewModel {
 
-    private final SettingRepository settingRepository;
+    private final SettingRepository repository;
     private final LiveData<Setting> setting;
     private final MutableLiveData<List<String>> unitOptions = new MutableLiveData<>();
     private final Map<String, String> unitMap = new HashMap<>();
 
-    public SettingViewModel(Application application) {
+    public SettingViewModel(@NonNull Application application) {
         super(application);
-        settingRepository = SettingRepository.getInstance(application);
-        setting = settingRepository.getSetting();
+        repository = new SettingRepository(application);
+        setting = repository.getSetting();
         loadUnitOptions(); // Initialize unit options
     }
 
@@ -32,7 +34,7 @@ public class SettingViewModel extends AndroidViewModel {
     }
 
     public void insertOrUpdateSetting(Setting setting) {
-        settingRepository.insertOrUpdateSetting(setting);
+        repository.insertOrUpdateSetting(setting);
     }
 
     public boolean isValidUnit(String unit) {

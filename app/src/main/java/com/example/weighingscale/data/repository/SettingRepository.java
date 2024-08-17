@@ -1,5 +1,6 @@
 package com.example.weighingscale.data.repository;
 
+import android.app.Application;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
@@ -13,23 +14,18 @@ import java.util.concurrent.ExecutorService;
 public class SettingRepository {
 
     private final SettingDao settingDao;
-    private final ExecutorService executor;
 
-    public SettingRepository(SettingDao settingDao, ExecutorService executor) {
-        this.settingDao = settingDao;
-        this.executor = executor;
+    public SettingRepository(Application application){
+        AppDatabase database = AppDatabase.getInstance(application);
+        settingDao = database.settingDao();
+    }
+    public LiveData<Setting> getSetting(){
+        return  settingDao.getSetting();
     }
 
-    public static SettingRepository getInstance(Context context) {
-        AppDatabase db = AppDatabase.getInstance(context);
-        return new SettingRepository(db.settingDao(), AppDatabase.databaseWriteExecutor);
-    }
-
-    public LiveData<Setting> getSetting() {
-        return settingDao.getSetting();
-    }
-
-    public void insertOrUpdateSetting(Setting setting) {
-        executor.execute(() -> settingDao.insertOrUpdateSetting(setting));
+    public void insertOrUpdateSetting(Setting setting){
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            settingDao.insertOrUpdateSetting(setting);
+        });
     }
 }
