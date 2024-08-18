@@ -12,7 +12,6 @@ import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.data.model.Province;
 import com.example.weighingscale.data.model.City;
 import com.example.weighingscale.data.model.Setting;
-import com.example.weighingscale.data.model.Subdistrict;
 import com.example.weighingscale.data.repository.AddressRepository;
 import com.example.weighingscale.data.repository.BatchRepository;
 import com.example.weighingscale.data.repository.BatchDetailRepository;

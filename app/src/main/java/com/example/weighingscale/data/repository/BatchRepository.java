@@ -2,8 +2,6 @@ package com.example.weighingscale.data.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import com.example.weighingscale.data.local.database.AppDatabase;
 import com.example.weighingscale.data.local.database.dao.BatchDao;
@@ -11,6 +9,7 @@ import com.example.weighingscale.data.local.database.dao.BatchDetailDao;
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
 
+import java.util.Date;
 import java.util.List;
 
 public class BatchRepository {
@@ -47,11 +46,17 @@ public class BatchRepository {
 
     public void completeBatch(String batchId) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
+            // Fetch batch and its details in a single transaction
             Batch batch = batchDao.getBatchById(batchId);
             if (batch != null) {
+                // Fetch batch details
                 List<BatchDetail> details = batchDetailDao.getBatchDetailsByBatchId(batchId);
+
+                // Initialize totals
                 int totalAmount = 0;
                 double totalPrice = 0.0;
+
+                // Calculate totals
                 if (details != null) {
                     for (BatchDetail detail : details) {
                         totalAmount += detail.amount;
@@ -61,8 +66,11 @@ public class BatchRepository {
 
                 // Calculate duration
                 long durationMillis = 0;
-                if (batch.start_date != null && batch.end_date != null) {
-                    durationMillis = batch.end_date.getTime() - batch.start_date.getTime();
+                if (batch.start_date != null) {
+                    batch.end_date = new Date();
+                    if (batch.end_date != null) {
+                        durationMillis = batch.end_date.getTime() - batch.start_date.getTime();
+                    }
                 }
 
                 // Update batch with calculated values
@@ -76,6 +84,7 @@ public class BatchRepository {
             }
         });
     }
+
 
     public void delete(Batch batch) {
         new DeleteAsyncTask(batchDao).execute(batch);
