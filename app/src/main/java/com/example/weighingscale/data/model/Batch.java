@@ -1,7 +1,6 @@
 package com.example.weighingscale.data.model;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -27,6 +26,12 @@ public class Batch {
     public String pic_name;
     public String pic_phone_number;
     public Date datetime;
+    public Date start_date;
+    public Date end_date;
+    public long duration; // Duration in milliseconds
+    public String unit;
+    public int total_amount;
+    public double total_price;
     public String weighing_location_id;
     public String weighing_location_geo;
     public String delivery_destination_id;
@@ -39,6 +44,7 @@ public class Batch {
         this.id = UUID.randomUUID().toString();
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
@@ -49,5 +55,29 @@ public class Batch {
 
     public String getPicPhoneNumber() {
         return pic_phone_number;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public Date getDatetime() {
+        return datetime;
+    }
+
+    public Date getStartDate() {
+        return start_date;
+    }
+
+    public Date getEndDate() {
+        return end_date;
+    }
+
+    public int getTotalAmount() {
+        return total_amount;
+    }
+
+    public double getTotalPrice() {
+        return total_price;
     }
 }

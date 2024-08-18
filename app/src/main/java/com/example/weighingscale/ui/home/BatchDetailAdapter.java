@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.BatchDetail;
+import com.example.weighingscale.util.DateTimeUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -55,8 +56,8 @@ public class BatchDetailAdapter extends ListAdapter<BatchDetail, BatchDetailAdap
         if (currentData == null) {
             return; // Return early if data at position is null
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-        String formattedDate = dateFormat.format(currentData.getDatetime());
+
+        String formattedDate = DateTimeUtil.formatDateTime(currentData.getDatetime(), "dd/MM/yyyy HH:mm");
 
         // Format the amount text including the unit
         String amountText = String.format(Locale.getDefault(), "%.0f %s", currentData.getAmount(), currentData.getUnit());

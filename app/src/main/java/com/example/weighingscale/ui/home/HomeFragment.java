@@ -255,8 +255,11 @@ public class HomeFragment extends Fragment {
                     batch.pic_name = picName;
                     batch.pic_phone_number = picPhoneNumber;
                     batch.datetime = DateTimeUtil.parseDateTime(dateTime);
+                    batch.start_date = DateTimeUtil.parseDateTime(dateTime);
                     batch.truck_driver_name = truckDriver;
                     batch.truck_driver_phone_number = truckDriverPhoneNumber;
+                    batch.unit = (currentSetting != null ? currentSetting.unit : "kg");
+
                     if (deliveryDestinationID[0] != null) {
                         batch.delivery_destination_id = deliveryDestinationID[0];
                     }

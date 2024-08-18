@@ -7,6 +7,7 @@ import androidx.room.Delete;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import com.example.weighingscale.data.model.Batch;
 
@@ -23,16 +24,18 @@ public interface BatchDao {
     @Query("SELECT * FROM Batch WHERE status = 1 LIMIT 1")
     LiveData<Batch> getActiveBatch();
 
+    @Query("SELECT * FROM Batch WHERE id = :id")
+    Batch getBatchById(String id);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertBatch(Batch batch);
 
-    @Transaction
-    @Query("UPDATE Batch SET status = 0 WHERE id = :batchId")
-    void completeBatch(String batchId);
+    @Update
+    void updateBatch(Batch batch);
 
     @Transaction
     @Query("UPDATE Batch SET status = 0 WHERE status = 1")
-    void completeBatch();
+    void forceCompleteBatch();
 
     @Query("DELETE FROM Batch WHERE id IN (:ids)")
     void deleteByIds(List<String> ids);
