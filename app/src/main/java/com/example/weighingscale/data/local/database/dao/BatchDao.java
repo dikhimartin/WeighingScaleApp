@@ -15,7 +15,7 @@ import java.util.List;
 
 @Dao
 public interface BatchDao {
-    @Query("SELECT * FROM Batch")
+    @Query("SELECT * FROM Batch ORDER BY datetime DESC")
     LiveData<List<Batch>> getDatas();
 
     @Query("SELECT * FROM Batch WHERE id = :id")
