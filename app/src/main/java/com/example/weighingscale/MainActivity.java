@@ -94,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
             if (destination.getId() == R.id.form_note_fragment){
                 Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
             }
+            if (destination.getId() == R.id.navigation_history_detail){
+                Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+            }
         });
     }
 

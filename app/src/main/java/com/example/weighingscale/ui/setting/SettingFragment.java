@@ -25,7 +25,6 @@ public class SettingFragment extends Fragment {
     private SettingViewModel settingViewModel;
     private EditText etPicName, etPicPhoneNumber, etRicePrice;
     private AutoCompleteTextView actvUnit;
-    private TextView tvUnitDisabledMessage;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -89,7 +88,7 @@ public class SettingFragment extends Fragment {
         // Validate and process input
         if (validateInputs(picName, picPhoneNumber, ricePriceStr, UnitValue)) {
             try {
-                float ricePrice = Float.parseFloat(ricePriceStr);
+                double ricePrice = Float.parseFloat(ricePriceStr);
                 Setting newSetting = createSetting(picName, picPhoneNumber, ricePrice, UnitValue);
                 settingViewModel.insertOrUpdateSetting(newSetting);
                 showToast("Pengaturan berhasil diubah");
@@ -136,7 +135,7 @@ public class SettingFragment extends Fragment {
         return isValid;
     }
 
-    private Setting createSetting(String picName, String picPhoneNumber, float ricePrice, String unit) {
+    private Setting createSetting(String picName, String picPhoneNumber, double ricePrice, String unit) {
         Setting setting = new Setting();
         setting.pic_name = picName;
         setting.pic_phone_number = picPhoneNumber;

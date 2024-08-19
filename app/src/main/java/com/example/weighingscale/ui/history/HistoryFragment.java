@@ -33,7 +33,6 @@ public class HistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         setupRecyclerView(view);
         setupViewModel();
-        // setupAddButton(view);
         setupDeleteAllButton(view);
         return view;
     }
@@ -54,17 +53,12 @@ public class HistoryFragment extends Fragment {
             }
 
             @Override
-            public void onEditClick(Batch batch) {
-                // TODO : Do something when on item edit click
+            public void onDetailClick(Batch batch) {
+                 Bundle bundle = new Bundle();
+                 bundle.putString("batch_id", batch.getId());
+                 NavHostFragment.findNavController(HistoryFragment.this)
+                         .navigate(R.id.action_HistoryFragment_to_HistoryDetailFragment, bundle);
             }
-
-            // @Override
-            // public void onEditClick(Batch batch) {
-            //     Bundle bundle = new Bundle();
-            //     bundle.putString("batch_id", batch.getId());
-            //     NavHostFragment.findNavController(HistoryFragment.this)
-            //             .navigate(R.id.action_noteFragment_to_addEditNoteFragment, bundle);
-            // }
 
             @Override
             public void onExportClick(Batch batch) {
@@ -82,7 +76,6 @@ public class HistoryFragment extends Fragment {
             public void onItemLongClick(Batch batch) {
                 // TODO : Do something when on item click long click
             }
-
         });
     }
 
@@ -95,13 +88,6 @@ public class HistoryFragment extends Fragment {
             }
         });
     }
-
-    // private void setupAddButton(View view) {
-    //     view.findViewById(R.id.button_add_note).setOnClickListener(v ->
-    //             NavHostFragment.findNavController(HistoryFragment.this)
-    //                     .navigate(R.id.action_noteFragment_to_addEditNoteFragment)
-    //     );
-    // }
 
     private void setupDeleteAllButton(View view) {
         deleteAllButton = view.findViewById(R.id.button_delete_all);

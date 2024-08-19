@@ -11,6 +11,6 @@ public class Setting {
     @NonNull
     public String pic_name;
     public String pic_phone_number;
-    public float rice_price;
+    public double rice_price;
     public String unit; // 'g' or 'kg'
 }

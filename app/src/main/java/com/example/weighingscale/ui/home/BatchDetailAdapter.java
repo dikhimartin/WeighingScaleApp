@@ -17,12 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.util.DateTimeUtil;
-
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class BatchDetailAdapter extends ListAdapter<BatchDetail, BatchDetailAdapter.BatchDetailHolder> {
-    private Context context;
+    private final Context context;
 
     public BatchDetailAdapter(Context context) {
         super(DIFF_CALLBACK);

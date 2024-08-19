@@ -34,6 +34,10 @@
         <item>kg</item>
     </string-array>
 
+    <!--  History -->
+    <string name="history">Riwayat</string>
+    <string name="history_detail">Detail Riwayat</string>
+
     <!--  main  -->
     <string name="error_socket_create">Socket creation failed</string>
     <string name="permission_denied">Permission denied</string>

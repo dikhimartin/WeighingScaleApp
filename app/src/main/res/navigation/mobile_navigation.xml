@@ -16,8 +16,18 @@
     <fragment
         android:id="@+id/navigation_history"
         android:name="com.example.weighingscale.ui.history.HistoryFragment"
-        android:label="@string/title_history"
-        tools:layout="@layout/fragment_history" />
+        android:label="@string/history"
+        tools:layout="@layout/fragment_history">
+        <action
+            android:id="@+id/action_HistoryFragment_to_HistoryDetailFragment"
+            app:destination="@id/navigation_history_detail" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_history_detail"
+        android:name="com.example.weighingscale.ui.history.HistoryDetailFragment"
+        android:label="@string/history_detail"
+        tools:layout="@layout/fragment_history_detail" />
+
 
     <!-- Pengaturan -->
     <fragment

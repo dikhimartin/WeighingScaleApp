@@ -28,8 +28,9 @@ public class Batch {
     public Date datetime;
     public Date start_date;
     public Date end_date;
-    public long duration; // Duration in milliseconds
+    public long duration;
     public String unit;
+    public double rice_price;
     public int total_amount;
     public double total_price;
     public String weighing_location_id;
@@ -61,6 +62,10 @@ public class Batch {
         return unit;
     }
 
+    public double getRicePrice(){
+        return  rice_price;
+    }
+
     public Date getDatetime() {
         return datetime;
     }
@@ -71,6 +76,10 @@ public class Batch {
 
     public Date getEndDate() {
         return end_date;
+    }
+
+    public long getDuration(){
+        return  duration;
     }
 
     public int getTotalAmount() {

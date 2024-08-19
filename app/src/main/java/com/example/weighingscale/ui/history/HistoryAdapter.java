@@ -84,10 +84,10 @@ public class HistoryAdapter extends ListAdapter<Batch, HistoryAdapter.HistoryHol
     }
 
     class HistoryHolder extends RecyclerView.ViewHolder {
-        private TextView textViewTitle;
-        private TextView textViewDateTime;
-        private TextView textViewTotalWeight;
-        private ImageButton btnMore;
+        private final TextView textViewTitle;
+        private final TextView textViewDateTime;
+        private final TextView textViewTotalWeight;
+        private final ImageButton btnMore;
 
         public HistoryHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,13 +98,13 @@ public class HistoryAdapter extends ListAdapter<Batch, HistoryAdapter.HistoryHol
 
             btnMore.setOnClickListener(view -> {
                 PopupMenu popupMenu = new PopupMenu(view.getContext(), btnMore);
-                popupMenu.inflate(R.menu.item_action_menu);
+                popupMenu.inflate(R.menu.item_action_history);
                 popupMenu.setOnMenuItemClickListener(item -> {
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
                         int id = item.getItemId();
-                        if (id == R.id.action_edit) {
-                            listener.onEditClick(getItem(position));
+                        if (id == R.id.action_detail) {
+                            listener.onDetailClick(getItem(position));
                             return true;
                         } else if (id == R.id.action_export) {
                             listener.onExportClick(getItem(position));
@@ -139,7 +139,7 @@ public class HistoryAdapter extends ListAdapter<Batch, HistoryAdapter.HistoryHol
 
     public interface OnItemClickListener {
         void onItemClick(Batch batch);
-        void onEditClick(Batch batch);
+        void onDetailClick(Batch batch);
         void onExportClick(Batch batch);
         void onDeleteClick(Batch batch);
         void onItemLongClick(Batch batch);

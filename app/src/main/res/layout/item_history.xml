@@ -31,6 +31,7 @@
             android:layout_alignParentTop="true"
             android:text="Dikhi Martin"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?attr/colorPrimary"
             android:maxLines="1"
             android:ellipsize="end"
             tools:ignore="HardcodedText" />

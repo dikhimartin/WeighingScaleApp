@@ -259,6 +259,7 @@ public class HomeFragment extends Fragment {
                     batch.truck_driver_name = truckDriver;
                     batch.truck_driver_phone_number = truckDriverPhoneNumber;
                     batch.unit = (currentSetting != null ? currentSetting.unit : "kg");
+                    batch.rice_price = (currentSetting != null ? currentSetting.rice_price : 0);
 
                     if (deliveryDestinationID[0] != null) {
                         batch.delivery_destination_id = deliveryDestinationID[0];
