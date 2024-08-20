@@ -84,8 +84,18 @@ public class HistoryDetailFragment extends Fragment {
         textPICName.setText(SafeValueUtil.getString(currentBatch.pic_name, "N/A"));
         textDatetime.setText(SafeValueUtil.getFormattedDate(currentBatch.datetime, "dd MMMM yyyy"));
         textRicePrice.setText(FormatterUtil.formatCurrency("Rp", SafeValueUtil.getDouble(currentBatch.rice_price, 0.0)));
-        textWeighingLocation.setText(SafeValueUtil.getString(currentBatch.weighing_location_name, "N/A"));
-        textDeliveryDestination.setText(SafeValueUtil.getString(currentBatch.delivery_destination_name, "N/A"));
+
+        // Set Weighing and Delivery Location
+        String weighingLocation = SafeValueUtil.getString(currentBatch.weighing_location_name, "N/A");
+        String deliveryDestination = SafeValueUtil.getString(currentBatch.delivery_destination_name, "N/A");
+        String formattedWeighingLocation = String.format("%s %s",
+            SafeValueUtil.getString(currentBatch.weighing_location_type, ""),
+            weighingLocation);
+        String formattedDeliveryDestination = String.format("%s %s",
+            SafeValueUtil.getString(currentBatch.delivery_destination_type, ""),
+            deliveryDestination);
+        textWeighingLocation.setText(formattedWeighingLocation);
+        textDeliveryDestination.setText(formattedDeliveryDestination);
 
         // Handle start and end date, and duration
         String startDateText = SafeValueUtil.getFormattedDate(currentBatch.start_date, "HH:mm:ss");

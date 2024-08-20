@@ -24,7 +24,9 @@ public class BatchDTO extends Batch {
     public int status;
 
     // Additional Attribute
+    public String weighing_location_type;
     public String weighing_location_name;
+    public String delivery_destination_type;
     public String delivery_destination_name;
 
     // Getters

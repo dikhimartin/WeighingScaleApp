@@ -37,14 +37,15 @@ public interface BatchDao {
         "    b.truck_driver_phone_number, " +
         "    b.status, " +
         "    wl.name AS weighing_location_name, " +
-        "    dd.name AS delivery_destination_name " +
+        "    wl.type AS weighing_location_type, " +
+        "    dd.name AS delivery_destination_name, " +
+        "    dd.type AS delivery_destination_type " +
         "FROM Batch b " +
         "LEFT JOIN City wl ON b.weighing_location_id = wl.id " +
         "LEFT JOIN City dd ON b.delivery_destination_id = dd.id " +
         "ORDER BY b.datetime DESC"
     )
     LiveData<List<BatchDTO>> getDatas();
-
 
     @Query(
         "SELECT " +
@@ -66,7 +67,9 @@ public interface BatchDao {
         "    b.truck_driver_phone_number, " +
         "    b.status, " +
         "    wl.name AS weighing_location_name, " +
-        "    dd.name AS delivery_destination_name " +
+        "    wl.type AS weighing_location_type, " +
+        "    dd.name AS delivery_destination_name, " +
+        "    dd.type AS delivery_destination_type " +
         "FROM Batch b " +
         "LEFT JOIN City wl ON b.weighing_location_id = wl.id " +
         "LEFT JOIN City dd ON b.delivery_destination_id = dd.id " +
