@@ -115,7 +115,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Harga Beras"
+                    android:text="Harga Padi"
                     android:textSize="13sp"
                     android:textColor="@android:color/darker_gray"
                     tools:ignore="HardcodedText" />
@@ -244,6 +244,7 @@
                 tools:ignore="HardcodedText" />
 
             <TextView
+                android:id="@+id/text_view_total_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0 karung"

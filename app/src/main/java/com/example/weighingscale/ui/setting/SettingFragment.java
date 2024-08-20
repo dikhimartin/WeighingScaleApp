@@ -94,7 +94,7 @@ public class SettingFragment extends Fragment {
                 showToast("Pengaturan berhasil diubah");
                 requireActivity().onBackPressed();
             } catch (NumberFormatException e) {
-                showToast("Inputan harga beras harus berupa angka");
+                showToast("Inputan harga padi harus berupa angka");
             }
         } else {
             showToast("Tolong isi semua inputan");

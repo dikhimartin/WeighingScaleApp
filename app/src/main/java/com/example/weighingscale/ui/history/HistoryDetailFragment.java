@@ -29,6 +29,7 @@ public class HistoryDetailFragment extends Fragment {
     private TextView textDuration;
     private TextView textTotalWeight;
     private TextView textTotalPrice;
+    private TextView textTotalItems;
     private Batch currentBatch;
     private HistoryViewModel historyViewModel;
 
@@ -51,6 +52,7 @@ public class HistoryDetailFragment extends Fragment {
         textDuration = view.findViewById(R.id.text_view_duration);
         textTotalWeight = view.findViewById(R.id.text_view_total_weight);
         textTotalPrice = view.findViewById(R.id.text_view_total_price);
+        textTotalItems = view.findViewById(R.id.text_view_total_item);
     }
 
     private void initializeViewModel() {
@@ -93,7 +95,8 @@ public class HistoryDetailFragment extends Fragment {
         textTotalPrice.setText(FormatterUtil.formatCurrency("Rp", SafeValueUtil.getDouble(currentBatch.total_price, 0.0)));
     }
 
-    private void batchDetailList(View view){
+     @SuppressLint("SetTextI18n")
+     private void batchDetailList(View view){
         String batchID = currentBatch.id;
         // Adapter log list
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_log);
@@ -104,6 +107,8 @@ public class HistoryDetailFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         historyViewModel.getBatchDetails(batchID).observe(getViewLifecycleOwner(), data -> {
             adapter.submitList(data);
+            int totalItems = data.size();
+            textTotalItems.setText(totalItems + " karung");
         });
     }
 }

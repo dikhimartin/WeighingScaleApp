@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">weighingscale</string>
+    <string name="app_name">Weighing Scale</string>
     <string name="title_home">Timbangan</string>
+    <string name="title_history">Riwayat</string>
+    <string name="title_report">Laporan</string>
+
+    <!-- Deprecated -->
     <string name="title_dashboard">Dashboard</string>
     <string name="title_data">Data</string>
 
@@ -23,9 +27,44 @@
     <string name="action_setting">Pengaturan</string>
     <string name="pic_name">Nama penanggung jawab</string>
     <string name="pic_phone_number">Nomor Telepon penanggung jawab</string>
-    <string name="rice_price_per_unit">Harga beras (per kilo)</string>
+    <string name="rice_price_per_unit">Harga padi (per unit)</string>
     <string name="update_settings">Ubah pengaturan</string>
+    <string-array name="unit_array">
+        <item>g</item>
+        <item>kg</item>
+    </string-array>
 
+    <!--  History -->
+    <string name="history">Riwayat</string>
+    <string name="history_detail">Detail Riwayat</string>
+
+    <!--  main  -->
     <string name="error_socket_create">Socket creation failed</string>
     <string name="permission_denied">Permission denied</string>
+    <string name="update">Ubah</string>
+    <string name="save">Simpan</string>
+    <string name="add">Tambah</string>
+    <string name="export">Export</string>
+    <string name="delete">Hapus</string>
+    <string name="message_update_success">Data berhasil diubah</string>
+    <string name="message_save_success">Data berhasil disimpan</string>
+    <string name="is_required">Wajib diisi</string>
+    <string name="more">Selengkapnya</string>
+    <string name="delete_all">Hapus semua</string>
+    <string name="delete_selected_data_title">Hapus semua data</string>
+    <string name="delete_selected_data_message">Apakah kamu yakin ingin menghapus semua data yang dipilih?</string>
+    <string name="message_selected_deleted">Data yang dipilih sudah dihapus</string>
+    <string name="message_deleted">Data sudah dihapus</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+    <string name="deleted">Dihapus</string>
+    <string name="unit">Unit</string>
+    <string name="select_unit">Pilih Unit</string>
+    <string name="truck_driver">Driver Truk</string>
+    <string name="truck_driver_phone_number">Nomor Telepon Driver Truk</string>
+    <string name="choose_province">Pilih Provinsi</string>
+    <string name="choose_city">Pilih Kota</string>
+    <string name="choose_subdistrict">Pilih Kecamatan</string>
+    <string name="choose_datetime">Tanggal dan Waktu</string>
+    <string name="unit_disabled_message">Tidak diperbolehkan merubah unit, apabila masih ada batch muatan yang aktif.</string>
 </resources>
