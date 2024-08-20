@@ -108,7 +108,7 @@ public class HistoryDetailFragment extends Fragment {
         historyViewModel.getBatchDetails(batchID).observe(getViewLifecycleOwner(), data -> {
             adapter.submitList(data);
             int totalItems = data.size();
-            textTotalItems.setText(totalItems + getString(R.string.bag));
+            textTotalItems.setText(totalItems +" "+ getString(R.string.bag));
         });
     }
 }

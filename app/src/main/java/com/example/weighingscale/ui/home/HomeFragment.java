@@ -309,7 +309,7 @@ public class HomeFragment extends Fragment {
     private void clearBatchDetails() {
         currentBatchId = null;
         binding.cardTotal.setVisibility(View.GONE);
-        binding.textTotalItems.setText("0 Item");
+        binding.textTotalItems.setText("0 karung (sak)");
         binding.summaryBatch.setVisibility(View.GONE);
         binding.finishButtonGroup.setVisibility(View.GONE);
         adapter.submitList(null);
