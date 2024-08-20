@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -52,10 +51,12 @@ public class SettingFragment extends Fragment {
         homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
             if (batch != null) {
                 root.findViewById(R.id.til_unit).setVisibility(View.GONE);
-                root.findViewById(R.id.tv_unit_disabled_message).setVisibility(View.VISIBLE);
+                root.findViewById(R.id.til_rice_price).setVisibility(View.GONE);
+                root.findViewById(R.id.tv_disabled_message).setVisibility(View.VISIBLE);
             } else {
                 root.findViewById(R.id.til_unit).setVisibility(View.VISIBLE);
-                root.findViewById(R.id.tv_unit_disabled_message).setVisibility(View.GONE);
+                root.findViewById(R.id.til_rice_price).setVisibility(View.VISIBLE);
+                root.findViewById(R.id.tv_disabled_message).setVisibility(View.GONE);
             }
         });
 

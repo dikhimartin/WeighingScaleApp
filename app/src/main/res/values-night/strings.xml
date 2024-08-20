@@ -29,6 +29,7 @@
     <string name="pic_phone_number">Nomor Telepon penanggung jawab</string>
     <string name="rice_price_per_unit">Harga padi (per unit)</string>
     <string name="update_settings">Ubah pengaturan</string>
+    <string name="setting_disabled_message">Tidak diperbolehkan merubah unit atau harga padi, apabila masih ada batch muatan yang aktif.</string>
     <string-array name="unit_array">
         <item>g</item>
         <item>kg</item>
@@ -66,6 +67,5 @@
     <string name="choose_city">Pilih Kota</string>
     <string name="choose_subdistrict">Pilih Kecamatan</string>
     <string name="choose_datetime">Tanggal dan Waktu</string>
-    <string name="unit_disabled_message">Tidak diperbolehkan merubah unit, apabila masih ada batch muatan yang aktif.</string>
     <string name="bag">karung (sak)</string>
 </resources>

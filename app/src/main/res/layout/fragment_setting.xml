@@ -59,13 +59,13 @@
 
     <!-- show message when unit input is disabled -->
     <TextView
-        android:id="@+id/tv_unit_disabled_message"
+        android:id="@+id/tv_disabled_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/rose_red"
         android:layout_marginBottom="16dp"
         android:visibility="gone"
-        android:text="@string/unit_disabled_message" />
+        android:text="@string/setting_disabled_message" />
 
     <!-- Rice Price (per unit) -->
     <com.google.android.material.textfield.TextInputLayout
