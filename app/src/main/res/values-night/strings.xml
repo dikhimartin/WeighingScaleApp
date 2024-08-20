@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Weighing Scale</string>
+    <string name="app_name">Paradigm Scale</string>
     <string name="title_home">Timbangan</string>
     <string name="title_history">Riwayat</string>
     <string name="title_report">Laporan</string>
@@ -67,4 +67,5 @@
     <string name="choose_subdistrict">Pilih Kecamatan</string>
     <string name="choose_datetime">Tanggal dan Waktu</string>
     <string name="unit_disabled_message">Tidak diperbolehkan merubah unit, apabila masih ada batch muatan yang aktif.</string>
+    <string name="bag">karung (sak)</string>
 </resources>
