@@ -15,9 +15,9 @@ import com.example.weighingscale.data.repository.BatchDetailRepository;
 import java.util.List;
 
 public class HistoryViewModel extends AndroidViewModel {
-    private BatchRepository batchRepository;
-    private BatchDetailRepository batchDetailRepository;
-    private LiveData<List<BatchDTO>> allBatch;
+    private final BatchRepository batchRepository;
+    private final BatchDetailRepository batchDetailRepository;
+    private final LiveData<List<BatchDTO>> allBatch;
 
     public HistoryViewModel(@NonNull Application application) {
         super(application);
