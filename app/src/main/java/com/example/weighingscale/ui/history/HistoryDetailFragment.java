@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.example.weighingscale.util.SafeValueUtil;
 public class HistoryDetailFragment extends Fragment {
 
     private TextView textPICName;
+    private TextView textDriver;
     private TextView textDatetime;
     private TextView textRicePrice;
     private TextView textStartDate;
@@ -30,8 +32,15 @@ public class HistoryDetailFragment extends Fragment {
     private TextView textTotalWeight;
     private TextView textTotalPrice;
     private TextView textTotalItems;
-    private TextView textWeighingLocation;
-    private TextView textDeliveryDestination;
+
+    private LinearLayout layoutWeighingLocation;
+    private TextView textWeighingLocationProvince;
+    private TextView textWeighingLocationCity;
+
+    private LinearLayout layoutDeliveryDestination;
+    private TextView textDeliveryDestinationProvince;
+    private TextView textDeliveryDestinationCity;
+
     private BatchDTO currentBatch;
     private HistoryViewModel historyViewModel;
 
@@ -47,6 +56,7 @@ public class HistoryDetailFragment extends Fragment {
 
     private void initializeViews(View view) {
         textPICName = view.findViewById(R.id.text_view_pic_name);
+        textDriver = view.findViewById(R.id.text_view_driver);
         textDatetime = view.findViewById(R.id.text_view_datetime);
         textRicePrice = view.findViewById(R.id.text_view_rice_price);
         textStartDate = view.findViewById(R.id.text_view_start_date);
@@ -55,8 +65,14 @@ public class HistoryDetailFragment extends Fragment {
         textTotalWeight = view.findViewById(R.id.text_view_total_weight);
         textTotalPrice = view.findViewById(R.id.text_view_total_price);
         textTotalItems = view.findViewById(R.id.text_view_total_item);
-        textWeighingLocation = view.findViewById(R.id.text_view_weighing_location);
-        textDeliveryDestination = view.findViewById(R.id.text_view_delivery_destination);
+
+        layoutWeighingLocation = view.findViewById(R.id.til_weighing_location);
+        textWeighingLocationProvince = view.findViewById(R.id.text_view_weighing_location_province);
+        textWeighingLocationCity = view.findViewById(R.id.text_view_weighing_location_city);
+
+        layoutDeliveryDestination = view.findViewById(R.id.til_delivery_destination);
+        textDeliveryDestinationProvince = view.findViewById(R.id.text_view_delivery_destination_province);
+        textDeliveryDestinationCity = view.findViewById(R.id.text_view_delivery_destination_city);
     }
 
     private void initializeViewModel() {
@@ -82,20 +98,41 @@ public class HistoryDetailFragment extends Fragment {
     private void populateBatch() {
         // Set basic fields
         textPICName.setText(SafeValueUtil.getString(currentBatch.pic_name, "N/A"));
+        textDriver.setText(SafeValueUtil.getString(currentBatch.truck_driver_name, "N/A"));
         textDatetime.setText(SafeValueUtil.getFormattedDate(currentBatch.datetime, "dd MMMM yyyy"));
-        textRicePrice.setText(FormatterUtil.formatCurrency("Rp", SafeValueUtil.getDouble(currentBatch.rice_price, 0.0)));
+        textRicePrice.setText(SafeValueUtil.formatCurrency("Rp", currentBatch.rice_price));
 
-        // Set Weighing and Delivery Location
-        String weighingLocation = SafeValueUtil.getString(currentBatch.weighing_location_name, "N/A");
-        String deliveryDestination = SafeValueUtil.getString(currentBatch.delivery_destination_name, "N/A");
-        String formattedWeighingLocation = String.format("%s %s",
-            SafeValueUtil.getString(currentBatch.weighing_location_type, ""),
-            weighingLocation);
-        String formattedDeliveryDestination = String.format("%s %s",
-            SafeValueUtil.getString(currentBatch.delivery_destination_type, ""),
-            deliveryDestination);
-        textWeighingLocation.setText(formattedWeighingLocation);
-        textDeliveryDestination.setText(formattedDeliveryDestination);
+        // Set Weighing Location
+         boolean isWeighingLocationEmpty = currentBatch.weighing_location_city_type == null &&
+                              currentBatch.weighing_location_city_name == null &&
+                              currentBatch.weighing_location_province_name == null;
+        layoutWeighingLocation.setVisibility(isWeighingLocationEmpty ? View.GONE : View.VISIBLE);
+        setLocationText(
+            textWeighingLocationCity,
+            currentBatch.weighing_location_city_type,
+            currentBatch.weighing_location_city_name
+        );
+        setLocationText(
+            textWeighingLocationProvince,
+            "Provinsi",
+            currentBatch.weighing_location_province_name
+        );
+
+        // Set Delivery Location
+         boolean isDeliveryLocationEmpty = currentBatch.delivery_destination_city_type == null &&
+                              currentBatch.delivery_destination_city_name == null &&
+                              currentBatch.delivery_destination_province_name == null;
+        layoutDeliveryDestination.setVisibility(isDeliveryLocationEmpty ? View.GONE : View.VISIBLE);
+        setLocationText(
+            textDeliveryDestinationCity,
+            currentBatch.delivery_destination_city_type,
+            currentBatch.delivery_destination_city_name
+        );
+        setLocationText(
+            textDeliveryDestinationProvince,
+            "Provinsi",
+            currentBatch.delivery_destination_province_name
+        );
 
         // Handle start and end date, and duration
         String startDateText = SafeValueUtil.getFormattedDate(currentBatch.start_date, "HH:mm:ss");
@@ -108,8 +145,8 @@ public class HistoryDetailFragment extends Fragment {
         textDuration.setText(durationText);
 
         // Set total weight and price
-        textTotalWeight.setText(SafeValueUtil.getInt(currentBatch.total_amount, 0) + " " + SafeValueUtil.getString(currentBatch.unit, "kg"));
-        textTotalPrice.setText(FormatterUtil.formatCurrency("Rp", SafeValueUtil.getDouble(currentBatch.total_price, 0.0)));
+        textTotalWeight.setText(currentBatch.total_amount + " " + SafeValueUtil.getString(currentBatch.unit, "kg"));
+        textTotalPrice.setText(SafeValueUtil.formatCurrency("Rp", currentBatch.total_price));
     }
 
      @SuppressLint("SetTextI18n")
@@ -127,5 +164,13 @@ public class HistoryDetailFragment extends Fragment {
             int totalItems = data.size();
             textTotalItems.setText(totalItems +" "+ getString(R.string.bag));
         });
+    }
+
+    private void setLocationText(TextView textView, String type, String name) {
+        String formattedText = (type != null && name != null)
+            ? String.format("%s %s", SafeValueUtil.getString(type, ""), SafeValueUtil.getString(name, "N/A"))
+            : "";
+        textView.setText(formattedText);
+        textView.setVisibility((type != null && name != null) ? View.VISIBLE : View.GONE);
     }
 }

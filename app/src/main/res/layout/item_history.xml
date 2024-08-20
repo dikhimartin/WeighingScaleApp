@@ -30,7 +30,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:text="Dikhi Martin"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textSize="14sp"
             android:textColor="?attr/colorPrimary"
             android:maxLines="1"
             android:ellipsize="end"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_toStartOf="@id/btnMore"
             android:layout_alignBaseline="@id/text_view_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="13sp"
             android:layout_marginEnd="30dp"
             android:text="100 Kg"
             tools:ignore="HardcodedText" />
@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_title"
             android:layout_alignStart="@id/text_view_title"
+            android:textSize="12sp"
             android:text="19 Juli 2024"
             tools:ignore="HardcodedText" />
     </RelativeLayout>

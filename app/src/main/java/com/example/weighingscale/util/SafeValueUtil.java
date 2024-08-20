@@ -67,7 +67,7 @@ public class SafeValueUtil {
      * @return the formatted currency string.
      */
     public static String formatCurrency(String currencySymbol, double value) {
-        return String.format(Locale.getDefault(), "%s%,.0f", currencySymbol, value);
+        return String.format(Locale.getDefault(), "%s% ,.0f", currencySymbol, value);
     }
 
     /**

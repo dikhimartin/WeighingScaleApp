@@ -2,6 +2,7 @@ package com.example.weighingscale.util;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 public class FormatterUtil {
 
@@ -38,7 +39,7 @@ public class FormatterUtil {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
 
         // Format the amount and remove the default currency symbol
-        String formattedAmount = currencyFormatter.format(amount).replace(NumberFormat.getCurrencyInstance().getCurrency().getSymbol(), "").trim();
+        String formattedAmount = currencyFormatter.format(amount).replace(Objects.requireNonNull(NumberFormat.getCurrencyInstance().getCurrency()).getSymbol(), "").trim();
 
         // Combine the prefix and the formatted amount
         return prefix + " " + formattedAmount;

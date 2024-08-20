@@ -24,13 +24,21 @@ public class BatchDTO extends Batch {
     public int status;
 
     // Additional Attribute
-    public String weighing_location_type;
-    public String weighing_location_name;
-    public String delivery_destination_type;
-    public String delivery_destination_name;
+    public String weighing_location_province_name;
+    public String weighing_location_city_type;
+    public String weighing_location_city_name;
+    public String delivery_destination_province_name;
+    public String delivery_destination_city_type;
+    public String delivery_destination_city_name;
 
     // Getters
     public String getID() { return id; }
+
+    public String getTitle() {
+        return (weighing_location_city_type != null && weighing_location_city_name != null)
+            ? String.format("%s %s", weighing_location_city_type, weighing_location_city_name)
+            : pic_name;
+    }
 
     public String getPicName() { return pic_name; }
 

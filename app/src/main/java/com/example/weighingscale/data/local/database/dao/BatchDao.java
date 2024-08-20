@@ -36,13 +36,17 @@ public interface BatchDao {
         "    b.truck_driver_name, " +
         "    b.truck_driver_phone_number, " +
         "    b.status, " +
-        "    wl.name AS weighing_location_name, " +
-        "    wl.type AS weighing_location_type, " +
-        "    dd.name AS delivery_destination_name, " +
-        "    dd.type AS delivery_destination_type " +
+        "    wlp.name AS weighing_location_province_name, " +
+        "    wlc.name AS weighing_location_city_name, " +
+        "    wlc.type AS weighing_location_city_type, " +
+        "    ddp.name AS delivery_destination_province_name, " +
+        "    ddc.name AS delivery_destination_city_name, " +
+        "    ddc.type AS delivery_destination_city_type " +
         "FROM Batch b " +
-        "LEFT JOIN City wl ON b.weighing_location_id = wl.id " +
-        "LEFT JOIN City dd ON b.delivery_destination_id = dd.id " +
+        "LEFT JOIN City wlc ON b.weighing_location_id = wlc.id " +
+        "LEFT JOIN Province wlp ON wlc.province_id = wlp.id " +
+        "LEFT JOIN City ddc ON b.delivery_destination_id = ddc.id " +
+        "LEFT JOIN Province ddp ON ddc.province_id = ddp.id " +
         "ORDER BY b.datetime DESC"
     )
     LiveData<List<BatchDTO>> getDatas();
@@ -66,13 +70,17 @@ public interface BatchDao {
         "    b.truck_driver_name, " +
         "    b.truck_driver_phone_number, " +
         "    b.status, " +
-        "    wl.name AS weighing_location_name, " +
-        "    wl.type AS weighing_location_type, " +
-        "    dd.name AS delivery_destination_name, " +
-        "    dd.type AS delivery_destination_type " +
+        "    wlp.name AS weighing_location_province_name, " +
+        "    wlc.name AS weighing_location_city_name, " +
+        "    wlc.type AS weighing_location_city_type, " +
+        "    ddp.name AS delivery_destination_province_name, " +
+        "    ddc.name AS delivery_destination_city_name, " +
+        "    ddc.type AS delivery_destination_city_type " +
         "FROM Batch b " +
-        "LEFT JOIN City wl ON b.weighing_location_id = wl.id " +
-        "LEFT JOIN City dd ON b.delivery_destination_id = dd.id " +
+        "LEFT JOIN City wlc ON b.weighing_location_id = wlc.id " +
+        "LEFT JOIN Province wlp ON wlc.province_id = wlp.id " +
+        "LEFT JOIN City ddc ON b.delivery_destination_id = ddc.id " +
+        "LEFT JOIN Province ddp ON ddc.province_id = ddp.id " +
         "WHERE b.id = :id"
     )
     LiveData<BatchDTO> getDataByID(String id);

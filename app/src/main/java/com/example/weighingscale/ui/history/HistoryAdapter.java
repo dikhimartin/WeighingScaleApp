@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
-import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.util.DateTimeUtil;
 
 import java.util.HashSet;
@@ -23,7 +22,7 @@ import java.util.Set;
 
 public class HistoryAdapter extends ListAdapter<BatchDTO, HistoryAdapter.HistoryHolder> {
     private OnItemClickListener listener;
-    private Set<String> selectedItems = new HashSet<>();
+    private final Set<String> selectedItems = new HashSet<>();
 
     public HistoryAdapter() {
         super(DIFF_CALLBACK);
@@ -38,7 +37,7 @@ public class HistoryAdapter extends ListAdapter<BatchDTO, HistoryAdapter.History
         @SuppressLint("DiffUtilEquals")
         @Override
         public boolean areContentsTheSame(@NonNull BatchDTO oldItem, @NonNull BatchDTO newItem) {
-            return oldItem.getPicName().equals(newItem.getPicName()) &&
+            return oldItem.getTitle().equals(newItem.getTitle()) &&
                     oldItem.getPicPhoneNumber().equals(newItem.getPicPhoneNumber());
         }
     };
@@ -55,7 +54,7 @@ public class HistoryAdapter extends ListAdapter<BatchDTO, HistoryAdapter.History
     @Override
     public void onBindViewHolder(@NonNull HistoryHolder holder, int position) {
         BatchDTO currentData = getItem(position);
-        holder.textViewTitle.setText(currentData.getPicName());
+        holder.textViewTitle.setText(currentData.getTitle());
         holder.textViewDateTime.setText(DateTimeUtil.formatDateTime(currentData.getDatetime(), "dd MMMM yyyy HH:mm"));
         holder.textViewTotalWeight.setText(String.format("%d %s", currentData.getTotalAmount(), currentData.getUnit()));
 

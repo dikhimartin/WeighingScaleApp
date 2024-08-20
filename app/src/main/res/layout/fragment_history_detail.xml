@@ -34,14 +34,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/text_view_pic_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/pic_name"
+                    android:text="Tanggal Penimbangan"
                     android:textColor="?attr/colorPrimary"
                     android:textStyle="bold"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/text_view_datetime"
@@ -54,7 +54,7 @@
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
-            <!-- Weighing location -->
+            <!-- PIC Name -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,22 +65,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Penimbangan"
+                    android:text="Penanggung jawab"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:id="@+id/text_view_weighing_location"
+                    android:id="@+id/text_view_pic_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kota"
+                    android:text="N/A"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
-            <!-- Delivery Destination -->
+            <!-- Driver -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,19 +91,135 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Pengiriman"
-                    android:textSize="12sp"
+                    android:text="Driver"
                     android:textColor="@android:color/darker_gray"
+                    android:textSize="11sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:id="@+id/text_view_delivery_destination"
+                    android:id="@+id/text_view_driver"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kota"
+                    android:text="N/A"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <!-- Weighing Location Wrapper -->
+            <LinearLayout
+                android:id="@+id/til_weighing_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="2dp">
+
+                <!-- Province Location -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="2dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Lokasi Penimbangan"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText" />
+                    <TextView
+                        android:id="@+id/text_view_weighing_location_province"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <!-- City Location -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="2dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="11sp"
+                        android:layout_marginBottom="5dp"
+                        tools:ignore="HardcodedText" />
+                    <TextView
+                        android:id="@+id/text_view_weighing_location_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Delivery Destination Wrapper -->
+            <LinearLayout
+                android:id="@+id/til_delivery_destination"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="2dp">
+
+                <!-- Province Location -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="2dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tujuan Pengiriman"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText" />
+                    <TextView
+                        android:id="@+id/text_view_delivery_destination_province"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <!-- City Location -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="2dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="11sp"
+                        android:layout_marginBottom="5dp"
+                        tools:ignore="HardcodedText" />
+                    <TextView
+                        android:id="@+id/text_view_delivery_destination_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <!--Rice Price -->
@@ -118,7 +234,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Harga Padi"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:textColor="@android:color/darker_gray"
                     tools:ignore="HardcodedText" />
 
@@ -128,7 +244,7 @@
                     android:layout_height="wrap_content"
                     android:text="Rp. 0"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
