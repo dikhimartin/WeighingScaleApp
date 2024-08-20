@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.data.repository.BatchRepository;
@@ -16,7 +17,7 @@ import java.util.List;
 public class HistoryViewModel extends AndroidViewModel {
     private BatchRepository batchRepository;
     private BatchDetailRepository batchDetailRepository;
-    private LiveData<List<Batch>> allBatch;
+    private LiveData<List<BatchDTO>> allBatch;
 
     public HistoryViewModel(@NonNull Application application) {
         super(application);
@@ -25,20 +26,24 @@ public class HistoryViewModel extends AndroidViewModel {
         allBatch = batchRepository.getDatas();
     }
 
-    public LiveData<List<Batch>> getAllBatch() {
+    public LiveData<List<BatchDTO>> getAllBatch() {
         return allBatch;
     }
 
-    public LiveData<Batch> getBatchById(String id) {
-        return batchRepository.getDataById(id);
+    public LiveData<BatchDTO> getBatchByID(String id) {
+        return batchRepository.getDataByID(id);
     }
 
-    public LiveData<List<BatchDetail>> getBatchDetails(String batchId) {
-        return batchDetailRepository.getDatasByBatchID(batchId);
+    public LiveData<List<BatchDetail>> getBatchDetails(String id) {
+        return batchDetailRepository.getDatasByBatchID(id);
     }
 
     public void deleteBatch(Batch batch) {
         batchRepository.delete(batch);
+    }
+
+    public void deleteBatchByID(String id) {
+        batchRepository.deleteByID(id);
     }
 
     public void deleteBatchByIds(List<String> ids) {

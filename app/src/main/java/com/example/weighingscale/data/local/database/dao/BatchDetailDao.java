@@ -5,7 +5,6 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public interface BatchDetailDao {
     LiveData<List<BatchDetail>> getDatasByBatchID(String batchId);
 
     @Query("SELECT * FROM BatchDetail WHERE batch_id = :batchId ORDER BY datetime DESC")
-    List<BatchDetail> getBatchDetailsByBatchId(String batchId); // Changed from LiveData to direct query
+    List<BatchDetail> getBatchDetailsByBatchID(String batchId); // Changed from LiveData to direct query
 
     @Insert
     void insert(BatchDetail batchDetail);

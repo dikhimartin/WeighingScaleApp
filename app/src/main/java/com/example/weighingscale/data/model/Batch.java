@@ -44,49 +44,4 @@ public class Batch {
     public Batch() {
         this.id = UUID.randomUUID().toString();
     }
-
-    @NonNull
-    public String getId() {
-        return id;
-    }
-
-    public String getPicName() {
-        return pic_name;
-    }
-
-    public String getPicPhoneNumber() {
-        return pic_phone_number;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public double getRicePrice(){
-        return  rice_price;
-    }
-
-    public Date getDatetime() {
-        return datetime;
-    }
-
-    public Date getStartDate() {
-        return start_date;
-    }
-
-    public Date getEndDate() {
-        return end_date;
-    }
-
-    public long getDuration(){
-        return  duration;
-    }
-
-    public int getTotalAmount() {
-        return total_amount;
-    }
-
-    public double getTotalPrice() {
-        return total_price;
-    }
 }

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
-import com.example.weighingscale.data.model.Batch;
+import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.SafeValueUtil;
 
@@ -30,7 +30,9 @@ public class HistoryDetailFragment extends Fragment {
     private TextView textTotalWeight;
     private TextView textTotalPrice;
     private TextView textTotalItems;
-    private Batch currentBatch;
+    private TextView textWeighingLocation;
+    private TextView textDeliveryDestination;
+    private BatchDTO currentBatch;
     private HistoryViewModel historyViewModel;
 
     @Nullable
@@ -53,6 +55,8 @@ public class HistoryDetailFragment extends Fragment {
         textTotalWeight = view.findViewById(R.id.text_view_total_weight);
         textTotalPrice = view.findViewById(R.id.text_view_total_price);
         textTotalItems = view.findViewById(R.id.text_view_total_item);
+        textWeighingLocation = view.findViewById(R.id.text_view_weighing_location);
+        textDeliveryDestination = view.findViewById(R.id.text_view_delivery_destination);
     }
 
     private void initializeViewModel() {
@@ -63,9 +67,10 @@ public class HistoryDetailFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null && args.containsKey("batch_id")) {
             String batchID = args.getString("batch_id");
-            historyViewModel.getBatchById(batchID).observe(getViewLifecycleOwner(), batch -> {
-                if (batch != null) {
-                    currentBatch = batch;
+            assert batchID != null;
+             historyViewModel.getBatchByID(batchID).observe(getViewLifecycleOwner(), batchWithCity -> {
+                if (batchWithCity != null) {
+                    currentBatch = batchWithCity;
                     populateBatch();
                     batchDetailList(view);
                 }
@@ -79,12 +84,14 @@ public class HistoryDetailFragment extends Fragment {
         textPICName.setText(SafeValueUtil.getString(currentBatch.pic_name, "N/A"));
         textDatetime.setText(SafeValueUtil.getFormattedDate(currentBatch.datetime, "dd MMMM yyyy"));
         textRicePrice.setText(FormatterUtil.formatCurrency("Rp", SafeValueUtil.getDouble(currentBatch.rice_price, 0.0)));
+        textWeighingLocation.setText(SafeValueUtil.getString(currentBatch.weighing_location_name, "N/A"));
+        textDeliveryDestination.setText(SafeValueUtil.getString(currentBatch.delivery_destination_name, "N/A"));
 
         // Handle start and end date, and duration
         String startDateText = SafeValueUtil.getFormattedDate(currentBatch.start_date, "HH:mm:ss");
         String endDateText = (currentBatch.end_date != null) ? SafeValueUtil.getFormattedDate(currentBatch.end_date, "HH:mm:ss") : "-";
         String durationText = (currentBatch.start_date != null && currentBatch.end_date != null) ?
-            FormatterUtil.formatDuration(currentBatch.end_date.getTime() - currentBatch.start_date.getTime()) : "-";
+        FormatterUtil.formatDuration(currentBatch.end_date.getTime() - currentBatch.start_date.getTime()) : "-";
 
         textStartDate.setText(startDateText);
         textEndDate.setText(endDateText);

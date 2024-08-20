@@ -1,7 +1,6 @@
 package com.example.weighingscale.data.model;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -24,8 +23,13 @@ public class BatchDetail {
     public int amount;
     public double price;
 
+    // Constructor
+    public BatchDetail() {
+        this.id = UUID.randomUUID().toString();
+    }
+
     @NonNull
-    public String getId() {
+    public String getID() {
         return id;
     }
 
@@ -39,10 +43,5 @@ public class BatchDetail {
 
     public String getUnit(){
         return unit;
-    }
-
-    // Constructor
-    public BatchDetail() {
-        this.id = UUID.randomUUID().toString();
     }
 }

@@ -1,9 +1,10 @@
 package com.example.weighingscale.data.model;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import java.util.UUID;
 
 @Entity(tableName = "Province")
 public class Province {
@@ -12,7 +13,13 @@ public class Province {
     public String id;
     public String name;
 
-    public String getId() {
+    // Constructor
+    public Province() {
+        this.id = UUID.randomUUID().toString();
+    }
+
+    @NonNull
+    public String getID() {
         return id;
     }
 

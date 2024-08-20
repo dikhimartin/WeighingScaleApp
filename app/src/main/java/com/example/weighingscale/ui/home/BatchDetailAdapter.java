@@ -30,7 +30,7 @@ public class BatchDetailAdapter extends ListAdapter<BatchDetail, BatchDetailAdap
     private static final DiffUtil.ItemCallback<BatchDetail> DIFF_CALLBACK = new DiffUtil.ItemCallback<BatchDetail>() {
         @Override
         public boolean areItemsTheSame(@NonNull BatchDetail oldItem, @NonNull BatchDetail newItem) {
-            return oldItem.getId() == newItem.getId();
+            return oldItem.getID() == newItem.getID();
         }
 
         @SuppressLint("DiffUtilEquals")

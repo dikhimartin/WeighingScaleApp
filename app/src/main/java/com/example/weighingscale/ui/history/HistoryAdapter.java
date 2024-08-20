@@ -14,13 +14,14 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
+import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.util.DateTimeUtil;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class HistoryAdapter extends ListAdapter<Batch, HistoryAdapter.HistoryHolder> {
+public class HistoryAdapter extends ListAdapter<BatchDTO, HistoryAdapter.HistoryHolder> {
     private OnItemClickListener listener;
     private Set<String> selectedItems = new HashSet<>();
 
@@ -28,15 +29,15 @@ public class HistoryAdapter extends ListAdapter<Batch, HistoryAdapter.HistoryHol
         super(DIFF_CALLBACK);
     }
 
-    private static final DiffUtil.ItemCallback<Batch> DIFF_CALLBACK = new DiffUtil.ItemCallback<Batch>() {
+    private static final DiffUtil.ItemCallback<BatchDTO> DIFF_CALLBACK = new DiffUtil.ItemCallback<BatchDTO>() {
         @Override
-        public boolean areItemsTheSame(@NonNull Batch oldItem, @NonNull Batch newItem) {
-            return oldItem.getId() == newItem.getId();
+        public boolean areItemsTheSame(@NonNull BatchDTO oldItem, @NonNull BatchDTO newItem) {
+            return oldItem.getID() == newItem.getID();
         }
 
         @SuppressLint("DiffUtilEquals")
         @Override
-        public boolean areContentsTheSame(@NonNull Batch oldItem, @NonNull Batch newItem) {
+        public boolean areContentsTheSame(@NonNull BatchDTO oldItem, @NonNull BatchDTO newItem) {
             return oldItem.getPicName().equals(newItem.getPicName()) &&
                     oldItem.getPicPhoneNumber().equals(newItem.getPicPhoneNumber());
         }
@@ -53,12 +54,12 @@ public class HistoryAdapter extends ListAdapter<Batch, HistoryAdapter.HistoryHol
     @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull HistoryHolder holder, int position) {
-        Batch currentData = getItem(position);
+        BatchDTO currentData = getItem(position);
         holder.textViewTitle.setText(currentData.getPicName());
         holder.textViewDateTime.setText(DateTimeUtil.formatDateTime(currentData.getDatetime(), "dd MMMM yyyy HH:mm"));
         holder.textViewTotalWeight.setText(String.format("%d %s", currentData.getTotalAmount(), currentData.getUnit()));
 
-        holder.itemView.setBackgroundColor(selectedItems.contains(currentData.getId()) ?
+        holder.itemView.setBackgroundColor(selectedItems.contains(currentData.getID()) ?
                 holder.itemView.getResources().getColor(R.color.selectedItem) :
                 holder.itemView.getResources().getColor(R.color.defaultItem));
     }
@@ -138,11 +139,11 @@ public class HistoryAdapter extends ListAdapter<Batch, HistoryAdapter.HistoryHol
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Batch batch);
-        void onDetailClick(Batch batch);
-        void onExportClick(Batch batch);
-        void onDeleteClick(Batch batch);
-        void onItemLongClick(Batch batch);
+        void onItemClick(BatchDTO batch);
+        void onDetailClick(BatchDTO batch);
+        void onExportClick(BatchDTO batch);
+        void onDeleteClick(BatchDTO batch);
+        void onItemLongClick(BatchDTO batch);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

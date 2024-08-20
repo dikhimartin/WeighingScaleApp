@@ -29,12 +29,12 @@ public class AddressRepository {
         return provinceDao.getAll();
     }
 
-    public LiveData<List<City>> getCitiesByProvinceId(String provinceId) {
-        return cityDao.getCitiesByProvinceId(provinceId);
+    public LiveData<List<City>> getCitiesByProvinceID(String provinceID) {
+        return cityDao.getCitiesByProvinceId(provinceID);
     }
 
-    public LiveData<List<Subdistrict>> getSubdistrictsByCityId(String cityId) {
-        return subdistrictDao.getSubdistrictsByCityId(cityId);
+    public LiveData<List<Subdistrict>> getSubdistrictsByCityId(String cityID) {
+        return subdistrictDao.getSubdistrictsByCityId(cityID);
     }
 
 }

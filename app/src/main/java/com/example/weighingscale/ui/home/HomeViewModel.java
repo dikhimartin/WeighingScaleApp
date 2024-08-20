@@ -40,7 +40,7 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     public void insertBatch(Batch batch) {
-        batchRepository.insertBatch(batch);
+        batchRepository.insert(batch);
     }
 
     public void insertBatchDetail(String batchId, int amount, Setting setting) {
@@ -72,7 +72,7 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<City>> getCitiesByProvinceId(String provinceId) {
-        return addressRepository.getCitiesByProvinceId(provinceId);
+        return addressRepository.getCitiesByProvinceID(provinceId);
     }
 }
 

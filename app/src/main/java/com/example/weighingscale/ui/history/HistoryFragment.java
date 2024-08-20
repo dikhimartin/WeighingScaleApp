@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
+import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.data.model.Batch;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -47,33 +48,33 @@ public class HistoryFragment extends Fragment {
 
         adapter.setOnItemClickListener(new HistoryAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Batch batch) {
-                adapter.toggleSelection(batch.getId());
+            public void onItemClick(BatchDTO batch) {
+                adapter.toggleSelection(batch.getID());
                 updateDeleteAllButtonVisibility();
             }
 
             @Override
-            public void onDetailClick(Batch batch) {
+            public void onDetailClick(BatchDTO batch) {
                  Bundle bundle = new Bundle();
-                 bundle.putString("batch_id", batch.getId());
+                 bundle.putString("batch_id", batch.getID());
                  NavHostFragment.findNavController(HistoryFragment.this)
                          .navigate(R.id.action_HistoryFragment_to_HistoryDetailFragment, bundle);
             }
 
             @Override
-            public void onExportClick(Batch batch) {
+            public void onExportClick(BatchDTO batch) {
                 // Implement export functionality here
                 Snackbar.make(requireView(), "Export " + batch.getPicName(), Snackbar.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onDeleteClick(Batch batch) {
-                historyViewModel.deleteBatch(batch);
+            public void onDeleteClick(BatchDTO batch) {
+                historyViewModel.deleteBatchByID(batch.getID());
                 Snackbar.make(requireView(), batch.getPicName() + " " + getString(R.string.deleted), Snackbar.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onItemLongClick(Batch batch) {
+            public void onItemLongClick(BatchDTO batch) {
                 // TODO : Do something when on item click long click
             }
         });

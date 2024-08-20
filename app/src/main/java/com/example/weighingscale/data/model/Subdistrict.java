@@ -1,10 +1,11 @@
 package com.example.weighingscale.data.model;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
+
+import java.util.UUID;
 
 @Entity(tableName = "Subdistrict",
         foreignKeys = {
@@ -25,9 +26,16 @@ public class Subdistrict {
     public String city_id;
     public String name;
 
-    public String getId() {
+    // Constructor
+    public Subdistrict() {
+        this.id = UUID.randomUUID().toString();
+    }
+
+    @NonNull
+    public String getID() {
         return id;
     }
+
     public String getName() {
         return name;
     }

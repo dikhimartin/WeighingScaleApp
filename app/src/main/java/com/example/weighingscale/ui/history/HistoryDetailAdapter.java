@@ -20,7 +20,7 @@ public class HistoryDetailAdapter extends ListAdapter<BatchDetail, HistoryDetail
     private static final DiffUtil.ItemCallback<BatchDetail> DIFF_CALLBACK = new DiffUtil.ItemCallback<BatchDetail>() {
         @Override
         public boolean areItemsTheSame(@NonNull BatchDetail oldItem, @NonNull BatchDetail newItem) {
-            return oldItem.getId().equals(newItem.getId());
+            return oldItem.getID().equals(newItem.getID());
         }
 
         @SuppressLint("DiffUtilEquals")

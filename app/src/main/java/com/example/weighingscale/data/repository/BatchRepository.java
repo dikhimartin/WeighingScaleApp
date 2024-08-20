@@ -3,6 +3,8 @@ package com.example.weighingscale.data.repository;
 import android.app.Application;
 import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
+
+import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.data.local.database.AppDatabase;
 import com.example.weighingscale.data.local.database.dao.BatchDao;
 import com.example.weighingscale.data.local.database.dao.BatchDetailDao;
@@ -13,9 +15,9 @@ import java.util.Date;
 import java.util.List;
 
 public class BatchRepository {
-    private BatchDao batchDao;
-    private BatchDetailDao batchDetailDao;
-    private LiveData<List<Batch>> listBatch;
+    private final BatchDao batchDao;
+    private final BatchDetailDao batchDetailDao;
+    private final LiveData<List<BatchDTO>> listBatch;
 
     public BatchRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
@@ -24,33 +26,33 @@ public class BatchRepository {
         listBatch = batchDao.getDatas();
     }
 
-    public LiveData<List<Batch>> getDatas() {
+    public LiveData<List<BatchDTO>> getDatas() {
         return listBatch;
     }
 
-    public LiveData<Batch> getDataById(String id) {
-        return batchDao.getDataById(id);
+    public LiveData<BatchDTO> getDataByID(String id) {
+        return batchDao.getDataByID(id);
     }
 
     public LiveData<Batch> getActiveBatch() {
         return batchDao.getActiveBatch();
     }
 
-    public void insertBatch(Batch batch) {
+    public void insert(Batch batch) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             batchDao.forceCompleteBatch(); // Complete any existing active batch
             batch.status = 1; // Set the new batch as active
-            batchDao.insertBatch(batch);
+            batchDao.insert(batch);
         });
     }
 
-    public void completeBatch(String batchId) {
+    public void completeBatch(String batchID) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             // Fetch batch and its details in a single transaction
-            Batch batch = batchDao.getBatchById(batchId);
+            Batch batch = batchDao.getBatchByID(batchID);
             if (batch != null) {
                 // Fetch batch details
-                List<BatchDetail> details = batchDetailDao.getBatchDetailsByBatchId(batchId);
+                List<BatchDetail> details = batchDetailDao.getBatchDetailsByBatchID(batchID);
 
                 // Initialize totals
                 int totalAmount = 0;
@@ -80,22 +82,25 @@ public class BatchRepository {
                 batch.status = 0; // Mark as completed
 
                 // Update batch in database
-                batchDao.updateBatch(batch);
+                batchDao.update(batch);
             }
         });
     }
 
+    public void deleteByID(String id) {
+        new DeleteByIdAsyncTask(batchDao).execute(id);
+    }
 
     public void delete(Batch batch) {
         new DeleteAsyncTask(batchDao).execute(batch);
     }
 
-    public void deleteAll() {
-        new DeleteAllAsyncTask(batchDao).execute();
-    }
-
     public void deleteByIds(List<String> ids) {
         new DeleteByIdsAsyncTask(batchDao).execute(ids);
+    }
+
+    public void deleteAll() {
+        new DeleteAllAsyncTask(batchDao).execute();
     }
 
     private static class DeleteAsyncTask extends AsyncTask<Batch,Void,Void> {
@@ -129,7 +134,19 @@ public class BatchRepository {
         }
         @Override
         protected Void doInBackground(List<String>... lists) {
-            batchDao.deleteByIds(lists[0]);
+            batchDao.deleteByIDs(lists[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteByIdAsyncTask extends AsyncTask<String, Void, Void> {
+        private BatchDao batchDao;
+        private DeleteByIdAsyncTask(BatchDao batchDao) {
+            this.batchDao = batchDao;
+        }
+        @Override
+        protected Void doInBackground(String... ids) {
+            batchDao.deleteByID(ids[0]);
             return null;
         }
     }
