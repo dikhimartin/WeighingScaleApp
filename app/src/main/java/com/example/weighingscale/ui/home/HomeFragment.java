@@ -243,7 +243,7 @@ public class HomeFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setView(dialogView)
-                .setTitle("Silahkan masukan data batch muatan")
+                .setTitle("Masukan data batch muatan")
                 .setPositiveButton("Simpan", (dialog, id) -> {
                     String picName = editPicName.getText().toString();
                     String picPhoneNumber = editPicPhoneNumber.getText().toString();
