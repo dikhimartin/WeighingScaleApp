@@ -80,31 +80,31 @@ public class HomeFragment extends Fragment {
                     currentBatchId = batch.id;
                     binding.summaryBatch.setVisibility(View.VISIBLE);
                     homeViewModel.getBatchDetails(currentBatchId).observe(getViewLifecycleOwner(), data -> {
-                    adapter.submitList(data);
+                        adapter.submitList(data);
 
-                    if (data != null && !data.isEmpty()) {
-                        recyclerView.smoothScrollToPosition(0);
+                        if (data != null && !data.isEmpty()) {
+                            recyclerView.smoothScrollToPosition(0);
 
-                        // Calculate total weight
-                        double totalWeight = 0.0;
-                        for (BatchDetail detail : data) {
-                            totalWeight += detail.getAmount();
+                            // Calculate total weight
+                            double totalWeight = 0.0;
+                            for (BatchDetail detail : data) {
+                                totalWeight += detail.getAmount();
+                            }
+                            String totalWeightText = String.format(Locale.getDefault(), "%.0f %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
+                            binding.textTotalWeight.setText(totalWeightText);
+
+                            // Update item count
+                            String itemCountText = String.format(Locale.getDefault(), "%d Item", data.size());
+                            binding.textTotalItems.setText(itemCountText);
+
+                            binding.cardTotal.setVisibility(View.VISIBLE);
+                            binding.finishButtonGroup.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.cardTotal.setVisibility(View.GONE);
+                            binding.finishButtonGroup.setVisibility(View.GONE);
+                            binding.textTotalItems.setText("0 Item");
                         }
-                        String totalWeightText = String.format(Locale.getDefault(), "%.0f %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
-                        binding.textTotalWeight.setText(totalWeightText);
-
-                        // Update item count
-                        String itemCountText = String.format(Locale.getDefault(), "%d Item", data.size());
-                        binding.textTotalItems.setText(itemCountText);
-
-                        binding.cardTotal.setVisibility(View.VISIBLE);
-                        binding.finishButtonGroup.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.cardTotal.setVisibility(View.GONE);
-                        binding.finishButtonGroup.setVisibility(View.GONE);
-                        binding.textTotalItems.setText("0 Item");
-                    }
-                });
+                    });
             } else {
                 clearBatchDetails();
                 showBatchInputDialog();

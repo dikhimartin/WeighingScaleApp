@@ -7,19 +7,21 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.weighingscale.data.model.Batch;
-import com.example.weighingscale.data.model.Note;
+import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.data.repository.BatchRepository;
-import com.example.weighingscale.data.repository.NoteRepository;
+import com.example.weighingscale.data.repository.BatchDetailRepository;
 
 import java.util.List;
 
 public class HistoryViewModel extends AndroidViewModel {
     private BatchRepository batchRepository;
+    private BatchDetailRepository batchDetailRepository;
     private LiveData<List<Batch>> allBatch;
 
     public HistoryViewModel(@NonNull Application application) {
         super(application);
         batchRepository = new BatchRepository(application);
+        batchDetailRepository = new BatchDetailRepository(application);
         allBatch = batchRepository.getDatas();
     }
 
@@ -31,12 +33,12 @@ public class HistoryViewModel extends AndroidViewModel {
         return batchRepository.getDataById(id);
     }
 
-    public void deleteBatch(Batch batch) {
-        batchRepository.delete(batch);
+    public LiveData<List<BatchDetail>> getBatchDetails(String batchId) {
+        return batchDetailRepository.getDatasByBatchID(batchId);
     }
 
-    public void deleteAllBatch() {
-        batchRepository.deleteAll();
+    public void deleteBatch(Batch batch) {
+        batchRepository.delete(batch);
     }
 
     public void deleteBatchByIds(List<String> ids) {
