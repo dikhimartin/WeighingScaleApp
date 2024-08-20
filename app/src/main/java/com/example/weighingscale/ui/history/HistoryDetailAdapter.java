@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.data.model.BatchDetail;
-import com.example.weighingscale.databinding.ItemLogBinding;
+import com.example.weighingscale.databinding.ItemHistoryDetailBinding;
 import com.example.weighingscale.util.DateTimeUtil;
 import java.util.Locale;
 
@@ -37,7 +37,7 @@ public class HistoryDetailAdapter extends ListAdapter<BatchDetail, HistoryDetail
     @NonNull
     @Override
     public BatchDetailHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemLogBinding binding = ItemLogBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemHistoryDetailBinding binding = ItemHistoryDetailBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new BatchDetailHolder(binding);
     }
 
@@ -50,9 +50,9 @@ public class HistoryDetailAdapter extends ListAdapter<BatchDetail, HistoryDetail
     }
 
     public static class BatchDetailHolder extends RecyclerView.ViewHolder {
-        private final ItemLogBinding binding;
+        private final ItemHistoryDetailBinding binding;
 
-        public BatchDetailHolder(@NonNull ItemLogBinding binding) {
+        public BatchDetailHolder(@NonNull ItemHistoryDetailBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

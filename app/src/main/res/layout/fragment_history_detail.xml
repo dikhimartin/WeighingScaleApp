@@ -67,7 +67,7 @@
                     android:layout_weight="1"
                     android:text="Penimbangan"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Pengiriman"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textColor="@android:color/darker_gray"
                     tools:ignore="HardcodedText" />
 
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Harga Padi"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textColor="@android:color/darker_gray"
                     tools:ignore="HardcodedText" />
 
@@ -240,7 +240,7 @@
                 android:text="Total Karung (sak)"
                 android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 tools:ignore="HardcodedText" />
 
             <TextView
@@ -248,7 +248,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0 karung (sak)"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:textColor="@android:color/black"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
@@ -267,7 +267,7 @@
                 android:text="Total Berat"
                 android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 tools:ignore="HardcodedText" />
 
             <TextView
@@ -276,7 +276,7 @@
                 android:layout_height="wrap_content"
                 android:text="0 Kg"
                 android:textColor="@android:color/black"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
@@ -294,7 +294,7 @@
                 android:text="Total Harga"
                 android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 tools:ignore="HardcodedText" />
 
             <TextView
@@ -303,7 +303,7 @@
                 android:layout_height="wrap_content"
                 android:text="Rp. 0"
                 android:textColor="@android:color/black"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
@@ -344,7 +344,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_log" />
-
+        tools:listitem="@layout/item_history_detail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
