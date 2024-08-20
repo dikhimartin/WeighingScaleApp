@@ -155,7 +155,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="0 Item"
+            android:text="0 karung (sak)"
             android:textSize="15sp"
             android:gravity="end"
             tools:ignore="HardcodedText"/>

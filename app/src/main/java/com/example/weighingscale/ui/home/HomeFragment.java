@@ -94,7 +94,7 @@ public class HomeFragment extends Fragment {
                             binding.textTotalWeight.setText(totalWeightText);
 
                             // Update item count
-                            String itemCountText = String.format(Locale.getDefault(), "%d Item", data.size());
+                            String itemCountText = String.format(Locale.getDefault(), "%d karung (sak)", data.size());
                             binding.textTotalItems.setText(itemCountText);
 
                             binding.cardTotal.setVisibility(View.VISIBLE);
@@ -102,7 +102,7 @@ public class HomeFragment extends Fragment {
                         } else {
                             binding.cardTotal.setVisibility(View.GONE);
                             binding.finishButtonGroup.setVisibility(View.GONE);
-                            binding.textTotalItems.setText("0 Item");
+                            binding.textTotalItems.setText("0 karung (sak)");
                         }
                     });
             } else {

@@ -67,4 +67,5 @@
     <string name="choose_subdistrict">Pilih Kecamatan</string>
     <string name="choose_datetime">Tanggal dan Waktu</string>
     <string name="unit_disabled_message">Tidak diperbolehkan merubah unit, apabila masih ada batch muatan yang aktif.</string>
+    <string name="bag">karung (sak)</string>
 </resources>
