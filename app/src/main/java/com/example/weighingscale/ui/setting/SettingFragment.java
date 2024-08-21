@@ -1,6 +1,7 @@
 package com.example.weighingscale.ui.setting;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.ui.home.HomeViewModel;
 import com.example.weighingscale.ui.shared.SharedAdapter;
+import com.example.weighingscale.util.InputDirectiveUtil;
 import com.example.weighingscale.util.ValidationUtil;
 
 public class SettingFragment extends Fragment {
@@ -40,6 +42,9 @@ public class SettingFragment extends Fragment {
         etRicePrice = root.findViewById(R.id.et_rice_price);
         actvUnit = root.findViewById(R.id.actv_unit);
         Button btnSave = root.findViewById(R.id.btn_save);
+
+        // Apply currency format using InputDirectiveUtil
+        InputDirectiveUtil.applyCurrencyFormat(etRicePrice);
 
         // Setup AutoCompleteTextView with adapter
         settingViewModel.getUnitOptions().observe(getViewLifecycleOwner(), units -> {
@@ -79,30 +84,24 @@ public class SettingFragment extends Fragment {
     }
 
     private void saveSetting() {
-        // Get input values
         String picName = etPicName.getText().toString().trim();
         String picPhoneNumber = etPicPhoneNumber.getText().toString().trim();
-        String ricePriceStr = etRicePrice.getText().toString().trim();
+        long ricePrice = InputDirectiveUtil.getCurrencyValue(etRicePrice); // Now returns a long
         String unitText = actvUnit.getText().toString().trim();
         String UnitValue = settingViewModel.getUnitValue(unitText);
 
         // Validate and process input
-        if (validateInputs(picName, picPhoneNumber, ricePriceStr, UnitValue)) {
-            try {
-                double ricePrice = Float.parseFloat(ricePriceStr);
-                Setting newSetting = createSetting(picName, picPhoneNumber, ricePrice, UnitValue);
-                settingViewModel.insertOrUpdateSetting(newSetting);
-                showToast("Pengaturan berhasil diubah");
-                requireActivity().onBackPressed();
-            } catch (NumberFormatException e) {
-                showToast("Inputan harga padi harus berupa angka");
-            }
+        if (validateInputs(picName, picPhoneNumber, ricePrice, UnitValue)) {
+            Setting newSetting = createSetting(picName, picPhoneNumber, ricePrice, UnitValue);
+            settingViewModel.insertOrUpdateSetting(newSetting);
+            showToast("Pengaturan berhasil diubah");
+            requireActivity().onBackPressed();
         } else {
             showToast("Tolong isi semua inputan");
         }
     }
 
-    private boolean validateInputs(String picName, String picPhoneNumber, String ricePriceStr, String unit) {
+    private boolean validateInputs(String picName, String picPhoneNumber, long ricePrice, String unit) {
         boolean isValid = true;
 
         if (ValidationUtil.isFieldEmpty(picName)) {
@@ -119,7 +118,7 @@ public class SettingFragment extends Fragment {
             etPicPhoneNumber.setError(null);
         }
 
-        if (ValidationUtil.isFieldEmpty(ricePriceStr) || !ValidationUtil.isNumeric(ricePriceStr)) {
+        if (ricePrice <= 0) {
             ValidationUtil.setFieldError(etRicePrice, requireContext(), R.string.is_required);
             isValid = false;
         } else {
@@ -136,7 +135,7 @@ public class SettingFragment extends Fragment {
         return isValid;
     }
 
-    private Setting createSetting(String picName, String picPhoneNumber, double ricePrice, String unit) {
+    private Setting createSetting(String picName, String picPhoneNumber, long ricePrice, String unit) {
         Setting setting = new Setting();
         setting.pic_name = picName;
         setting.pic_phone_number = picPhoneNumber;

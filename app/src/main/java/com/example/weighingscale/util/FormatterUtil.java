@@ -31,10 +31,10 @@ public class FormatterUtil {
      * Formats a double value as a currency string with a specified prefix.
      *
      * @param prefix The prefix for the currency, e.g., "Rp".
-     * @param amount The double value to format.
+     * @param amount The long value to format.
      * @return A string representing the formatted currency.
      */
-    public static String formatCurrency(String prefix, double amount) {
+    public static String formatCurrency(String prefix, long amount) {
         // Create a NumberFormat instance for currency formatting in the Indonesian locale
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
 

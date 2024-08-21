@@ -30,9 +30,9 @@ public class Batch {
     public Date end_date;
     public long duration;
     public String unit;
-    public double rice_price;
+    public long rice_price;
     public int total_amount;
-    public double total_price;
+    public long total_price;
     public String weighing_location_id;
     public String weighing_location_geo;
     public String delivery_destination_id;

@@ -3,6 +3,7 @@ package com.example.weighingscale.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.text.NumberFormat;
 
 /**
  * Utility class for safely handling common data types in Room database models.
@@ -60,14 +61,15 @@ public class SafeValueUtil {
     }
 
     /**
-     * Safely formats a double value as a currency string.
+     * Safely formats a long value as a currency string.
      *
      * @param currencySymbol the symbol to prefix the formatted value (e.g., "Rp").
-     * @param value the double value to format.
+     * @param value the long value to format.
      * @return the formatted currency string.
      */
-    public static String formatCurrency(String currencySymbol, double value) {
-        return String.format(Locale.getDefault(), "%s% ,.0f", currencySymbol, value);
+    public static String formatCurrency(String currencySymbol, long value) {
+        String formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(value);
+        return String.format("%s %s", currencySymbol, formattedNumber);
     }
 
     /**

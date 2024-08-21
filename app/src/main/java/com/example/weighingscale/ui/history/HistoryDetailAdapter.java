@@ -59,7 +59,7 @@ public class HistoryDetailAdapter extends ListAdapter<BatchDetail, HistoryDetail
 
         public void bind(BatchDetail batchDetail) {
             String formattedDate = DateTimeUtil.formatDateTime(batchDetail.getDatetime(), "dd/MM/yyyy HH:mm");
-            String amountText = String.format(Locale.getDefault(), "%.0f %s", batchDetail.getAmount(), batchDetail.getUnit());
+            String amountText = String.format(Locale.getDefault(), "%d %s", batchDetail.getAmount(), batchDetail.getUnit());
             binding.textViewWeight.setText(amountText);
             binding.textViewDate.setText(formattedDate);
         }

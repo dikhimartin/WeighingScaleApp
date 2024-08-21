@@ -58,7 +58,7 @@ public class BatchDetailAdapter extends ListAdapter<BatchDetail, BatchDetailAdap
         String formattedDate = DateTimeUtil.formatDateTime(currentData.getDatetime(), "dd/MM/yyyy HH:mm");
 
         // Format the amount text including the unit
-        String amountText = String.format(Locale.getDefault(), "%.0f %s", currentData.getAmount(), currentData.getUnit());
+        String amountText = String.format(Locale.getDefault(), "%d %s", currentData.getAmount(), currentData.getUnit());
         holder.textViewWeight.setText(amountText);
         holder.textViewDate.setText(formattedDate);
 

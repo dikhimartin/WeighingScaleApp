@@ -86,11 +86,11 @@ public class HomeFragment extends Fragment {
                             recyclerView.smoothScrollToPosition(0);
 
                             // Calculate total weight
-                            double totalWeight = 0.0;
+                            int totalWeight = 0;
                             for (BatchDetail detail : data) {
                                 totalWeight += detail.getAmount();
                             }
-                            String totalWeightText = String.format(Locale.getDefault(), "%.0f %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
+                            String totalWeightText = String.format(Locale.getDefault(), "%d %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
                             binding.textTotalWeight.setText(totalWeightText);
 
                             // Update item count

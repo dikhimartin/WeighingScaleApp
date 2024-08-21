@@ -20,9 +20,9 @@ import java.util.Date;
 import java.util.List;
 
 public class HomeViewModel extends AndroidViewModel {
-    private BatchRepository batchRepository;
-    private BatchDetailRepository batchDetailRepository;
-    private AddressRepository addressRepository;
+    private final BatchRepository batchRepository;
+    private final BatchDetailRepository batchDetailRepository;
+    private final AddressRepository addressRepository;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
@@ -45,10 +45,10 @@ public class HomeViewModel extends AndroidViewModel {
 
     public void insertBatchDetail(String batchId, int amount, Setting setting) {
         BatchDetail batchDetail = new BatchDetail();
-        double price = 0.0;
+        long price = 0;
         String unit = "kg";
         if (setting != null) {
-            double ricePrice = setting.rice_price;
+            long ricePrice = setting.rice_price;
             price = amount * ricePrice;
             unit = setting.unit;
         }

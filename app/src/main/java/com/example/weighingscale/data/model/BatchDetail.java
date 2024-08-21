@@ -21,7 +21,7 @@ public class BatchDetail {
     public Date datetime;
     public String unit;
     public int amount;
-    public double price;
+    public long price;
 
     // Constructor
     public BatchDetail() {
@@ -37,10 +37,9 @@ public class BatchDetail {
         return datetime;
     }
 
-    public double getAmount() {
+    public int getAmount() {
         return amount;
     }
-
     public String getUnit(){
         return unit;
     }

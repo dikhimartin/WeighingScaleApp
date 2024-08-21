@@ -56,7 +56,7 @@ public class BatchRepository {
 
                 // Initialize totals
                 int totalAmount = 0;
-                double totalPrice = 0.0;
+                long totalPrice = 0;
 
                 // Calculate totals
                 if (details != null) {
