@@ -54,30 +54,14 @@ public class BatchRepository {
                 // Fetch batch details
                 List<BatchDetail> details = batchDetailDao.getBatchDetailsByBatchID(batchID);
 
-                // Initialize totals
-                int totalAmount = 0;
-                long totalPrice = 0;
-
-                // Calculate totals
-                if (details != null) {
-                    for (BatchDetail detail : details) {
-                        totalAmount += detail.amount;
-                        totalPrice += detail.price;
-                    }
-                }
-
                 // Calculate duration
                 long durationMillis = 0;
                 if (batch.start_date != null) {
                     batch.end_date = new Date();
-                    if (batch.end_date != null) {
-                        durationMillis = batch.end_date.getTime() - batch.start_date.getTime();
-                    }
+                    durationMillis = batch.end_date.getTime() - batch.start_date.getTime();
                 }
 
                 // Update batch with calculated values
-                batch.total_amount = totalAmount;
-                batch.total_price = totalPrice;
                 batch.duration = durationMillis;
                 batch.status = 0; // Mark as completed
 

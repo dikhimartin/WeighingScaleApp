@@ -21,7 +21,6 @@ public class BatchDetail {
     public Date datetime;
     public String unit;
     public int amount;
-    public long price;
 
     // Constructor
     public BatchDetail() {

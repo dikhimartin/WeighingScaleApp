@@ -28,8 +28,8 @@ public interface BatchDao {
         "    b.duration, " +
         "    b.unit, " +
         "    b.rice_price, " +
-        "    b.total_amount, " +
-        "    b.total_price, " +
+        "    SUM(IFNULL(bd.amount, 0)) AS total_amount, " +
+        "    SUM(IFNULL(bd.amount, 0)) * b.rice_price AS total_price, " +
         "    b.weighing_location_id, " +
         "    b.weighing_location_geo, " +
         "    b.delivery_destination_id, " +
@@ -43,10 +43,12 @@ public interface BatchDao {
         "    ddc.name AS delivery_destination_city_name, " +
         "    ddc.type AS delivery_destination_city_type " +
         "FROM Batch b " +
+        "LEFT JOIN BatchDetail bd ON b.id = bd.batch_id " +
         "LEFT JOIN City wlc ON b.weighing_location_id = wlc.id " +
         "LEFT JOIN Province wlp ON wlc.province_id = wlp.id " +
         "LEFT JOIN City ddc ON b.delivery_destination_id = ddc.id " +
         "LEFT JOIN Province ddp ON ddc.province_id = ddp.id " +
+        "GROUP BY b.id " +
         "ORDER BY b.datetime DESC"
     )
     LiveData<List<BatchDTO>> getDatas();
@@ -62,8 +64,8 @@ public interface BatchDao {
         "    b.duration, " +
         "    b.unit, " +
         "    b.rice_price, " +
-        "    b.total_amount, " +
-        "    b.total_price, " +
+        "    SUM(IFNULL(bd.amount, 0)) AS total_amount, " +
+        "    SUM(IFNULL(bd.amount, 0)) * b.rice_price AS total_price, " +
         "    b.weighing_location_id, " +
         "    b.weighing_location_geo, " +
         "    b.delivery_destination_id, " +
@@ -77,11 +79,14 @@ public interface BatchDao {
         "    ddc.name AS delivery_destination_city_name, " +
         "    ddc.type AS delivery_destination_city_type " +
         "FROM Batch b " +
+        "LEFT JOIN BatchDetail bd ON b.id = bd.batch_id " +
         "LEFT JOIN City wlc ON b.weighing_location_id = wlc.id " +
         "LEFT JOIN Province wlp ON wlc.province_id = wlp.id " +
         "LEFT JOIN City ddc ON b.delivery_destination_id = ddc.id " +
         "LEFT JOIN Province ddp ON ddc.province_id = ddp.id " +
-        "WHERE b.id = :id"
+        "WHERE b.id = :id " +
+        "GROUP BY b.id " +
+        "ORDER BY b.datetime DESC"
     )
     LiveData<BatchDTO> getDataByID(String id);
 

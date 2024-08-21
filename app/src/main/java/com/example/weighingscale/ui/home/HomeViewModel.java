@@ -45,18 +45,14 @@ public class HomeViewModel extends AndroidViewModel {
 
     public void insertBatchDetail(String batchId, int amount, Setting setting) {
         BatchDetail batchDetail = new BatchDetail();
-        long price = 0;
         String unit = "kg";
         if (setting != null) {
-            long ricePrice = setting.rice_price;
-            price = amount * ricePrice;
             unit = setting.unit;
         }
         batchDetail.batch_id = batchId;
         batchDetail.datetime = new Date();
         batchDetail.amount = amount;
         batchDetail.unit = unit;
-        batchDetail.price = price;
         AppDatabase.databaseWriteExecutor.execute(() -> {
             batchDetailRepository.insert(batchDetail);
         });
