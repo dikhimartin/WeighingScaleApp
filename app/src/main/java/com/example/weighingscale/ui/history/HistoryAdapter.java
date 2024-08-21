@@ -106,7 +106,7 @@ public class HistoryAdapter extends ListAdapter<BatchDTO, HistoryAdapter.History
                         if (id == R.id.action_detail) {
                             listener.onDetailClick(getItem(position));
                             return true;
-                        } else if (id == R.id.action_export) {
+                        } else if (id == R.id.action_share) {
                             listener.onExportClick(getItem(position));
                             return true;
                         } else if (id == R.id.action_delete) {

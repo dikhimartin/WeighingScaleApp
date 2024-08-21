@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.data.model.Batch;
+import com.example.weighingscale.util.PDFUtil;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +65,15 @@ public class HistoryFragment extends Fragment {
 
             @Override
             public void onExportClick(BatchDTO batch) {
-                // Implement export functionality here
-                Snackbar.make(requireView(), "Export " + batch.getPicName(), Snackbar.LENGTH_SHORT).show();
+                // Ambil batch details terlebih dahulu
+                historyViewModel.getBatchDetails(batch.getID()).observe(getViewLifecycleOwner(), batchDetails -> {
+                    // Buat PDF
+                    File pdfFile = PDFUtil.generatePDF(requireContext(), batch, batchDetails);
+                    // Bagikan PDF
+                    if (pdfFile != null) {
+                        PDFUtil.sharePDF(requireContext(), pdfFile);
+                    }
+                });
             }
 
             @Override

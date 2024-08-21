@@ -1,6 +1,7 @@
 package com.example.weighingscale;
 
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,6 +10,10 @@ import android.view.View;
 import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.LogModelUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import android.Manifest;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ENABLE_BT = 1;
     public static final int MESSAGE_READ = 2;
     public static final int HANDLER_STATUS = 3;
+    public static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 100;
 
     private SharedViewModel sharedViewModel;
     private BluetoothUtil mBluetoothUtil;
@@ -79,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
         // Init Bluetooth
         initBluetooth();
 
+        // Cek izin WRITE_EXTERNAL_STORAGE
+        checkStoragePermission();
+
         // Listen for destination changes
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.navigation_setting || destination.getId() == R.id.navigation_device) {
@@ -99,6 +108,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void checkStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Jika izin belum diberikan, minta izin
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_WRITE_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Izin telah diberikan, lanjutkan dengan tindakan yang membutuhkan izin ini
+                Toast.makeText(this, "Izin penyimpanan diberikan", Toast.LENGTH_SHORT).show();
+            } else {
+                // Izin ditolak, beri tahu pengguna
+                Toast.makeText(this, "Izin penyimpanan ditolak", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,7 +1,6 @@
 package com.example.weighingscale.ui.note;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +100,7 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
                         if (id == R.id.action_edit) {
                             listener.onEditClick(getItem(position));
                             return true;
-                        } else if (id == R.id.action_export) {
+                        } else if (id == R.id.action_share) {
                             listener.onExportClick(getItem(position));
                             return true;
                         } else if (id == R.id.action_delete) {

@@ -40,6 +40,10 @@ public class BatchDTO extends Batch {
             : pic_name;
     }
 
+    public long getRice_price(){return rice_price;};
+
+    public String getTruck_driver_name(){return truck_driver_name;};
+
     public String getPicName() { return pic_name; }
 
     public String getPicPhoneNumber() { return pic_phone_number; }
