@@ -77,21 +77,20 @@ public class PDFUtil {
         // Baris 1: Tanggal & Waktu
         headerTable.addCell(createCell("Tanggal & Waktu", TextAlignment.LEFT));
         headerTable.addCell(createCell(":", TextAlignment.LEFT));
-        headerTable.addCell(createCell(DateTimeUtil.formatDateTime(batch.getDatetime(), "dd MMMM yyyy HH:mm"), TextAlignment.LEFT));
+        headerTable.addCell(createCell(DateTimeUtil.formatDateTime(batch.datetime, "dd MMMM yyyy HH:mm"), TextAlignment.LEFT));
 
         // Baris 2: Lokasi Penimbangan
         headerTable.addCell(createCell("Lokasi Penimbangan", TextAlignment.LEFT));
         headerTable.addCell(createCell(":", TextAlignment.LEFT));
-        headerTable.addCell(createCell("Provinsi Jawa Tengah\nKabupaten Demak", TextAlignment.LEFT));
+        headerTable.addCell(createCell(formatLocation(batch.weighing_location_province_name, batch.weighing_location_city_type, batch.weighing_location_city_name), TextAlignment.LEFT));
 
         // Baris 3: Tujuan Pengiriman
         headerTable.addCell(createCell("Tujuan Pengiriman", TextAlignment.LEFT));
         headerTable.addCell(createCell(":", TextAlignment.LEFT));
-        headerTable.addCell(createCell("Provinsi Jawa Tengah\nKabupaten Demak", TextAlignment.LEFT));
+        headerTable.addCell(createCell(formatLocation(batch.delivery_destination_province_name, batch.delivery_destination_city_type, batch.delivery_destination_city_name), TextAlignment.LEFT));
 
         document.add(headerTable);
     }
-
 
     private static void addBatchDetailsTable(Document document, List<BatchDetail> batchDetails) {
         Table table = new Table(new float[]{1, 4, 3});
@@ -147,16 +146,16 @@ public class PDFUtil {
         // Penanggung Jawab (Align Left)
         Cell leftCell = new Cell();
         leftCell.add(new Paragraph("Penanggung Jawab").setBold());
-        leftCell.add(new Paragraph(batch.getPicName()));
-        leftCell.add(new Paragraph(batch.getPicPhoneNumber()));
+        leftCell.add(new Paragraph(SafeValueUtil.getString(batch.pic_name, "N/A")));
+        leftCell.add(new Paragraph(SafeValueUtil.getString(batch.pic_phone_number, "N/A")));
         leftCell.setBorder(Border.NO_BORDER);
         leftCell.setTextAlignment(TextAlignment.LEFT);
 
         // Driver (Align Right)
         Cell rightCell = new Cell();
         rightCell.add(new Paragraph("Driver").setBold());
-        rightCell.add(new Paragraph(batch.getTruck_driver_name()));
-        rightCell.add(new Paragraph("08123456789"));
+        rightCell.add(new Paragraph(SafeValueUtil.getString(batch.truck_driver_name, "N/A")));
+        rightCell.add(new Paragraph(SafeValueUtil.getString(batch.truck_driver_phone_number, "N/A")));
         rightCell.setBorder(Border.NO_BORDER);
         rightCell.setTextAlignment(TextAlignment.RIGHT);
 
@@ -172,6 +171,14 @@ public class PDFUtil {
 
     private static Cell createCell(String content, TextAlignment alignment) {
         return new Cell().add(new Paragraph(content)).setTextAlignment(alignment).setBorder(Border.NO_BORDER);
+    }
+
+    private static String formatLocation(String provinceName, String cityType, String cityName) {
+        if (provinceName == null || cityType == null || cityName == null ||
+            provinceName.isEmpty() || cityType.isEmpty() || cityName.isEmpty()) {
+            return "-";
+        }
+        return "Provinsi " + provinceName + "\n" + cityType + " " + cityName;
     }
 
     public static void sharePDF(Context context, File pdfFile) {
