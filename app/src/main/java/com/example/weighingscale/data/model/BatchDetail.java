@@ -32,6 +32,10 @@ public class BatchDetail {
         return id;
     }
 
+    public String getBatchID() {
+        return batch_id;
+    }
+
     public Date getDatetime() {
         return datetime;
     }
@@ -39,6 +43,7 @@ public class BatchDetail {
     public int getAmount() {
         return amount;
     }
+
     public String getUnit(){
         return unit;
     }

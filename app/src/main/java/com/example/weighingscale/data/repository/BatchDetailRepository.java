@@ -1,6 +1,7 @@
 package com.example.weighingscale.data.repository;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 import com.example.weighingscale.data.local.database.AppDatabase;
@@ -31,4 +32,19 @@ public class BatchDetailRepository {
         batchDetailDao.insert(batchDetail);
     }
 
+    public void update(BatchDetail batchDetail) {
+        new UpdateNoteAsyncTask(batchDetailDao).execute(batchDetail);
+    }
+
+    private static class UpdateNoteAsyncTask extends AsyncTask<BatchDetail,Void,Void> {
+        private BatchDetailDao batchDetailDao;
+        private UpdateNoteAsyncTask(BatchDetailDao batchDetailDao){
+            this.batchDetailDao=batchDetailDao;
+        }
+        @Override
+        protected Void doInBackground(BatchDetail... batchDetails) {
+            batchDetailDao.update(batchDetails[0]);
+            return null;
+        }
+    }
 }

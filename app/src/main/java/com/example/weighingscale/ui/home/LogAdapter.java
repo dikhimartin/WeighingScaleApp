@@ -19,10 +19,11 @@ import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.util.DateTimeUtil;
 import java.util.Locale;
 
-public class BatchDetailAdapter extends ListAdapter<BatchDetail, BatchDetailAdapter.BatchDetailHolder> {
+public class LogAdapter extends ListAdapter<BatchDetail, LogAdapter.LogHolder> {
     private final Context context;
+    private OnItemClickListener listener;
 
-    public BatchDetailAdapter(Context context) {
+    public LogAdapter(Context context) {
         super(DIFF_CALLBACK);
         this.context = context;
     }
@@ -42,14 +43,14 @@ public class BatchDetailAdapter extends ListAdapter<BatchDetail, BatchDetailAdap
 
     @NonNull
     @Override
-    public BatchDetailHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public LogHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_log, parent, false);
-        return new BatchDetailHolder(itemView);
+        return new LogHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BatchDetailHolder holder, int position) {
+    public void onBindViewHolder(@NonNull LogHolder holder, int position) {
         BatchDetail currentData = getItem(position);
         if (currentData == null) {
             return; // Return early if data at position is null
@@ -70,16 +71,31 @@ public class BatchDetailAdapter extends ListAdapter<BatchDetail, BatchDetailAdap
         }
     }
 
-    public static class BatchDetailHolder extends RecyclerView.ViewHolder {
+    class LogHolder extends RecyclerView.ViewHolder {
         private final TextView textViewDate;
         private final TextView textViewWeight;
         private final CardView cardView;
 
-        public BatchDetailHolder(@NonNull View itemView) {
+        public LogHolder(@NonNull View itemView) {
             super(itemView);
             textViewDate = itemView.findViewById(R.id.text_view_date);
             textViewWeight = itemView.findViewById(R.id.text_view_weight);
             cardView = itemView.findViewById(R.id.card_view);
+
+            itemView.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(getItem(position));
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(BatchDetail batchDetail);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

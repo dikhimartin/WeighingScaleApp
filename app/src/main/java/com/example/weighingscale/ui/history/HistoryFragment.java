@@ -65,11 +65,8 @@ public class HistoryFragment extends Fragment {
 
             @Override
             public void onExportClick(BatchDTO batch) {
-                // Ambil batch details terlebih dahulu
                 historyViewModel.getBatchDetails(batch.getID()).observe(getViewLifecycleOwner(), batchDetails -> {
-                    // Buat PDF
                     File pdfFile = PDFUtil.generatePDF(requireContext(), batch, batchDetails);
-                    // Bagikan PDF
                     if (pdfFile != null) {
                         PDFUtil.sharePDF(requireContext(), pdfFile);
                     }

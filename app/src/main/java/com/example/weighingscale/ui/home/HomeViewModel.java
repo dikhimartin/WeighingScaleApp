@@ -58,6 +58,10 @@ public class HomeViewModel extends AndroidViewModel {
         });
     }
 
+    public void updateBatchDetail(BatchDetail batchDetail) {
+        batchDetailRepository.update(batchDetail);
+    }
+
     public void completeBatch(String batchId) {
         batchRepository.completeBatch(batchId);
     }

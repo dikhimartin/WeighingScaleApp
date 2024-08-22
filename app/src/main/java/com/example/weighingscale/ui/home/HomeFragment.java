@@ -3,6 +3,7 @@ package com.example.weighingscale.ui.home;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private HomeViewModel homeViewModel;
     private SharedViewModel sharedViewModel;
-    private BatchDetailAdapter adapter;
+    private LogAdapter adapter;
 
     private String currentBatchId = null;
     private Setting currentSetting;
@@ -58,14 +59,6 @@ public class HomeFragment extends Fragment {
         // Init instance settingViewModel
         SettingViewModel settingViewModel = new ViewModelProvider(requireActivity()).get(SettingViewModel.class);
 
-        // Adapter log list
-        RecyclerView recyclerView = root.findViewById(R.id.recycler_view_log);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
-
-        adapter = new BatchDetailAdapter(requireContext());
-        recyclerView.setAdapter(adapter);
-
         // Observe setting once
         settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
             if (setting != null) {
@@ -74,42 +67,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // Observe active batch
-        homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
-            if (batch != null) {
-                    currentBatchId = batch.id;
-                    binding.summaryBatch.setVisibility(View.VISIBLE);
-                    homeViewModel.getBatchDetails(currentBatchId).observe(getViewLifecycleOwner(), data -> {
-                        adapter.submitList(data);
-
-                        if (data != null && !data.isEmpty()) {
-                            recyclerView.smoothScrollToPosition(0);
-
-                            // Calculate total weight
-                            int totalWeight = 0;
-                            for (BatchDetail detail : data) {
-                                totalWeight += detail.getAmount();
-                            }
-                            String totalWeightText = String.format(Locale.getDefault(), "%d %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
-                            binding.textTotalWeight.setText(totalWeightText);
-
-                            // Update item count
-                            String itemCountText = String.format(Locale.getDefault(), "%d karung (sak)", data.size());
-                            binding.textTotalItems.setText(itemCountText);
-
-                            binding.cardTotal.setVisibility(View.VISIBLE);
-                            binding.finishButtonGroup.setVisibility(View.VISIBLE);
-                        } else {
-                            binding.cardTotal.setVisibility(View.GONE);
-                            binding.finishButtonGroup.setVisibility(View.GONE);
-                            binding.textTotalItems.setText("0 karung (sak)");
-                        }
-                    });
-            } else {
-                clearBatchDetails();
-                showBatchInputDialog();
-            }
-        });
+        // Observer Log List
+        setupRecyclerView(root);
 
         // Observe Bluetooth status
         sharedViewModel.getBluetoothStatus().observe(getViewLifecycleOwner(), new Observer<Integer>() {
@@ -160,6 +119,64 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    @SuppressLint("SetTextI18n")
+    private void setupRecyclerView(View root) {
+         // Adapter log list
+        RecyclerView recyclerView = root.findViewById(R.id.recycler_view_log);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
+
+        adapter = new LogAdapter(requireContext());
+        recyclerView.setAdapter(adapter);
+
+        // Observe active batch
+        homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
+            if (batch != null) {
+                    currentBatchId = batch.id;
+                    binding.summaryBatch.setVisibility(View.VISIBLE);
+                    homeViewModel.getBatchDetails(currentBatchId).observe(getViewLifecycleOwner(), data -> {
+                        adapter.submitList(data);
+
+                        if (data != null && !data.isEmpty()) {
+                            recyclerView.smoothScrollToPosition(0);
+
+                            // Calculate total weight
+                            int totalWeight = 0;
+                            for (BatchDetail detail : data) {
+                                totalWeight += detail.getAmount();
+                            }
+                            String totalWeightText = String.format(Locale.getDefault(), "%d %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
+                            binding.textTotalWeight.setText(totalWeightText);
+
+                            // Update item count
+                            String itemCountText = String.format(Locale.getDefault(), "%d karung (sak)", data.size());
+                            binding.textTotalItems.setText(itemCountText);
+
+                            binding.cardTotal.setVisibility(View.VISIBLE);
+                            binding.finishButtonGroup.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.cardTotal.setVisibility(View.GONE);
+                            binding.finishButtonGroup.setVisibility(View.GONE);
+                            binding.textTotalItems.setText("0 karung (sak)");
+                        }
+                    });
+            } else {
+                clearBatchDetails();
+                showBatchInputDialog();
+            }
+        });
+
+        adapter.setOnItemClickListener(new LogAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BatchDetail batchDetail) {
+                Log.d("ID", batchDetail.getID());
+                Log.d("BatchID", batchDetail.getBatchID());
+                Log.d("Amount", String.valueOf(batchDetail.getAmount()));
+                showLogInputDialog(batchDetail);
+            }
+        });
+    }
+
     private void saveLog() {
         if (currentBatchId == null) {
             showBatchInputDialog();
@@ -184,7 +201,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-
     private void resetAmount() {
         Integer bluetoothStatus = sharedViewModel.getBluetoothStatus().getValue();
         if (bluetoothStatus != null && bluetoothStatus == StateConnecting.BLUETOOTH_CONNECTED) {
@@ -193,6 +209,36 @@ public class HomeFragment extends Fragment {
             binding.textAmount.setText("0");
             binding.editAmount.setText("");
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void showLogInputDialog(BatchDetail batchDetail) {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_input_log, null);
+
+        TextView etAmount = dialogView.findViewById(R.id.et_amount);
+        TextView etDateTime = dialogView.findViewById(R.id.til_datetime);
+
+        etAmount.setText(String.valueOf(batchDetail.getAmount()));
+        String formattedDate = DateTimeUtil.formatDateTime(batchDetail.getDatetime(), "dd/MM/yyyy HH:mm");
+        etDateTime.setText("Tanggal :"+ " " + formattedDate);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setView(dialogView)
+                .setTitle("Mengubah nilai log")
+                .setPositiveButton("Ubah", (dialog, id) -> {
+                    int amount = FormatterUtil.sanitizeAndConvertToInteger(etAmount.getText().toString());
+                    if (amount <= 0) throw new NumberFormatException();
+
+                    // Update Batch Detail
+                    batchDetail.amount = amount;
+                    homeViewModel.updateBatchDetail(batchDetail);
+
+                    Toast.makeText(requireContext(), "Nilai telah diubah", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void showBatchInputDialog() {

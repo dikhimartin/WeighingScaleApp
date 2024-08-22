@@ -69,4 +69,5 @@
     <string name="choose_datetime">Tanggal dan Waktu</string>
     <string name="bag">karung (sak)</string>
     <string name="share">Bagikan</string>
+    <string name="amount">Nilai</string>
 </resources>
