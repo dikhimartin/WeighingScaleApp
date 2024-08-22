@@ -116,8 +116,9 @@ public class PDFUtil {
         Table summaryTable = new Table(new float[]{3, 0.5f, 5});
         summaryTable.setMarginBottom(20f);
 
-        // Baris 1: Harga Padi (per-Kg)
-        summaryTable.addCell(createCell("Harga Padi (per-Kg)", TextAlignment.LEFT));
+        // Baris 1: Harga Padi (per-unit)
+        String unit = batch.getUnit() != null ? batch.getUnit() : "Kg";
+        summaryTable.addCell(createCell("Harga Padi (per-" + unit + ")", TextAlignment.LEFT));
         summaryTable.addCell(createCell(":", TextAlignment.LEFT));
         summaryTable.addCell(createCell(SafeValueUtil.formatCurrency("Rp.", batch.getRice_price()), TextAlignment.LEFT));
 
@@ -129,15 +130,16 @@ public class PDFUtil {
         // Baris 3: Total Berat
         summaryTable.addCell(createCell("Total Berat", TextAlignment.LEFT));
         summaryTable.addCell(createCell(":", TextAlignment.LEFT));
-        summaryTable.addCell(createCell(batch.getTotalAmount() + " Kg", TextAlignment.LEFT));
+        summaryTable.addCell(createCell(batch.getTotalAmount() + " " + unit, TextAlignment.LEFT));
 
         // Baris 4: Total Harga
         summaryTable.addCell(createCell("Total Harga", TextAlignment.LEFT));
         summaryTable.addCell(createCell(":", TextAlignment.LEFT));
-        summaryTable.addCell(createCell(SafeValueUtil.formatCurrency("Rp.", (batch.getTotalAmount() * batch.getRice_price())), TextAlignment.LEFT));
+        summaryTable.addCell(createCell(SafeValueUtil.formatCurrency("Rp.", batch.getTotalAmount() * batch.getRice_price()), TextAlignment.LEFT));
 
         document.add(summaryTable);
     }
+
 
     private static void addFooter(Document document, BatchDTO batch) {
         Table footerTable = new Table(new float[]{1, 1});
