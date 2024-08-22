@@ -28,17 +28,13 @@ public class InputDirectiveUtil {
                     String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
 
                     try {
-                        long parsed = cleanString.isEmpty() ? 0 : Long.parseLong(cleanString); // Changed to long
-                        String formatted = NumberFormat.getCurrencyInstance(new Locale("id", "ID")).format(parsed);
-
-                        // Add "Rp." prefix and remove other occurrences of "Rp" from formatting
-                        formatted = "Rp. " + formatted.replaceAll("[Rp\\s]", "");
-
+                        long parsed = cleanString.isEmpty() ? 0 : Long.parseLong(cleanString);
+                        String formatted = NumberFormat.getNumberInstance(new Locale("id", "ID")).format(parsed);
+                        formatted = "Rp. " + formatted;
                         current = formatted;
                         editText.setText(formatted);
                         editText.setSelection(formatted.length());
                     } catch (NumberFormatException e) {
-                        // In case of error, just reset the text to avoid crashes
                         editText.setText(current);
                         editText.setSelection(current.length());
                     }
@@ -52,7 +48,7 @@ public class InputDirectiveUtil {
     public static long getCurrencyValue(EditText editText) {
         String cleanString = editText.getText().toString().replaceAll("[Rp,.\\s]", "");
         try {
-            return cleanString.isEmpty() ? 0 : Long.parseLong(cleanString);  // Return as long
+            return cleanString.isEmpty() ? 0 : Long.parseLong(cleanString);
         } catch (NumberFormatException e) {
             return 0;
         }

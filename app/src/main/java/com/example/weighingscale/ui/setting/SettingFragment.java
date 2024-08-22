@@ -86,7 +86,7 @@ public class SettingFragment extends Fragment {
     private void saveSetting() {
         String picName = etPicName.getText().toString().trim();
         String picPhoneNumber = etPicPhoneNumber.getText().toString().trim();
-        long ricePrice = InputDirectiveUtil.getCurrencyValue(etRicePrice); // Now returns a long
+        long ricePrice = InputDirectiveUtil.getCurrencyValue(etRicePrice);
         String unitText = actvUnit.getText().toString().trim();
         String UnitValue = settingViewModel.getUnitValue(unitText);
 
