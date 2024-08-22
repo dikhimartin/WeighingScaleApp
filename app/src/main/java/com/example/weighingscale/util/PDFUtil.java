@@ -103,9 +103,11 @@ public class PDFUtil {
 
         for (int i = 0; i < batchDetails.size(); i++) {
             BatchDetail detail = batchDetails.get(i);
+            String unit = detail.getUnit() != null ? detail.getUnit() : "Kg";
+
             table.addCell(createCell(String.valueOf(i + 1)));
             table.addCell(createCell(DateTimeUtil.formatDateTime(detail.getDatetime(), "dd/MM/yyyy HH:mm")));
-            table.addCell(createCell(detail.getAmount() + " Kg"));
+            table.addCell(createCell(detail.getAmount() + " " + unit));
         }
 
         document.add(table);
