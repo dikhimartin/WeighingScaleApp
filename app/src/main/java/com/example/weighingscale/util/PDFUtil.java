@@ -66,7 +66,7 @@ public class PDFUtil {
                 .setFont(PdfFontFactory.createFont("Helvetica-Bold"))
                 .setTextAlignment(TextAlignment.CENTER)
                 .setFontSize(16));
-        document.add(new Paragraph("").setMarginBottom(20f)); // Menambahkan jarak setelah judul
+        document.add(new Paragraph("").setMarginBottom(25f)); // Menambahkan jarak setelah judul
     }
 
     private static void addHeaderTable(Document document, BatchDTO batch) {
