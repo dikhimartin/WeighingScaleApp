@@ -133,7 +133,8 @@ public class HomeFragment extends Fragment {
         homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
             if (batch != null) {
                     currentBatchId = batch.id;
-                    binding.summaryBatch.setVisibility(View.VISIBLE);
+                    active_batch();
+                    binding.sectionMode.setVisibility(View.VISIBLE);
                     homeViewModel.getBatchDetails(currentBatchId).observe(getViewLifecycleOwner(), data -> {
                         adapter.submitList(data);
 
@@ -163,15 +164,13 @@ public class HomeFragment extends Fragment {
             } else {
                 clearBatchDetails();
                 showBatchInputDialog();
+                inactive_batch();
             }
         });
 
         adapter.setOnItemClickListener(new LogAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BatchDetail batchDetail) {
-                Log.d("ID", batchDetail.getID());
-                Log.d("BatchID", batchDetail.getBatchID());
-                Log.d("Amount", String.valueOf(batchDetail.getAmount()));
                 showLogInputDialog(batchDetail);
             }
         });
@@ -356,8 +355,8 @@ public class HomeFragment extends Fragment {
         currentBatchId = null;
         binding.cardTotal.setVisibility(View.GONE);
         binding.textTotalItems.setText("0 karung (sak)");
-        binding.summaryBatch.setVisibility(View.GONE);
         binding.finishButtonGroup.setVisibility(View.GONE);
+        binding.sectionMode.setVisibility(View.GONE);
         adapter.submitList(null);
     }
 
@@ -377,9 +376,22 @@ public class HomeFragment extends Fragment {
         binding.textMode.setText("Mode Manual");
     }
 
+    @SuppressLint("SetTextI18n")
+    private void  active_batch(){
+        binding.textBatchStatus.setText("Batch aktif");
+        binding.iconBatchStatus.setImageResource(R.drawable.ic_circle_success);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void  inactive_batch(){
+        binding.textBatchStatus.setText("Batch tidak aktif");
+        binding.iconBatchStatus.setImageResource(R.drawable.ic_circle_danger);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
 }
