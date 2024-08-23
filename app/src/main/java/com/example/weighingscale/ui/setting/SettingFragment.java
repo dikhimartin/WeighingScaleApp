@@ -13,13 +13,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.ui.home.HomeViewModel;
 import com.example.weighingscale.ui.shared.SharedAdapter;
+import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.InputDirectiveUtil;
 import com.example.weighingscale.util.ValidationUtil;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SettingFragment extends Fragment {
 
@@ -95,7 +100,10 @@ public class SettingFragment extends Fragment {
             Setting newSetting = createSetting(picName, picPhoneNumber, ricePrice, UnitValue);
             settingViewModel.insertOrUpdateSetting(newSetting);
             showToast("Pengaturan berhasil diubah");
-            requireActivity().onBackPressed();
+
+             // Navigate back to the previous fragment
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.popBackStack();
         } else {
             showToast("Tolong isi semua inputan");
         }

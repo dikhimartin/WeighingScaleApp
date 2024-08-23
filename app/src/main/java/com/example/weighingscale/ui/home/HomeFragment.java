@@ -3,6 +3,7 @@ package com.example.weighingscale.ui.home;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AutoCompleteTextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -44,6 +46,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private HomeViewModel homeViewModel;
     private SharedViewModel sharedViewModel;
+    private SettingViewModel settingViewModel;
     private LogAdapter adapter;
 
     private String currentBatchID = null;
@@ -62,15 +65,7 @@ public class HomeFragment extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         // Init instance settingViewModel
-        SettingViewModel settingViewModel = new ViewModelProvider(requireActivity()).get(SettingViewModel.class);
-
-        // Observe setting once
-        settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
-            if (setting != null) {
-                currentSetting = setting;
-                binding.textUnit.setText(setting.unit);
-            }
-        });
+        settingViewModel = new ViewModelProvider(requireActivity()).get(SettingViewModel.class);
 
         // Observer Log List
         setupRecyclerView(root);
@@ -257,10 +252,10 @@ public class HomeFragment extends Fragment {
         TextView tvDateTime = dialogView.findViewById(R.id.tv_datetime);
 
         // Autofill value from setting
-        if (currentSetting != null) {
-            editPicName.setText(currentSetting.pic_name);
+        observeSetting(() -> {
+             editPicName.setText(currentSetting.pic_name);
             editPicPhoneNumber.setText(currentSetting.pic_phone_number);
-        }
+        });
 
         // Setup AutoCompleteTextView Weighing Location with adapter
         AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
@@ -356,6 +351,18 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void observeSetting(Runnable callback) {
+        settingViewModel.getSetting().observe(getViewLifecycleOwner(), setting -> {
+            if (setting != null) {
+                currentSetting = setting;
+                binding.textUnit.setText(setting.unit);
+                if (callback != null) {
+                    callback.run();
+                }
+            }
+        });
+    }
+
     private void navigateToHistory(){
          // Set up NavOptions to clear back stack
         NavOptions navOptions = new NavOptions.Builder()
@@ -414,5 +421,4 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }
