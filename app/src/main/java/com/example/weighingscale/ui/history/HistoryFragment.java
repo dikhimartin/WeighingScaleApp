@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
-import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.util.PDFUtil;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -75,8 +74,15 @@ public class HistoryFragment extends Fragment {
 
             @Override
             public void onDeleteClick(BatchDTO batch) {
-                historyViewModel.deleteBatchByID(batch.getID());
-                Snackbar.make(requireView(), batch.getPicName() + " " + getString(R.string.deleted), Snackbar.LENGTH_SHORT).show();
+                new AlertDialog.Builder(requireContext())
+                .setTitle("Hapus data")
+                .setMessage("Apakah kamu yakin ingin menghapus data ini ?")
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    historyViewModel.deleteBatchByID(batch.getID());
+                    Snackbar.make(requireView(), batch.getPicName() + " " + getString(R.string.deleted), Snackbar.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
             }
 
             @Override
@@ -102,7 +108,7 @@ public class HistoryFragment extends Fragment {
             if (adapter != null) {
                 List<String> selectedIds = new ArrayList<>(adapter.getSelectedItems());
                 if (!selectedIds.isEmpty()) {
-                    showDeleteConfirmationDialog(selectedIds);
+                    showDeleteAllConfirmationDialog(selectedIds);
                 } else {
                     Snackbar.make(requireView(), "No batches selected to delete", Snackbar.LENGTH_SHORT).show();
                 }
@@ -110,7 +116,8 @@ public class HistoryFragment extends Fragment {
         });
     }
 
-    private void showDeleteConfirmationDialog(List<String> selectedIds) {
+
+    private void showDeleteAllConfirmationDialog(List<String> selectedIds) {
         new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.delete_selected_data_title)
                 .setMessage(R.string.delete_selected_data_message)
