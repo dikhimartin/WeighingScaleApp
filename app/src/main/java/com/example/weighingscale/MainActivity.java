@@ -64,12 +64,15 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private StateConnecting stateConnecting;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Initialize ViewModels
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         stateConnecting = new StateConnecting();
 
+        // Binding layout
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -82,29 +85,32 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        // Init Bluetooth
+        // Initialize Bluetooth
         initBluetooth();
 
-        // Cek izin WRITE_EXTERNAL_STORAGE
+        // Check permission WRITE_EXTERNAL_STORAGE
         checkStoragePermission();
 
         // Listen for destination changes
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.navigation_setting || destination.getId() == R.id.navigation_device) {
+            if (destination.getId() == R.id.navigation_setting || destination.getId() == R.id.navigation_device || destination.getId() == R.id.navigation_history_detail) {
+                // Enable navigation
                 navView.setVisibility(View.GONE);
-                // Enable the up button
-                Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
             } else {
+                // Disable navigation
                 navView.setVisibility(View.VISIBLE);
-                // Disable the up button
-                Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
             }
             // Back action
-            if (destination.getId() == R.id.form_note_fragment){
-                Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-            }
-            if (destination.getId() == R.id.navigation_history_detail){
-                Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+            if (destination.getId() == R.id.form_note_fragment || destination.getId() == R.id.navigation_history_detail) {
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
             }
         });
     }
@@ -112,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkStoragePermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Jika izin belum diberikan, minta izin
+            // If permission has not been granted, ask for permission.
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_CODE_WRITE_EXTERNAL_STORAGE);

@@ -3,7 +3,6 @@ package com.example.weighingscale.ui.home;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.weighingscale.R;
@@ -24,12 +26,15 @@ import com.example.weighingscale.data.model.Province;
 import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.databinding.FragmentHomeBinding;
 import com.example.weighingscale.state.StateConnecting;
+import com.example.weighingscale.ui.history.HistoryFragment;
 import com.example.weighingscale.ui.setting.SettingViewModel;
 import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.DateTimeUtil;
 import com.example.weighingscale.util.FormatterUtil;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -41,7 +46,7 @@ public class HomeFragment extends Fragment {
     private SharedViewModel sharedViewModel;
     private LogAdapter adapter;
 
-    private String currentBatchId = null;
+    private String currentBatchID = null;
     private Setting currentSetting;
 
     @SuppressLint("SetTextI18n")
@@ -99,13 +104,14 @@ public class HomeFragment extends Fragment {
         binding.buttonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentBatchId != null) {
+                if (currentBatchID != null) {
                     new AlertDialog.Builder(requireContext())
                             .setTitle("Selesaikan batch muatan")
                             .setMessage("Apakah kamu yakin ingin menyelesaikan batch muatan ini ?")
                             .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                homeViewModel.completeBatch(currentBatchId);
+                                homeViewModel.completeBatch(currentBatchID);
                                 Toast.makeText(requireContext(), "Batch muatan sudah selesai", Toast.LENGTH_SHORT).show();
+                                navigateToHistory();
                             })
                             .setNegativeButton(R.string.no, null)
                             .show();
@@ -132,10 +138,10 @@ public class HomeFragment extends Fragment {
         // Observe active batch
         homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
             if (batch != null) {
-                    currentBatchId = batch.id;
+                    currentBatchID = batch.id;
                     active_batch();
                     binding.sectionMode.setVisibility(View.VISIBLE);
-                    homeViewModel.getBatchDetails(currentBatchId).observe(getViewLifecycleOwner(), data -> {
+                    homeViewModel.getBatchDetails(currentBatchID).observe(getViewLifecycleOwner(), data -> {
                         adapter.submitList(data);
 
                         if (data != null && !data.isEmpty()) {
@@ -177,7 +183,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void saveLog() {
-        if (currentBatchId == null) {
+        if (currentBatchID == null) {
             showBatchInputDialog();
             Toast.makeText(requireContext(), "Tidak ada batch muatan yang aktif", Toast.LENGTH_SHORT).show();
             return;
@@ -192,7 +198,7 @@ public class HomeFragment extends Fragment {
             int amount = FormatterUtil.sanitizeAndConvertToInteger(amountText);
             if (amount <= 0) throw new NumberFormatException();
 
-            homeViewModel.insertBatchDetail(currentBatchId, amount, currentSetting);
+            homeViewModel.insertBatchDetail(currentBatchID, amount, currentSetting);
             Toast.makeText(requireContext(), "Log sudah disimpan", Toast.LENGTH_SHORT).show();
             resetAmount();
         } catch (NumberFormatException e) {
@@ -350,9 +356,24 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void navigateToHistory(){
+         // Set up NavOptions to clear back stack
+        NavOptions navOptions = new NavOptions.Builder()
+                .setPopUpTo(R.id.navigation_home, true)  // Clear the back stack up to homeFragment
+                .build();
+
+        // Navigate to HistoryFragment
+        NavController navController = NavHostFragment.findNavController(HomeFragment.this);
+        navController.navigate(R.id.action_homeFragment_to_historyFragment, null, navOptions);
+
+        // Update BottomNavigationView
+        BottomNavigationView navView = requireActivity().findViewById(R.id.nav_view);
+        navView.setSelectedItemId(R.id.navigation_history);
+    }
+
     @SuppressLint("SetTextI18n")
     private void clearBatchDetails() {
-        currentBatchId = null;
+        currentBatchID = null;
         binding.cardTotal.setVisibility(View.GONE);
         binding.textTotalItems.setText("0 karung (sak)");
         binding.finishButtonGroup.setVisibility(View.GONE);
