@@ -28,6 +28,7 @@ public class HistoryFragment extends Fragment {
     private HistoryViewModel historyViewModel;
     private HistoryAdapter adapter;
     private View deleteAllButton;
+    private boolean isSelectionMode = false;
 
     @Nullable
     @Override
@@ -50,16 +51,12 @@ public class HistoryFragment extends Fragment {
         adapter.setOnItemClickListener(new HistoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BatchDTO batch) {
-                adapter.toggleSelection(batch.getID());
-                updateDeleteAllButtonVisibility();
-            }
-
-            @Override
-            public void onDetailClick(BatchDTO batch) {
-                 Bundle bundle = new Bundle();
-                 bundle.putString("batch_id", batch.getID());
-                 NavHostFragment.findNavController(HistoryFragment.this)
-                         .navigate(R.id.action_HistoryFragment_to_HistoryDetailFragment, bundle);
+                if (isSelectionMode) {
+                    adapter.toggleSelection(batch.getID());
+                    updateDeleteAllButtonVisibility();
+                } else {
+                    navigateToDetail(batch);
+                }
             }
 
             @Override
@@ -87,9 +84,20 @@ public class HistoryFragment extends Fragment {
 
             @Override
             public void onItemLongClick(BatchDTO batch) {
-                // TODO : Do something when on item click long click
+                if (!isSelectionMode) {
+                    isSelectionMode = true;
+                    adapter.toggleSelection(batch.getID());
+                    updateDeleteAllButtonVisibility();
+                }
             }
         });
+    }
+
+    private void navigateToDetail(BatchDTO batch) {
+        Bundle bundle = new Bundle();
+        bundle.putString("batch_id", batch.getID());
+        NavHostFragment.findNavController(HistoryFragment.this)
+                .navigate(R.id.action_HistoryFragment_to_HistoryDetailFragment, bundle);
     }
 
     private void setupViewModel() {
@@ -116,7 +124,6 @@ public class HistoryFragment extends Fragment {
         });
     }
 
-
     private void showDeleteAllConfirmationDialog(List<String> selectedIds) {
         new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.delete_selected_data_title)
@@ -125,6 +132,7 @@ public class HistoryFragment extends Fragment {
                     historyViewModel.deleteBatchByIds(selectedIds);
                     adapter.clearSelectedItems();
                     updateDeleteAllButtonVisibility();
+                    isSelectionMode = false;
                     Snackbar.make(requireView(), R.string.message_selected_deleted, Snackbar.LENGTH_SHORT).show();
                 })
                 .setNegativeButton(R.string.no, null)
@@ -134,9 +142,9 @@ public class HistoryFragment extends Fragment {
     private void updateDeleteAllButtonVisibility() {
         if (adapter != null && adapter.getSelectedItems().isEmpty()) {
             deleteAllButton.setVisibility(View.GONE);
+            isSelectionMode = false; // Exit selection mode when no items are selected
         } else {
             deleteAllButton.setVisibility(View.VISIBLE);
         }
     }
-
 }

@@ -103,10 +103,7 @@ public class HistoryAdapter extends ListAdapter<BatchDTO, HistoryAdapter.History
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
                         int id = item.getItemId();
-                        if (id == R.id.action_detail) {
-                            listener.onDetailClick(getItem(position));
-                            return true;
-                        } else if (id == R.id.action_share) {
+                         if (id == R.id.action_share) {
                             listener.onExportClick(getItem(position));
                             return true;
                         } else if (id == R.id.action_delete) {
@@ -139,7 +136,6 @@ public class HistoryAdapter extends ListAdapter<BatchDTO, HistoryAdapter.History
 
     public interface OnItemClickListener {
         void onItemClick(BatchDTO batch);
-        void onDetailClick(BatchDTO batch);
         void onExportClick(BatchDTO batch);
         void onDeleteClick(BatchDTO batch);
         void onItemLongClick(BatchDTO batch);
