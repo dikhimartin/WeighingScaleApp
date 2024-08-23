@@ -75,14 +75,14 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onDeleteClick(BatchDTO batch) {
                 new AlertDialog.Builder(requireContext())
-                .setTitle("Hapus data")
-                .setMessage("Apakah kamu yakin ingin menghapus data ini ?")
-                .setPositiveButton(R.string.yes, (dialog, which) -> {
-                    historyViewModel.deleteBatchByID(batch.getID());
-                    Snackbar.make(requireView(), batch.getPicName() + " " + getString(R.string.deleted), Snackbar.LENGTH_SHORT).show();
-                })
-                .setNegativeButton(R.string.no, null)
-                .show();
+                    .setTitle("Hapus data")
+                    .setMessage("Apakah kamu yakin ingin menghapus data ini ?")
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        historyViewModel.deleteBatchByID(batch.getID());
+                        Snackbar.make(requireView(), batch.getPicName() + " " + getString(R.string.deleted), Snackbar.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
             }
 
             @Override
