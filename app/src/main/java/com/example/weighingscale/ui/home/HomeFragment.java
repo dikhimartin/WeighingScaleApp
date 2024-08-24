@@ -31,6 +31,8 @@ import com.example.weighingscale.state.StateConnecting;
 import com.example.weighingscale.ui.history.HistoryFragment;
 import com.example.weighingscale.ui.setting.SettingViewModel;
 import com.example.weighingscale.ui.shared.EntityAdapter;
+import com.example.weighingscale.ui.shared.LocationUtil;
+import com.example.weighingscale.ui.shared.LocationViewModel;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.DateTimeUtil;
@@ -47,6 +49,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private SharedViewModel sharedViewModel;
     private SettingViewModel settingViewModel;
+    private LocationViewModel locationViewModel;
     private LogAdapter adapter;
 
     private String currentBatchID = null;
@@ -66,6 +69,9 @@ public class HomeFragment extends Fragment {
 
         // Init instance settingViewModel
         settingViewModel = new ViewModelProvider(requireActivity()).get(SettingViewModel.class);
+
+        // Init instance locationViewModel
+        locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
         // Observer Log List
         setupRecyclerView(root);
@@ -260,12 +266,26 @@ public class HomeFragment extends Fragment {
         // Setup AutoCompleteTextView Weighing Location with adapter
         AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
         AutoCompleteTextView selectLocCity = dialogView.findViewById(R.id.select_weighing_location_city);
-        setupOptionLocation(selectLocProvince, selectLocCity);
+        LocationUtil.setupOptionLocation(
+                requireContext(),
+                getViewLifecycleOwner(),
+                selectLocProvince,
+                selectLocCity,
+                locationViewModel.getProvinces(),
+                locationViewModel
+        );
 
         // Setup AutoCompleteTextView Destination with adapter
         AutoCompleteTextView selectDestProvince = dialogView.findViewById(R.id.select_destination_province);
         AutoCompleteTextView selectDestCity = dialogView.findViewById(R.id.select_destination_city);
-        setupOptionLocation(selectDestProvince, selectDestCity);
+        LocationUtil.setupOptionLocation(
+                requireContext(),
+                getViewLifecycleOwner(),
+                selectDestProvince,
+                selectDestCity,
+                locationViewModel.getProvinces(),
+                locationViewModel
+        );
 
         // Set up datetime picker
         tvDateTime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDateTime));
@@ -320,35 +340,6 @@ public class HomeFragment extends Fragment {
 
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    private void setupOptionLocation(AutoCompleteTextView selectProvince, AutoCompleteTextView selectCity) {
-        homeViewModel.getAllProvinces().observe(getViewLifecycleOwner(), provinces -> {
-            if (provinces != null && !provinces.isEmpty()) {
-                List<SelectOptionWrapper> provinceWrappers = new ArrayList<>();
-                for (Province province : provinces) {
-                    provinceWrappers.add(new SelectOptionWrapper(province.getID(), province.getName()));
-                }
-                EntityAdapter provinceAdapter = new EntityAdapter(requireContext(), provinceWrappers);
-                selectProvince.setAdapter(provinceAdapter);
-
-                selectProvince.setOnItemClickListener((parent, view, position, id) -> {
-                    SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
-                    if (selectedWrapper != null) {
-                        homeViewModel.getCitiesByProvinceId(selectedWrapper.getId()).observe(getViewLifecycleOwner(), cities -> {
-                            if (cities != null && !cities.isEmpty()) {
-                                List<SelectOptionWrapper> cityWrappers = new ArrayList<>();
-                                for (City city : cities) {
-                                    cityWrappers.add(new SelectOptionWrapper(city.getID(), city.getType() + " " + city.getName()));
-                                }
-                                EntityAdapter cityAdapter = new EntityAdapter(requireContext(), cityWrappers);
-                                selectCity.setAdapter(cityAdapter);
-                            }
-                        });
-                    }
-                });
-            }
-        });
     }
 
     private void observeSetting(Runnable callback) {

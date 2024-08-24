@@ -1,12 +1,15 @@
 package com.example.weighingscale.ui.history;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,8 +20,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
+import com.example.weighingscale.ui.shared.LocationUtil;
+import com.example.weighingscale.ui.shared.LocationViewModel;
+import com.example.weighingscale.ui.shared.SelectOptionWrapper;
+import com.example.weighingscale.util.DateTimeUtil;
 import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.SafeValueUtil;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class HistoryDetailFragment extends Fragment {
 
@@ -43,6 +56,8 @@ public class HistoryDetailFragment extends Fragment {
 
     private BatchDTO currentBatch;
     private HistoryViewModel historyViewModel;
+    private LocationViewModel locationViewModel;
+    private MaterialCardView cardSummary;
 
     @Nullable
     @Override
@@ -73,10 +88,15 @@ public class HistoryDetailFragment extends Fragment {
         layoutDeliveryDestination = view.findViewById(R.id.til_delivery_destination);
         textDeliveryDestinationProvince = view.findViewById(R.id.text_view_delivery_destination_province);
         textDeliveryDestinationCity = view.findViewById(R.id.text_view_delivery_destination_city);
+
+        // Initialize listener
+        cardSummary = view.findViewById(R.id.card_summary);
+        cardSummary.setOnClickListener(v -> showUpdateBatchDialog(currentBatch));
     }
 
     private void initializeViewModel() {
         historyViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
+        locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
     }
 
     private void setupMode(View view) {
@@ -135,8 +155,8 @@ public class HistoryDetailFragment extends Fragment {
         );
 
         // Handle start and end date, and duration
-        String startDateText = SafeValueUtil.getFormattedDate(currentBatch.start_date, "HH:mm:ss");
-        String endDateText = (currentBatch.end_date != null) ? SafeValueUtil.getFormattedDate(currentBatch.end_date, "HH:mm:ss") : "-";
+        String startDateText = SafeValueUtil.getFormattedDate(currentBatch.start_date, "dd/MM/yyyy HH:mm:ss");
+        String endDateText = (currentBatch.end_date != null) ? SafeValueUtil.getFormattedDate(currentBatch.end_date, "dd/MM/yyyy HH:mm:ss") : "-";
         String durationText = (currentBatch.start_date != null && currentBatch.end_date != null) ?
         FormatterUtil.formatDuration(currentBatch.end_date.getTime() - currentBatch.start_date.getTime()) : "-";
 
@@ -173,4 +193,99 @@ public class HistoryDetailFragment extends Fragment {
         textView.setText(formattedText);
         textView.setVisibility((type != null && name != null) ? View.VISIBLE : View.GONE);
     }
+
+    @SuppressLint("SetTextI18n")
+    private void showUpdateBatchDialog(BatchDTO batch) {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_input_batch, null);
+
+        TextInputEditText etPICName = dialogView.findViewById(R.id.et_pic_name);
+        TextInputEditText etPICPhoneNumber = dialogView.findViewById(R.id.et_pic_phone_number);
+        TextInputEditText etTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
+        TextInputEditText etTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
+        TextInputEditText tvDatetime = dialogView.findViewById(R.id.tv_datetime);
+
+        AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
+        AutoCompleteTextView selectLocCity = dialogView.findViewById(R.id.select_weighing_location_city);
+        AutoCompleteTextView selectDestProvince = dialogView.findViewById(R.id.select_destination_province);
+        AutoCompleteTextView selectDestCity = dialogView.findViewById(R.id.select_destination_city);
+
+        // Autofill data from batch
+        etPICName.setText(batch.pic_name);
+        etPICPhoneNumber.setText(batch.pic_phone_number);
+        etTruckDriver.setText(batch.truck_driver_name);
+        etTruckDriverPhoneNumber.setText(batch.truck_driver_phone_number);
+
+        // Autofill datetime
+        String dateTime = DateTimeUtil.formatDateTime(batch.datetime, "yyyy-MM-dd HH:mm:ss");
+        tvDatetime.setText(dateTime);
+
+        // Autofill location data
+        selectLocProvince.setText(batch.weighing_location_province_name);
+        selectLocCity.setText(batch.weighing_location_city_name);
+        selectDestProvince.setText(batch.delivery_destination_province_name);
+        selectDestCity.setText(batch.delivery_destination_city_name);
+
+        LocationUtil.setupOptionLocation(
+            requireContext(),
+            getViewLifecycleOwner(),
+            selectLocProvince,
+            selectLocCity,
+            locationViewModel.getProvinces(),
+            locationViewModel
+        );
+
+        LocationUtil.setupOptionLocation(
+            requireContext(),
+            getViewLifecycleOwner(),
+            selectDestProvince,
+            selectDestCity,
+            locationViewModel.getProvinces(),
+            locationViewModel
+        );
+
+        // Set up datetime picker
+        tvDatetime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDatetime));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setView(dialogView)
+            .setTitle("Mengubah data batch muatan")
+            .setPositiveButton("Ubah", (dialog, id) -> {
+                String picName = etPICName.getText().toString();
+                String picPhoneNumber = etPICPhoneNumber.getText().toString();
+                String truckDriver = etTruckDriver.getText().toString();
+                String truckDriverPhoneNumber = etTruckDriverPhoneNumber.getText().toString();
+
+                batch.pic_name = picName;
+                batch.pic_phone_number = picPhoneNumber;
+                batch.truck_driver_name = truckDriver;
+                batch.truck_driver_phone_number = truckDriverPhoneNumber;
+
+                // Handle selected city IDs similarly to HomeFragment
+                String selectedWeighingLocationID = getLocationId(selectLocCity);
+                String selectedDestinationID = getLocationId(selectDestCity);
+
+                if (selectedWeighingLocationID != null) {
+                    batch.weighing_location_id = selectedWeighingLocationID;
+                }
+                if (selectedDestinationID != null) {
+                    batch.delivery_destination_id = selectedDestinationID;
+                }
+
+                // Save the updated batch
+                // historyViewModel.updateBatch(batch);
+                Toast.makeText(requireContext(), "Data batch muatan telah diubah", Toast.LENGTH_SHORT).show();
+            })
+            .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    // Helper method to get the selected city's ID from AutoCompleteTextView
+    private String getLocationId(AutoCompleteTextView autoCompleteTextView) {
+        SelectOptionWrapper selectedCity = (SelectOptionWrapper) autoCompleteTextView.getAdapter().getItem(autoCompleteTextView.getListSelection());
+        return selectedCity != null ? selectedCity.getId() : null;
+    }
+
 }
