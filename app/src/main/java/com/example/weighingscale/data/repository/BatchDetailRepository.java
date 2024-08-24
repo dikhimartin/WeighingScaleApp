@@ -29,7 +29,9 @@ public class BatchDetailRepository {
     }
 
     public void insert(BatchDetail batchDetail) {
-        batchDetailDao.insert(batchDetail);
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            batchDetailDao.insert(batchDetail);
+        });
     }
 
     public void update(BatchDetail batchDetail) {

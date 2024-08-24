@@ -49,9 +49,7 @@ public class HomeViewModel extends AndroidViewModel {
         batchDetail.datetime = new Date();
         batchDetail.amount = amount;
         batchDetail.unit = (setting != null ? setting.unit : "kg");
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            batchDetailRepository.insert(batchDetail);
-        });
+        batchDetailRepository.insert(batchDetail);
     }
 
     public void updateBatchDetail(BatchDetail batchDetail) {
@@ -61,6 +59,5 @@ public class HomeViewModel extends AndroidViewModel {
     public void completeBatch(String batchId) {
         batchRepository.completeBatch(batchId);
     }
-
 }
 
