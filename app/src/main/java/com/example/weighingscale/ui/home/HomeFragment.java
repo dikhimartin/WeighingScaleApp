@@ -36,6 +36,7 @@ import com.example.weighingscale.util.FormatterUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -251,11 +252,14 @@ public class HomeFragment extends Fragment {
         TextView editPicPhoneNumber = dialogView.findViewById(R.id.et_pic_phone_number);
         TextView editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
         TextView editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
-        TextView tvDateTime = dialogView.findViewById(R.id.tv_datetime);
+        TextView tvDatetime = dialogView.findViewById(R.id.tv_datetime);
         AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
         AutoCompleteTextView selectLocCity = dialogView.findViewById(R.id.select_weighing_location_city);
         AutoCompleteTextView selectDestProvince = dialogView.findViewById(R.id.select_destination_province);
         AutoCompleteTextView selectDestCity = dialogView.findViewById(R.id.select_destination_city);
+
+        // Autofill datetime
+        tvDatetime.setText(DateTimeUtil.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss"));
 
         // Autofill value from setting
         observeSetting(() -> {
@@ -270,7 +274,7 @@ public class HomeFragment extends Fragment {
         setupOptionLocation(selectDestProvince, selectDestCity);
 
         // Set up datetime picker
-        tvDateTime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDateTime));
+        tvDatetime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDatetime));
 
         // Variable to store selected city's ID
         final String[] deliveryDestinationID = new String[1];
@@ -297,7 +301,7 @@ public class HomeFragment extends Fragment {
                     String picPhoneNumber = editPicPhoneNumber.getText().toString();
                     String truckDriver = editTruckDriver.getText().toString();
                     String truckDriverPhoneNumber = editTruckDriverPhoneNumber.getText().toString();
-                    String dateTime = tvDateTime.getText().toString();
+                    String dateTime = tvDatetime.getText().toString();
 
                     Batch batch = new Batch();
                     batch.pic_name = picName;
