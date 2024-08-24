@@ -34,6 +34,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HistoryDetailFragment extends Fragment {
 
@@ -221,6 +222,22 @@ public class HistoryDetailFragment extends Fragment {
         String dateTime = DateTimeUtil.formatDateTime(batch.datetime, "yyyy-MM-dd HH:mm:ss");
         tvDatetime.setText(dateTime);
 
+        // Autofill AutoCompleteTextView for Weighing Location
+        if (batch.weighing_location_province_name != null) {
+            selectLocProvince.setText(batch.weighing_location_province_name);
+        }
+        if (batch.weighing_location_city_type != null && batch.weighing_location_city_name != null) {
+            selectLocCity.setText(batch.weighing_location_city_type + " " + batch.weighing_location_city_name);
+        }
+
+        // Autofill AutoCompleteTextView for Destination
+        if (batch.delivery_destination_province_name != null) {
+            selectDestProvince.setText(batch.delivery_destination_province_name);
+        }
+        if (batch.delivery_destination_city_type != null && batch.delivery_destination_city_name != null) {
+            selectDestCity.setText(batch.delivery_destination_city_type + " " + batch.delivery_destination_city_name);
+        }
+
         // Setup AutoCompleteTextView Weighing Location with adapter
         setupOptionLocation(selectLocProvince, selectLocCity);
 
@@ -251,16 +268,10 @@ public class HistoryDetailFragment extends Fragment {
         builder.setView(dialogView)
             .setTitle("Mengubah data batch muatan")
             .setPositiveButton("Ubah", (dialog, id) -> {
-                String picName = etPICName.getText().toString();
-                String picPhoneNumber = etPICPhoneNumber.getText().toString();
-                String truckDriver = etTruckDriver.getText().toString();
-                String truckDriverPhoneNumber = etTruckDriverPhoneNumber.getText().toString();
-
-                Log.d("updated-batch-value", batch.id);
-                Log.d("updated-batch-value", picName);
-                Log.d("updated-batch-value", picPhoneNumber);
-                Log.d("updated-batch-value", truckDriver);
-                Log.d("updated-batch-value", truckDriverPhoneNumber);
+                String picName = Objects.requireNonNull(etPICName.getText()).toString();
+                String picPhoneNumber = Objects.requireNonNull(etPICPhoneNumber.getText()).toString();
+                String truckDriver = Objects.requireNonNull(etTruckDriver.getText()).toString();
+                String truckDriverPhoneNumber = Objects.requireNonNull(etTruckDriverPhoneNumber.getText()).toString();
 
                 batch.pic_name = picName;
                 batch.pic_phone_number = picPhoneNumber;
@@ -275,17 +286,6 @@ public class HistoryDetailFragment extends Fragment {
 
                 // Save the updated batch through ViewModel
                 historyViewModel.updateBatch(batch);
-
-                // Check if the batch was updated correctly
-                historyViewModel.getBatchByID(batch.id).observe(getViewLifecycleOwner(), updatedBatch -> {
-                    if (updatedBatch != null) {
-                        // Log updated values
-                        Log.d("updated-batch", updatedBatch.pic_name);
-                        Log.d("updated-batch", updatedBatch.pic_phone_number);
-                        Log.d("updated-batch", updatedBatch.truck_driver_name);
-                        Log.d("updated-batch", updatedBatch.truck_driver_phone_number);
-                    }
-                });
 
                 Toast.makeText(requireContext(), "Data batch muatan telah diubah", Toast.LENGTH_SHORT).show();
             })
