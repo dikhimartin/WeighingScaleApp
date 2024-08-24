@@ -36,5 +36,4 @@ public class AddressRepository {
     public LiveData<List<Subdistrict>> getSubdistrictsByCityId(String cityID) {
         return subdistrictDao.getSubdistrictsByCityId(cityID);
     }
-
 }

@@ -38,12 +38,12 @@ public class HistoryViewModel extends AndroidViewModel {
         return batchDetailRepository.getDatasByBatchID(id);
     }
 
-    public void deleteBatch(Batch batch) {
-        batchRepository.delete(batch);
+    public void updateBatch(Batch batch) {
+        batchRepository.update(batch);
     }
 
-    public void deleteBatchByID(String id) {
-        batchRepository.deleteByID(id);
+    public void deleteBatch(Batch batch) {
+        batchRepository.delete(batch);
     }
 
     public void deleteBatchByIds(List<String> ids) {

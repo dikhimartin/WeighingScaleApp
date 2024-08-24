@@ -33,18 +33,8 @@ public class BatchDetailRepository {
     }
 
     public void update(BatchDetail batchDetail) {
-        new UpdateNoteAsyncTask(batchDetailDao).execute(batchDetail);
-    }
-
-    private static class UpdateNoteAsyncTask extends AsyncTask<BatchDetail,Void,Void> {
-        private BatchDetailDao batchDetailDao;
-        private UpdateNoteAsyncTask(BatchDetailDao batchDetailDao){
-            this.batchDetailDao=batchDetailDao;
-        }
-        @Override
-        protected Void doInBackground(BatchDetail... batchDetails) {
-            batchDetailDao.update(batchDetails[0]);
-            return null;
-        }
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            batchDetailDao.update(batchDetail);
+        });
     }
 }

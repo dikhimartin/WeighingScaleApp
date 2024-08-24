@@ -2,6 +2,8 @@ package com.example.weighingscale.data.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 
 import com.example.weighingscale.data.dto.BatchDTO;
@@ -46,6 +48,12 @@ public class BatchRepository {
         });
     }
 
+    public void update(Batch batch) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            batchDao.update(batch);
+        });
+    }
+
     public void completeBatch(String batchID) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             // Fetch batch and its details in a single transaction
@@ -71,67 +79,15 @@ public class BatchRepository {
         });
     }
 
-    public void deleteByID(String id) {
-        new DeleteByIdAsyncTask(batchDao).execute(id);
-    }
-
     public void delete(Batch batch) {
-        new DeleteAsyncTask(batchDao).execute(batch);
+        AppDatabase.databaseWriteExecutor.execute(() -> batchDao.delete(batch));
     }
 
     public void deleteByIds(List<String> ids) {
-        new DeleteByIdsAsyncTask(batchDao).execute(ids);
+        AppDatabase.databaseWriteExecutor.execute(() -> batchDao.deleteByIDs(ids));
     }
 
     public void deleteAll() {
-        new DeleteAllAsyncTask(batchDao).execute();
-    }
-
-    private static class DeleteAsyncTask extends AsyncTask<Batch,Void,Void> {
-        private BatchDao batchDao;
-        private DeleteAsyncTask(BatchDao batchDao){
-            this.batchDao=batchDao;
-        }
-        @Override
-        protected Void doInBackground(Batch... batches) {
-            batchDao.delete(batches[0]);
-            return null;
-        }
-    }
-
-    private static class DeleteAllAsyncTask extends AsyncTask<Batch,Void,Void>{
-        private BatchDao batchDao;
-        private DeleteAllAsyncTask(BatchDao batchDao){
-            this.batchDao= this.batchDao;
-        }
-        @Override
-        protected Void doInBackground(Batch... batches) {
-            batchDao.deleteAll();
-            return null;
-        }
-    }
-
-    private static class DeleteByIdsAsyncTask extends AsyncTask<List<String>, Void, Void> {
-        private BatchDao batchDao;
-        private DeleteByIdsAsyncTask(BatchDao batchDao) {
-            this.batchDao = batchDao;
-        }
-        @Override
-        protected Void doInBackground(List<String>... lists) {
-            batchDao.deleteByIDs(lists[0]);
-            return null;
-        }
-    }
-
-    private static class DeleteByIdAsyncTask extends AsyncTask<String, Void, Void> {
-        private BatchDao batchDao;
-        private DeleteByIdAsyncTask(BatchDao batchDao) {
-            this.batchDao = batchDao;
-        }
-        @Override
-        protected Void doInBackground(String... ids) {
-            batchDao.deleteByID(ids[0]);
-            return null;
-        }
+        AppDatabase.databaseWriteExecutor.execute(batchDao::deleteAll);
     }
 }

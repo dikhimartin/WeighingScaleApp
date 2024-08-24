@@ -3,6 +3,7 @@ package com.example.weighingscale.ui.history;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -255,6 +256,12 @@ public class HistoryDetailFragment extends Fragment {
                 String truckDriver = etTruckDriver.getText().toString();
                 String truckDriverPhoneNumber = etTruckDriverPhoneNumber.getText().toString();
 
+                Log.d("updated-batch-value", batch.id);
+                Log.d("updated-batch-value", picName);
+                Log.d("updated-batch-value", picPhoneNumber);
+                Log.d("updated-batch-value", truckDriver);
+                Log.d("updated-batch-value", truckDriverPhoneNumber);
+
                 batch.pic_name = picName;
                 batch.pic_phone_number = picPhoneNumber;
                 batch.truck_driver_name = truckDriver;
@@ -266,8 +273,20 @@ public class HistoryDetailFragment extends Fragment {
                     batch.weighing_location_id = weighingLocationID[0];
                 }
 
-                // Save the updated batch
-                // historyViewModel.updateBatch(batch);
+                // Save the updated batch through ViewModel
+                historyViewModel.updateBatch(batch);
+
+                // Check if the batch was updated correctly
+                historyViewModel.getBatchByID(batch.id).observe(getViewLifecycleOwner(), updatedBatch -> {
+                    if (updatedBatch != null) {
+                        // Log updated values
+                        Log.d("updated-batch", updatedBatch.pic_name);
+                        Log.d("updated-batch", updatedBatch.pic_phone_number);
+                        Log.d("updated-batch", updatedBatch.truck_driver_name);
+                        Log.d("updated-batch", updatedBatch.truck_driver_phone_number);
+                    }
+                });
+
                 Toast.makeText(requireContext(), "Data batch muatan telah diubah", Toast.LENGTH_SHORT).show();
             })
             .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss());

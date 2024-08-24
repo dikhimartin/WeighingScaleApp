@@ -106,9 +106,6 @@ public interface BatchDao {
     @Query("UPDATE Batch SET status = 0 WHERE status = 1")
     void forceCompleteBatch();
 
-    @Query("DELETE FROM Batch WHERE id = :id")
-    void deleteByID(String id);
-
     @Query("DELETE FROM Batch WHERE id IN (:ids)")
     void deleteByIDs(List<String> ids);
 

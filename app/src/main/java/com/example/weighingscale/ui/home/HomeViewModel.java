@@ -62,13 +62,5 @@ public class HomeViewModel extends AndroidViewModel {
         batchRepository.completeBatch(batchId);
     }
 
-    // Address Methods
-    public LiveData<List<Province>> getAllProvinces() {
-        return addressRepository.getAllProvinces();
-    }
-
-    public LiveData<List<City>> getCitiesByProvinceId(String provinceId) {
-        return addressRepository.getCitiesByProvinceID(provinceId);
-    }
 }
 

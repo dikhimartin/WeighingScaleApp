@@ -42,4 +42,18 @@ public class Batch {
     public Batch() {
         this.id = UUID.randomUUID().toString();
     }
+
+    // Getters
+    public String getID() { return id; }
+
+    public long getRice_price(){return rice_price;};
+
+    public String getPicName() { return pic_name; }
+
+    public String getPicPhoneNumber() { return pic_phone_number; }
+
+    public String getUnit() { return unit; }
+
+    public Date getDatetime() { return datetime; }
 }
+
