@@ -272,6 +272,7 @@ public class HomeFragment extends Fragment {
                 selectLocProvince,
                 selectLocCity,
                 locationViewModel.getProvinces(),
+                locationViewModel.getCities(),
                 locationViewModel
         );
 
@@ -284,6 +285,7 @@ public class HomeFragment extends Fragment {
                 selectDestProvince,
                 selectDestCity,
                 locationViewModel.getProvinces(),
+                locationViewModel.getCities(),
                 locationViewModel
         );
 

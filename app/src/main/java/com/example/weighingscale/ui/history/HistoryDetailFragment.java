@@ -204,7 +204,6 @@ public class HistoryDetailFragment extends Fragment {
         TextInputEditText etTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
         TextInputEditText etTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
         TextInputEditText tvDatetime = dialogView.findViewById(R.id.tv_datetime);
-
         AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
         AutoCompleteTextView selectLocCity = dialogView.findViewById(R.id.select_weighing_location_city);
         AutoCompleteTextView selectDestProvince = dialogView.findViewById(R.id.select_destination_province);
@@ -220,28 +219,26 @@ public class HistoryDetailFragment extends Fragment {
         String dateTime = DateTimeUtil.formatDateTime(batch.datetime, "yyyy-MM-dd HH:mm:ss");
         tvDatetime.setText(dateTime);
 
-        // Autofill location data
-        selectLocProvince.setText(batch.weighing_location_province_name);
-        selectLocCity.setText(batch.weighing_location_city_name);
-        selectDestProvince.setText(batch.delivery_destination_province_name);
-        selectDestCity.setText(batch.delivery_destination_city_name);
-
+        // Setup AutoCompleteTextView Weighing Location with adapter
         LocationUtil.setupOptionLocation(
-            requireContext(),
-            getViewLifecycleOwner(),
-            selectLocProvince,
-            selectLocCity,
-            locationViewModel.getProvinces(),
-            locationViewModel
+                requireContext(),
+                getViewLifecycleOwner(),
+                selectLocProvince,
+                selectLocCity,
+                locationViewModel.getProvinces(),
+                locationViewModel.getCities(),
+                locationViewModel
         );
 
+        // Setup AutoCompleteTextView Destination with adapter
         LocationUtil.setupOptionLocation(
-            requireContext(),
-            getViewLifecycleOwner(),
-            selectDestProvince,
-            selectDestCity,
-            locationViewModel.getProvinces(),
-            locationViewModel
+                requireContext(),
+                getViewLifecycleOwner(),
+                selectDestProvince,
+                selectDestCity,
+                locationViewModel.getProvinces(),
+                locationViewModel.getCities(),
+                locationViewModel
         );
 
         // Set up datetime picker

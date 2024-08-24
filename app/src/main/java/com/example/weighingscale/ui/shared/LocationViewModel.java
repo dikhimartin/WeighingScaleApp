@@ -39,3 +39,4 @@ public class LocationViewModel extends AndroidViewModel {
         selectedProvinceId.setValue(provinceId);
     }
 }
+

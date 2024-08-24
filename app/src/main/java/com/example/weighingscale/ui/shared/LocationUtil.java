@@ -17,6 +17,7 @@ public class LocationUtil {
     public static void setupOptionLocation(Context context, LifecycleOwner lifecycleOwner,
                                            AutoCompleteTextView selectProvince, AutoCompleteTextView selectCity,
                                            LiveData<List<Province>> provincesLiveData,
+                                           LiveData<List<City>> citiesLiveData,
                                            LocationViewModel locationViewModel) {
 
         provincesLiveData.observe(lifecycleOwner, provinces -> {
@@ -37,7 +38,7 @@ public class LocationUtil {
             }
         });
 
-        locationViewModel.getCities().observe(lifecycleOwner, cities -> {
+        citiesLiveData.observe(lifecycleOwner, cities -> {
             if (cities != null && !cities.isEmpty()) {
                 List<SelectOptionWrapper> cityWrappers = new ArrayList<>();
                 for (City city : cities) {
@@ -49,3 +50,5 @@ public class LocationUtil {
         });
     }
 }
+
+
