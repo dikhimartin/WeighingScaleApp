@@ -3,7 +3,6 @@ package com.example.weighingscale.ui.home;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AutoCompleteTextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,10 +26,8 @@ import com.example.weighingscale.data.model.Province;
 import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.databinding.FragmentHomeBinding;
 import com.example.weighingscale.state.StateConnecting;
-import com.example.weighingscale.ui.history.HistoryFragment;
 import com.example.weighingscale.ui.setting.SettingViewModel;
 import com.example.weighingscale.ui.shared.EntityAdapter;
-import com.example.weighingscale.ui.shared.LocationUtil;
 import com.example.weighingscale.ui.shared.LocationViewModel;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
@@ -256,6 +252,10 @@ public class HomeFragment extends Fragment {
         TextView editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
         TextView editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
         TextView tvDateTime = dialogView.findViewById(R.id.tv_datetime);
+        AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
+        AutoCompleteTextView selectLocCity = dialogView.findViewById(R.id.select_weighing_location_city);
+        AutoCompleteTextView selectDestProvince = dialogView.findViewById(R.id.select_destination_province);
+        AutoCompleteTextView selectDestCity = dialogView.findViewById(R.id.select_destination_city);
 
         // Autofill value from setting
         observeSetting(() -> {
@@ -264,30 +264,10 @@ public class HomeFragment extends Fragment {
         });
 
         // Setup AutoCompleteTextView Weighing Location with adapter
-        AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
-        AutoCompleteTextView selectLocCity = dialogView.findViewById(R.id.select_weighing_location_city);
-        LocationUtil.setupOptionLocation(
-                requireContext(),
-                getViewLifecycleOwner(),
-                selectLocProvince,
-                selectLocCity,
-                locationViewModel.getProvinces(),
-                locationViewModel.getCities(),
-                locationViewModel
-        );
+        setupOptionLocation(selectLocProvince, selectLocCity);
 
         // Setup AutoCompleteTextView Destination with adapter
-        AutoCompleteTextView selectDestProvince = dialogView.findViewById(R.id.select_destination_province);
-        AutoCompleteTextView selectDestCity = dialogView.findViewById(R.id.select_destination_city);
-        LocationUtil.setupOptionLocation(
-                requireContext(),
-                getViewLifecycleOwner(),
-                selectDestProvince,
-                selectDestCity,
-                locationViewModel.getProvinces(),
-                locationViewModel.getCities(),
-                locationViewModel
-        );
+        setupOptionLocation(selectDestProvince, selectDestCity);
 
         // Set up datetime picker
         tvDateTime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDateTime));
@@ -342,6 +322,35 @@ public class HomeFragment extends Fragment {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void setupOptionLocation(AutoCompleteTextView selectProvince, AutoCompleteTextView selectCity) {
+        locationViewModel.getAllProvinces().observe(getViewLifecycleOwner(), provinces -> {
+            if (provinces != null && !provinces.isEmpty()) {
+                List<SelectOptionWrapper> provinceWrappers = new ArrayList<>();
+                for (Province province : provinces) {
+                    provinceWrappers.add(new SelectOptionWrapper(province.getID(), province.getName()));
+                }
+                EntityAdapter provinceAdapter = new EntityAdapter(requireContext(), provinceWrappers);
+                selectProvince.setAdapter(provinceAdapter);
+
+                selectProvince.setOnItemClickListener((parent, view, position, id) -> {
+                    SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
+                    if (selectedWrapper != null) {
+                        LocationViewModel.getCitiesByProvinceId(selectedWrapper.getId()).observe(getViewLifecycleOwner(), cities -> {
+                            if (cities != null && !cities.isEmpty()) {
+                                List<SelectOptionWrapper> cityWrappers = new ArrayList<>();
+                                for (City city : cities) {
+                                    cityWrappers.add(new SelectOptionWrapper(city.getID(), city.getType() + " " + city.getName()));
+                                }
+                                EntityAdapter cityAdapter = new EntityAdapter(requireContext(), cityWrappers);
+                                selectCity.setAdapter(cityAdapter);
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     private void observeSetting(Runnable callback) {

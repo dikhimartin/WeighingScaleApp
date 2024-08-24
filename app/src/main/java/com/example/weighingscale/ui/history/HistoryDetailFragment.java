@@ -20,7 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
-import com.example.weighingscale.ui.shared.LocationUtil;
+import com.example.weighingscale.data.model.City;
+import com.example.weighingscale.data.model.Province;
+import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.LocationViewModel;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.util.DateTimeUtil;
@@ -29,9 +31,8 @@ import com.example.weighingscale.util.SafeValueUtil;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryDetailFragment extends Fragment {
 
@@ -220,29 +221,30 @@ public class HistoryDetailFragment extends Fragment {
         tvDatetime.setText(dateTime);
 
         // Setup AutoCompleteTextView Weighing Location with adapter
-        LocationUtil.setupOptionLocation(
-                requireContext(),
-                getViewLifecycleOwner(),
-                selectLocProvince,
-                selectLocCity,
-                locationViewModel.getProvinces(),
-                locationViewModel.getCities(),
-                locationViewModel
-        );
+        setupOptionLocation(selectLocProvince, selectLocCity);
 
         // Setup AutoCompleteTextView Destination with adapter
-        LocationUtil.setupOptionLocation(
-                requireContext(),
-                getViewLifecycleOwner(),
-                selectDestProvince,
-                selectDestCity,
-                locationViewModel.getProvinces(),
-                locationViewModel.getCities(),
-                locationViewModel
-        );
+        setupOptionLocation(selectDestProvince, selectDestCity);
 
         // Set up datetime picker
         tvDatetime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDatetime));
+
+        // Variable to store selected city's ID
+        final String[] deliveryDestinationID = new String[1];
+        selectDestCity.setOnItemClickListener((parent, view, position, id) -> {
+            SelectOptionWrapper selectedCity = (SelectOptionWrapper) parent.getAdapter().getItem(position);
+            if (selectedCity != null) {
+                deliveryDestinationID[0] = selectedCity.getId();
+            }
+        });
+
+        final String[] weighingLocationID = new String[1];
+        selectLocCity.setOnItemClickListener((parent, view, position, id) -> {
+            SelectOptionWrapper selectedCity = (SelectOptionWrapper) parent.getAdapter().getItem(position);
+            if (selectedCity != null) {
+                weighingLocationID[0] = selectedCity.getId();
+            }
+        });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setView(dialogView)
@@ -257,16 +259,11 @@ public class HistoryDetailFragment extends Fragment {
                 batch.pic_phone_number = picPhoneNumber;
                 batch.truck_driver_name = truckDriver;
                 batch.truck_driver_phone_number = truckDriverPhoneNumber;
-
-                // Handle selected city IDs similarly to HomeFragment
-                String selectedWeighingLocationID = getLocationId(selectLocCity);
-                String selectedDestinationID = getLocationId(selectDestCity);
-
-                if (selectedWeighingLocationID != null) {
-                    batch.weighing_location_id = selectedWeighingLocationID;
+                if (deliveryDestinationID[0] != null) {
+                    batch.delivery_destination_id = deliveryDestinationID[0];
                 }
-                if (selectedDestinationID != null) {
-                    batch.delivery_destination_id = selectedDestinationID;
+                if (weighingLocationID[0] != null) {
+                    batch.weighing_location_id = weighingLocationID[0];
                 }
 
                 // Save the updated batch
@@ -279,10 +276,33 @@ public class HistoryDetailFragment extends Fragment {
         dialog.show();
     }
 
-    // Helper method to get the selected city's ID from AutoCompleteTextView
-    private String getLocationId(AutoCompleteTextView autoCompleteTextView) {
-        SelectOptionWrapper selectedCity = (SelectOptionWrapper) autoCompleteTextView.getAdapter().getItem(autoCompleteTextView.getListSelection());
-        return selectedCity != null ? selectedCity.getId() : null;
+    private void setupOptionLocation(AutoCompleteTextView selectProvince, AutoCompleteTextView selectCity) {
+        locationViewModel.getAllProvinces().observe(getViewLifecycleOwner(), provinces -> {
+            if (provinces != null && !provinces.isEmpty()) {
+                List<SelectOptionWrapper> provinceWrappers = new ArrayList<>();
+                for (Province province : provinces) {
+                    provinceWrappers.add(new SelectOptionWrapper(province.getID(), province.getName()));
+                }
+                EntityAdapter provinceAdapter = new EntityAdapter(requireContext(), provinceWrappers);
+                selectProvince.setAdapter(provinceAdapter);
+
+                selectProvince.setOnItemClickListener((parent, view, position, id) -> {
+                    SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
+                    if (selectedWrapper != null) {
+                        LocationViewModel.getCitiesByProvinceId(selectedWrapper.getId()).observe(getViewLifecycleOwner(), cities -> {
+                            if (cities != null && !cities.isEmpty()) {
+                                List<SelectOptionWrapper> cityWrappers = new ArrayList<>();
+                                for (City city : cities) {
+                                    cityWrappers.add(new SelectOptionWrapper(city.getID(), city.getType() + " " + city.getName()));
+                                }
+                                EntityAdapter cityAdapter = new EntityAdapter(requireContext(), cityWrappers);
+                                selectCity.setAdapter(cityAdapter);
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
 }

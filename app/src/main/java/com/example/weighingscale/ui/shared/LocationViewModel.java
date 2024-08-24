@@ -14,29 +14,20 @@ import com.example.weighingscale.data.repository.AddressRepository;
 import java.util.List;
 
 public class LocationViewModel extends AndroidViewModel {
-    private final AddressRepository addressRepository;
-
-    private final MutableLiveData<String> selectedProvinceId = new MutableLiveData<>();
-    private final LiveData<List<Province>> provinces;
-    private final LiveData<List<City>> cities;
+    private static AddressRepository addressRepository = null;
 
     public LocationViewModel(@NonNull Application application) {
         super(application);
         addressRepository = new AddressRepository(application);
-        provinces = addressRepository.getAllProvinces();
-        cities = Transformations.switchMap(selectedProvinceId, id -> addressRepository.getCitiesByProvinceID(id));
     }
 
-    public LiveData<List<Province>> getProvinces() {
-        return provinces;
+    // Address Methods
+    public LiveData<List<Province>> getAllProvinces() {
+        return addressRepository.getAllProvinces();
     }
 
-    public LiveData<List<City>> getCities() {
-        return cities;
-    }
-
-    public void setSelectedProvinceId(String provinceId) {
-        selectedProvinceId.setValue(provinceId);
+    public static LiveData<List<City>> getCitiesByProvinceId(String provinceId) {
+        return addressRepository.getCitiesByProvinceID(provinceId);
     }
 }
 
