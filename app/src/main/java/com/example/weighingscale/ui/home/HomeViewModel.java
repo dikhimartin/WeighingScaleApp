@@ -45,14 +45,10 @@ public class HomeViewModel extends AndroidViewModel {
 
     public void insertBatchDetail(String batchId, int amount, Setting setting) {
         BatchDetail batchDetail = new BatchDetail();
-        String unit = "kg";
-        if (setting != null) {
-            unit = setting.unit;
-        }
         batchDetail.batch_id = batchId;
         batchDetail.datetime = new Date();
         batchDetail.amount = amount;
-        batchDetail.unit = unit;
+        batchDetail.unit = (setting != null ? setting.unit : "kg");
         AppDatabase.databaseWriteExecutor.execute(() -> {
             batchDetailRepository.insert(batchDetail);
         });

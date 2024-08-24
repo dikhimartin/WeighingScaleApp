@@ -253,7 +253,7 @@ public class HomeFragment extends Fragment {
 
         // Autofill value from setting
         observeSetting(() -> {
-             editPicName.setText(currentSetting.pic_name);
+            editPicName.setText(currentSetting.pic_name);
             editPicPhoneNumber.setText(currentSetting.pic_phone_number);
         });
 
