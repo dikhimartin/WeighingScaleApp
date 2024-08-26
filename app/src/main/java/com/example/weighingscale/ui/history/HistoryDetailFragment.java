@@ -3,7 +3,6 @@ package com.example.weighingscale.ui.history;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +22,13 @@ import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.data.model.City;
 import com.example.weighingscale.data.model.Province;
+import com.example.weighingscale.ui.setting.SettingViewModel;
 import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.LocationViewModel;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
-import com.example.weighingscale.util.DateTimeUtil;
+import com.example.weighingscale.ui.shared.SharedAdapter;
 import com.example.weighingscale.util.FormatterUtil;
+import com.example.weighingscale.util.InputDirectiveUtil;
 import com.example.weighingscale.util.SafeValueUtil;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -60,7 +61,7 @@ public class HistoryDetailFragment extends Fragment {
     private BatchDTO currentBatch;
     private HistoryViewModel historyViewModel;
     private LocationViewModel locationViewModel;
-    private MaterialCardView cardSummary;
+    private SettingViewModel settingViewModel;
 
     @Nullable
     @Override
@@ -93,13 +94,14 @@ public class HistoryDetailFragment extends Fragment {
         textDeliveryDestinationCity = view.findViewById(R.id.text_view_delivery_destination_city);
 
         // Initialize listener
-        cardSummary = view.findViewById(R.id.card_summary);
+        MaterialCardView cardSummary = view.findViewById(R.id.card_summary);
         cardSummary.setOnClickListener(v -> showUpdateBatchDialog(currentBatch));
     }
 
     private void initializeViewModel() {
         historyViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
         locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
+        settingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
     }
 
     private void setupMode(View view) {
@@ -199,56 +201,56 @@ public class HistoryDetailFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void showUpdateBatchDialog(BatchDTO batch) {
+        // Inflate the custom dialog view
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_input_batch, null);
 
+        // Initialize views
+        LinearLayout layoutSetting = dialogView.findViewById(R.id.layout_setting);
         TextInputEditText etPICName = dialogView.findViewById(R.id.et_pic_name);
         TextInputEditText etPICPhoneNumber = dialogView.findViewById(R.id.et_pic_phone_number);
         TextInputEditText etTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
         TextInputEditText etTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
-        TextInputEditText tvDatetime = dialogView.findViewById(R.id.tv_datetime);
+        AutoCompleteTextView actvUnit = dialogView.findViewById(R.id.actv_unit);
+        TextInputEditText etRicePrice = dialogView.findViewById(R.id.et_rice_price);
         AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
         AutoCompleteTextView selectLocCity = dialogView.findViewById(R.id.select_weighing_location_city);
         AutoCompleteTextView selectDestProvince = dialogView.findViewById(R.id.select_destination_province);
         AutoCompleteTextView selectDestCity = dialogView.findViewById(R.id.select_destination_city);
 
-        // Autofill data from batch
+        // Show setting layout
+        layoutSetting.setVisibility(View.VISIBLE);
+
+        // Apply currency format
+        InputDirectiveUtil.applyCurrencyFormat(etRicePrice);
+
+        // Setup unit AutoCompleteTextView
+        settingViewModel.getUnitOptions().observe(getViewLifecycleOwner(), units -> {
+            SharedAdapter adapter = new SharedAdapter(requireContext(), units);
+            actvUnit.setAdapter(adapter);
+        });
+
+        // Autofill data from the batch
         etPICName.setText(batch.pic_name);
         etPICPhoneNumber.setText(batch.pic_phone_number);
         etTruckDriver.setText(batch.truck_driver_name);
         etTruckDriverPhoneNumber.setText(batch.truck_driver_phone_number);
+        actvUnit.setText(settingViewModel.getUnitDisplayText(batch.unit), false);
+        etRicePrice.setText(String.valueOf(batch.rice_price));
 
-        // Autofill datetime
-        String dateTime = DateTimeUtil.formatDateTime(batch.datetime, "yyyy-MM-dd HH:mm:ss");
-        tvDatetime.setText(dateTime);
+        selectLocProvince.setText(batch.weighing_location_province_name);
+        selectLocCity.setText(batch.weighing_location_city_type + " " + batch.weighing_location_city_name);
+        selectDestProvince.setText(batch.delivery_destination_province_name);
+        selectDestCity.setText(batch.delivery_destination_city_type + " " + batch.delivery_destination_city_name);
 
-        // Autofill AutoCompleteTextView for Weighing Location
-        if (batch.weighing_location_province_name != null) {
-            selectLocProvince.setText(batch.weighing_location_province_name);
-        }
-        if (batch.weighing_location_city_type != null && batch.weighing_location_city_name != null) {
-            selectLocCity.setText(batch.weighing_location_city_type + " " + batch.weighing_location_city_name);
-        }
-
-        // Autofill AutoCompleteTextView for Destination
-        if (batch.delivery_destination_province_name != null) {
-            selectDestProvince.setText(batch.delivery_destination_province_name);
-        }
-        if (batch.delivery_destination_city_type != null && batch.delivery_destination_city_name != null) {
-            selectDestCity.setText(batch.delivery_destination_city_type + " " + batch.delivery_destination_city_name);
-        }
-
-        // Setup AutoCompleteTextView Weighing Location with adapter
+        // Setup AutoCompleteTextView adapters
         setupOptionLocation(selectLocProvince, selectLocCity);
-
-        // Setup AutoCompleteTextView Destination with adapter
         setupOptionLocation(selectDestProvince, selectDestCity);
 
-        // Set up datetime picker
-        tvDatetime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDatetime));
-
-        // Variable to store selected city's ID
+        // Store selected city IDs
         final String[] deliveryDestinationID = new String[1];
+        final String[] weighingLocationID = new String[1];
+
         selectDestCity.setOnItemClickListener((parent, view, position, id) -> {
             SelectOptionWrapper selectedCity = (SelectOptionWrapper) parent.getAdapter().getItem(position);
             if (selectedCity != null) {
@@ -256,7 +258,6 @@ public class HistoryDetailFragment extends Fragment {
             }
         });
 
-        final String[] weighingLocationID = new String[1];
         selectLocCity.setOnItemClickListener((parent, view, position, id) -> {
             SelectOptionWrapper selectedCity = (SelectOptionWrapper) parent.getAdapter().getItem(position);
             if (selectedCity != null) {
@@ -264,19 +265,19 @@ public class HistoryDetailFragment extends Fragment {
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setView(dialogView)
+        // Create and show the dialog
+        new AlertDialog.Builder(requireContext())
+            .setView(dialogView)
             .setTitle("Mengubah data batch muatan")
             .setPositiveButton("Ubah", (dialog, id) -> {
-                String picName = Objects.requireNonNull(etPICName.getText()).toString();
-                String picPhoneNumber = Objects.requireNonNull(etPICPhoneNumber.getText()).toString();
-                String truckDriver = Objects.requireNonNull(etTruckDriver.getText()).toString();
-                String truckDriverPhoneNumber = Objects.requireNonNull(etTruckDriverPhoneNumber.getText()).toString();
+                // Update batch data
+                batch.pic_name = Objects.requireNonNull(etPICName.getText()).toString();
+                batch.pic_phone_number = Objects.requireNonNull(etPICPhoneNumber.getText()).toString();
+                batch.truck_driver_name = Objects.requireNonNull(etTruckDriver.getText()).toString();
+                batch.truck_driver_phone_number = Objects.requireNonNull(etTruckDriverPhoneNumber.getText()).toString();
+                batch.rice_price = InputDirectiveUtil.getCurrencyValue(etRicePrice);
+                batch.unit = settingViewModel.getUnitValue(Objects.requireNonNull(actvUnit.getText()).toString().trim());
 
-                batch.pic_name = picName;
-                batch.pic_phone_number = picPhoneNumber;
-                batch.truck_driver_name = truckDriver;
-                batch.truck_driver_phone_number = truckDriverPhoneNumber;
                 if (deliveryDestinationID[0] != null) {
                     batch.delivery_destination_id = deliveryDestinationID[0];
                 }
@@ -286,14 +287,13 @@ public class HistoryDetailFragment extends Fragment {
 
                 // Save the updated batch through ViewModel
                 historyViewModel.updateBatch(batch);
-
                 Toast.makeText(requireContext(), "Data batch muatan telah diubah", Toast.LENGTH_SHORT).show();
             })
-            .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss());
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss())
+            .create()
+            .show();
     }
+
 
     private void setupOptionLocation(AutoCompleteTextView selectProvince, AutoCompleteTextView selectCity) {
         locationViewModel.getAllProvinces().observe(getViewLifecycleOwner(), provinces -> {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AutoCompleteTextView;
@@ -34,11 +35,16 @@ import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.DateTimeUtil;
 import com.example.weighingscale.util.FormatterUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
@@ -245,39 +251,40 @@ public class HomeFragment extends Fragment {
     }
 
     private void showBatchInputDialog() {
+        // Inflate the custom dialog view
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_input_batch, null);
 
-        TextView editPicName = dialogView.findViewById(R.id.et_pic_name);
-        TextView editPicPhoneNumber = dialogView.findViewById(R.id.et_pic_phone_number);
-        TextView editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
-        TextView editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
-        TextView tvDatetime = dialogView.findViewById(R.id.tv_datetime);
+        // Initialize views
+        TextInputLayout tilDatetime = dialogView.findViewById(R.id.til_datetime);
+        TextInputEditText editPicName = dialogView.findViewById(R.id.et_pic_name);
+        TextInputEditText editPicPhoneNumber = dialogView.findViewById(R.id.et_pic_phone_number);
+        TextInputEditText editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
+        TextInputEditText editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
+        TextInputEditText tvDatetime = dialogView.findViewById(R.id.tv_datetime);
         AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
         AutoCompleteTextView selectLocCity = dialogView.findViewById(R.id.select_weighing_location_city);
         AutoCompleteTextView selectDestProvince = dialogView.findViewById(R.id.select_destination_province);
         AutoCompleteTextView selectDestCity = dialogView.findViewById(R.id.select_destination_city);
 
-        // Autofill datetime
+        // Set current date and time
         tvDatetime.setText(DateTimeUtil.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        tilDatetime.setVisibility(View.VISIBLE);
 
-        // Autofill value from setting
+        // Autofill values from current settings
         observeSetting(() -> {
             editPicName.setText(currentSetting.pic_name);
             editPicPhoneNumber.setText(currentSetting.pic_phone_number);
         });
 
-        // Setup AutoCompleteTextView Weighing Location with adapter
+        // Set up AutoCompleteTextViews with location options
         setupOptionLocation(selectLocProvince, selectLocCity);
-
-        // Setup AutoCompleteTextView Destination with adapter
         setupOptionLocation(selectDestProvince, selectDestCity);
 
-        // Set up datetime picker
-        tvDatetime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDatetime));
-
-        // Variable to store selected city's ID
+        // Store selected city IDs
         final String[] deliveryDestinationID = new String[1];
+        final String[] weighingLocationID = new String[1];
+
         selectDestCity.setOnItemClickListener((parent, view, position, id) -> {
             SelectOptionWrapper selectedCity = (SelectOptionWrapper) parent.getAdapter().getItem(position);
             if (selectedCity != null) {
@@ -285,7 +292,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        final String[] weighingLocationID = new String[1];
         selectLocCity.setOnItemClickListener((parent, view, position, id) -> {
             SelectOptionWrapper selectedCity = (SelectOptionWrapper) parent.getAdapter().getItem(position);
             if (selectedCity != null) {
@@ -293,40 +299,41 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setView(dialogView)
-                .setTitle("Masukan data batch muatan")
-                .setPositiveButton("Simpan", (dialog, id) -> {
-                    String picName = editPicName.getText().toString();
-                    String picPhoneNumber = editPicPhoneNumber.getText().toString();
-                    String truckDriver = editTruckDriver.getText().toString();
-                    String truckDriverPhoneNumber = editTruckDriverPhoneNumber.getText().toString();
-                    String dateTime = tvDatetime.getText().toString();
+        // Show datetime picker when clicking on the datetime field
+        tvDatetime.setOnClickListener(view -> DateTimeUtil.showDateTimePicker(getChildFragmentManager(), tvDatetime));
 
-                    Batch batch = new Batch();
-                    batch.pic_name = picName;
-                    batch.pic_phone_number = picPhoneNumber;
-                    batch.datetime = DateTimeUtil.parseDateTime(dateTime);
-                    batch.start_date = DateTimeUtil.parseDateTime(dateTime);
-                    batch.truck_driver_name = truckDriver;
-                    batch.truck_driver_phone_number = truckDriverPhoneNumber;
-                    batch.unit = (currentSetting != null ? currentSetting.unit : "kg");
-                    batch.rice_price = (currentSetting != null ? currentSetting.rice_price : 0);
+        // Create and show the dialog
+        new AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setTitle("Masukan data batch muatan")
+            .setPositiveButton("Simpan", (dialog, id) -> {
+                // Create and populate batch object
+                Batch batch = new Batch();
+                batch.pic_name = Objects.requireNonNull(editPicName.getText()).toString();
+                batch.pic_phone_number = Objects.requireNonNull(editPicPhoneNumber.getText()).toString();
+                batch.datetime = DateTimeUtil.parseDateTime(Objects.requireNonNull(tvDatetime.getText()).toString());
+                batch.start_date = batch.datetime;
+                batch.truck_driver_name = Objects.requireNonNull(editTruckDriver.getText()).toString();
+                batch.truck_driver_phone_number = Objects.requireNonNull(editTruckDriverPhoneNumber.getText()).toString();
+                batch.unit = currentSetting != null ? currentSetting.unit : "kg";
+                batch.rice_price = currentSetting != null ? currentSetting.rice_price : 0;
 
-                    if (deliveryDestinationID[0] != null) {
-                        batch.delivery_destination_id = deliveryDestinationID[0];
-                    }
-                    if (weighingLocationID[0] != null) {
-                        batch.weighing_location_id = weighingLocationID[0];
-                    }
-                    homeViewModel.insertBatch(batch);
-                    Toast.makeText(requireContext(), "Batch muatan sudah aktif", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss());
+                if (deliveryDestinationID[0] != null) {
+                    batch.delivery_destination_id = deliveryDestinationID[0];
+                }
+                if (weighingLocationID[0] != null) {
+                    batch.weighing_location_id = weighingLocationID[0];
+                }
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                // Insert the batch into ViewModel and notify user
+                homeViewModel.insertBatch(batch);
+                Toast.makeText(requireContext(), "Batch muatan sudah aktif", Toast.LENGTH_SHORT).show();
+            })
+            .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss())
+            .create()
+            .show();
     }
+
 
     private void setupOptionLocation(AutoCompleteTextView selectProvince, AutoCompleteTextView selectCity) {
         locationViewModel.getAllProvinces().observe(getViewLifecycleOwner(), provinces -> {

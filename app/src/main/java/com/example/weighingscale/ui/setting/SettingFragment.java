@@ -1,7 +1,6 @@
 package com.example.weighingscale.ui.setting;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.ui.home.HomeViewModel;
 import com.example.weighingscale.ui.shared.SharedAdapter;
-import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.InputDirectiveUtil;
 import com.example.weighingscale.util.ValidationUtil;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SettingFragment extends Fragment {
 

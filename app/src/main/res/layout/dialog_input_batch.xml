@@ -5,185 +5,259 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/til_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lokasi Penimbangan"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="HardcodedText" />
-
-        <!-- PIC Name  -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_pic_name"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <!-- Setting-->
+        <LinearLayout
+            android:id="@+id/layout_setting"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/white"
-            android:layout_marginBottom="16dp">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_pic_name"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
+
+            <!-- Title-->
+            <TextView
+                android:id="@+id/til_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pengaturan"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="18sp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="HardcodedText" />
+            
+                <!-- Unit Selection -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_unit"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/select_unit"
+                    app:boxBackgroundColor="@color/white">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/actv_unit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Rice Price (per unit) -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_rice_price"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/rice_price_per_unit"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxStrokeWidth="2dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_rice_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Location-->
+        <LinearLayout
+            android:id="@+id/layout_location"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
+            <!-- Title-->
+            <TextView
+                android:id="@+id/til_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lokasi Penimbangan"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="18sp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <!-- PIC Name  -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_pic_name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/pic_name"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:boxBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_pic_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/pic_name"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- PIC Phone Number -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_pic_phone_number"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/pic_phone_number"
-            app:boxBackgroundColor="@color/white"
-            android:layout_marginBottom="16dp">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_pic_phone_number"
+            <!-- PIC Phone Number -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_pic_phone_number"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="@string/pic_phone_number"
+                app:boxBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_pic_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Datetime -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_datetime"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/choose_datetime"
-            app:boxBackgroundColor="@color/white"
-            android:layout_marginBottom="16dp">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tv_datetime"
+            <!-- Datetime -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_datetime"
+                android:visibility="gone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:focusable="true"
-                android:focusableInTouchMode="false"
-                android:clickable="true" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="@string/choose_datetime"
+                app:boxBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_datetime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Weighing Location Province -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_weighing_location_province"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Pilih Provinsi Penimbangan"
-            app:boxBackgroundColor="@color/white"
-            android:layout_marginBottom="16dp"
-            tools:ignore="HardcodedText">
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/select_weighing_location_province"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Weighing Location City -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_weighing_location__city"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Pilih Kota Penimbangan"
-            app:boxBackgroundColor="@color/white"
-            android:layout_marginBottom="16dp"
-            tools:ignore="HardcodedText">
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/select_weighing_location_city"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/til_destination"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tujuan Pengiriman"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="HardcodedText" />
-
-        <!-- Truck Driver  -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_truck_driver"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/white"
-            android:layout_marginBottom="16dp">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_truck_driver"
+            <!-- Weighing Location Province -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_weighing_location_province"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/truck_driver"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="Pilih Provinsi Penimbangan"
+                app:boxBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp"
+                tools:ignore="HardcodedText">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/select_weighing_location_province"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Truck Driver Phone Number -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_truck_driver_phone_number"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/truck_driver_phone_number"
-            app:boxBackgroundColor="@color/white"
-            android:layout_marginBottom="16dp">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_truck_driver_phone_number"
+            <!-- Weighing Location City -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_weighing_location__city"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="Pilih Kota Penimbangan"
+                app:boxBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp"
+                tools:ignore="HardcodedText">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/select_weighing_location_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
-
-
-        <!-- Destination Province -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_destination_province"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        <!-- Destination-->
+        <LinearLayout
+            android:id="@+id/layout_destination"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Pilih Provinsi Tujuan"
-            app:boxBackgroundColor="@color/white"
-            android:layout_marginBottom="16dp"
-            tools:ignore="HardcodedText">
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/select_destination_province"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- Title -->
+            <TextView
+                android:id="@+id/til_destination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tujuan Pengiriman"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="18sp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="HardcodedText" />
 
-        <!-- Destination City -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_destination_city"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Pilih Kota Tujuan"
-            app:boxBackgroundColor="@color/white"
-            android:layout_marginBottom="16dp"
-            tools:ignore="HardcodedText">
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/select_destination_city"
+            <!-- Truck Driver  -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_truck_driver"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_truck_driver"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/truck_driver"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Truck Driver Phone Number -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_truck_driver_phone_number"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/truck_driver_phone_number"
+                app:boxBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_truck_driver_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Destination Province -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_destination_province"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pilih Provinsi Tujuan"
+                app:boxBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp"
+                tools:ignore="HardcodedText">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/select_destination_province"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Destination City -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_destination_city"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pilih Kota Tujuan"
+                app:boxBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp"
+                tools:ignore="HardcodedText">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/select_destination_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
 
     </LinearLayout>
 </ScrollView>
