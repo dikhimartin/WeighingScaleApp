@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +29,9 @@ public class HistoryFragment extends Fragment {
 
     private HistoryViewModel historyViewModel;
     private HistoryAdapter adapter;
+    private RecyclerView recyclerView;
+    private ImageView imageNoData;
+    private TextView textNoData;
     private View deleteAllButton;
     private boolean isSelectionMode = false;
 
@@ -34,14 +39,21 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
-        setupRecyclerView(view);
+        initViews(view);
+        setupRecyclerView();
         setupViewModel();
-        setupDeleteAllButton(view);
+        setupDeleteAllButton();
         return view;
     }
 
-    private void setupRecyclerView(View view) {
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+    private void initViews(View view) {
+        recyclerView = view.findViewById(R.id.recycler_view);
+        imageNoData = view.findViewById(R.id.image_no_data);
+        textNoData = view.findViewById(R.id.text_no_data);
+        deleteAllButton = view.findViewById(R.id.button_delete_all);
+    }
+
+    private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
@@ -106,12 +118,12 @@ public class HistoryFragment extends Fragment {
             HistoryAdapter adapter = (HistoryAdapter) ((RecyclerView) requireView().findViewById(R.id.recycler_view)).getAdapter();
             if (adapter != null) {
                 adapter.submitList(batches);
+                toggleEmptyState(batches.isEmpty());
             }
         });
     }
 
-    private void setupDeleteAllButton(View view) {
-        deleteAllButton = view.findViewById(R.id.button_delete_all);
+    private void setupDeleteAllButton() {
         deleteAllButton.setOnClickListener(v -> {
             if (adapter != null) {
                 List<String> selectedIds = new ArrayList<>(adapter.getSelectedItems());
@@ -145,6 +157,18 @@ public class HistoryFragment extends Fragment {
             isSelectionMode = false; // Exit selection mode when no items are selected
         } else {
             deleteAllButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void toggleEmptyState(boolean isEmpty) {
+        if (isEmpty) {
+            recyclerView.setVisibility(View.GONE);
+            imageNoData.setVisibility(View.VISIBLE);
+            textNoData.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            imageNoData.setVisibility(View.GONE);
+            textNoData.setVisibility(View.GONE);
         }
     }
 }

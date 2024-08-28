@@ -70,4 +70,5 @@
     <string name="bag">karung (sak)</string>
     <string name="share">Bagikan</string>
     <string name="amount">Nilai</string>
+    <string name="no_data_available">Data belum ada</string>
 </resources>
