@@ -68,4 +68,6 @@
     <string name="choose_subdistrict">Pilih Kecamatan</string>
     <string name="choose_datetime">Tanggal dan Waktu</string>
     <string name="bag">karung (sak)</string>
+    <string name="share">Bagikan</string>
+    <string name="amount">Nilai</string>
 </resources>
