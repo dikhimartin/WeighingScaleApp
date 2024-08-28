@@ -46,19 +46,4 @@
         android:name="com.example.weighingscale.ui.device.DeviceFragment"
         android:label="@string/title_device"
         tools:layout="@layout/fragment_device" />
-
-    <!-- Note -->
-    <fragment
-        android:id="@+id/navigation_note"
-        android:name="com.example.weighingscale.ui.note.NoteFragment"
-        android:label="Note"
-        tools:layout="@layout/fragment_note">
-        <action
-            android:id="@+id/action_noteFragment_to_addEditNoteFragment"
-            app:destination="@id/form_note_fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/form_note_fragment"
-        android:name="com.example.weighingscale.ui.note.FormNoteFragment"
-        tools:layout="@layout/fragment_note_form" />
 </navigation>
