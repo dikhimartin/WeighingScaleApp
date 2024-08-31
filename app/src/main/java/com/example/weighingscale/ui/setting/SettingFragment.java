@@ -108,14 +108,14 @@ public class SettingFragment extends Fragment {
     private boolean validateInputs(String picName, String picPhoneNumber, long ricePrice, String unit) {
         boolean isValid = true;
 
-        if (ValidationUtil.isFieldEmpty(picName)) {
+        if (ValidationUtil.isValueEmpty(picName)) {
             ValidationUtil.setFieldError(etPicName, requireContext(), R.string.is_required);
             isValid = false;
         } else {
             etPicName.setError(null);
         }
 
-        if (ValidationUtil.isFieldEmpty(picPhoneNumber)) {
+        if (ValidationUtil.isValueEmpty(picPhoneNumber)) {
             ValidationUtil.setFieldError(etPicPhoneNumber, requireContext(), R.string.is_required);
             isValid = false;
         } else {

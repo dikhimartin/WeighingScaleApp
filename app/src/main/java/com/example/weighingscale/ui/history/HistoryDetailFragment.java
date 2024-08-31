@@ -30,6 +30,7 @@ import com.example.weighingscale.ui.shared.SharedAdapter;
 import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.InputDirectiveUtil;
 import com.example.weighingscale.util.SafeValueUtil;
+import com.example.weighingscale.util.ValidationUtil;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -238,10 +239,20 @@ public class HistoryDetailFragment extends Fragment {
         actvUnit.setText(settingViewModel.getUnitDisplayText(batch.unit), false);
         etRicePrice.setText(String.valueOf(batch.rice_price));
 
-        selectLocProvince.setText(batch.weighing_location_province_name);
-        selectLocCity.setText(batch.weighing_location_city_type + " " + batch.weighing_location_city_name);
-        selectDestProvince.setText(batch.delivery_destination_province_name);
-        selectDestCity.setText(batch.delivery_destination_city_type + " " + batch.delivery_destination_city_name);
+        if (!ValidationUtil.isValueEmpty(batch.weighing_location_province_name)) {
+            selectLocProvince.setText(batch.weighing_location_province_name);
+        }
+        if (!ValidationUtil.isValueEmpty(batch.weighing_location_city_type) ||
+            !ValidationUtil.isValueEmpty(batch.weighing_location_city_name)) {
+            selectLocCity.setText(batch.weighing_location_city_type + " " + batch.weighing_location_city_name);
+        }
+        if (!ValidationUtil.isValueEmpty(batch.delivery_destination_province_name)) {
+            selectDestProvince.setText(batch.delivery_destination_province_name);
+        }
+        if (!ValidationUtil.isValueEmpty(batch.delivery_destination_city_type) ||
+            !ValidationUtil.isValueEmpty(batch.delivery_destination_city_name)) {
+            selectDestCity.setText(batch.delivery_destination_city_type + " " + batch.delivery_destination_city_name);
+        }
 
         // Setup AutoCompleteTextView adapters
         setupOptionLocation(selectLocProvince, selectLocCity);
@@ -323,5 +334,4 @@ public class HistoryDetailFragment extends Fragment {
             }
         });
     }
-
 }
