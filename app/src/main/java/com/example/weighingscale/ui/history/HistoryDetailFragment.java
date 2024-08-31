@@ -21,8 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.AddressDTO;
 import com.example.weighingscale.data.dto.BatchDTO;
-import com.example.weighingscale.data.model.City;
-import com.example.weighingscale.data.model.Province;
 import com.example.weighingscale.ui.setting.SettingViewModel;
 import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.LocationViewModel;
@@ -215,7 +213,7 @@ public class HistoryDetailFragment extends Fragment {
         TextInputEditText etTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
         AutoCompleteTextView actvUnit = dialogView.findViewById(R.id.actv_unit);
         TextInputEditText etRicePrice = dialogView.findViewById(R.id.et_rice_price);
-        AutoCompleteTextView selectLocation = dialogView.findViewById(R.id.select_weighing_location_city);
+        AutoCompleteTextView selectLocation = dialogView.findViewById(R.id.select_weighing_location);
         AutoCompleteTextView selectDestination = dialogView.findViewById(R.id.select_destination_city);
 
         // Show setting layout
@@ -258,6 +256,10 @@ public class HistoryDetailFragment extends Fragment {
         // Setup AutoCompleteTextView adapters
         setupOptionLocation(selectLocation);
         setupOptionLocation(selectDestination);
+
+        // Set up backspace clear-all
+        InputDirectiveUtil.setClearAllAutoCompleteTextViewOnBackspace(selectLocation);
+        InputDirectiveUtil.setClearAllAutoCompleteTextViewOnBackspace(selectDestination);
 
         // Store selected city IDs
         final String[] deliveryDestinationID = new String[1];

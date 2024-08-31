@@ -3,11 +3,9 @@ package com.example.weighingscale.ui.home;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AutoCompleteTextView;
@@ -24,8 +22,6 @@ import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.AddressDTO;
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
-import com.example.weighingscale.data.model.City;
-import com.example.weighingscale.data.model.Province;
 import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.databinding.FragmentHomeBinding;
 import com.example.weighingscale.state.StateConnecting;
@@ -36,20 +32,16 @@ import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.DateTimeUtil;
 import com.example.weighingscale.util.FormatterUtil;
-import com.example.weighingscale.util.LogModelUtils;
-import com.example.weighingscale.util.SafeValueUtil;
+import com.example.weighingscale.util.InputDirectiveUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
 
@@ -267,7 +259,7 @@ public class HomeFragment extends Fragment {
         TextInputEditText editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
         TextInputEditText editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
         TextInputEditText tvDatetime = dialogView.findViewById(R.id.tv_datetime);
-        AutoCompleteTextView selectLocation = dialogView.findViewById(R.id.select_weighing_location_city);
+        AutoCompleteTextView selectLocation = dialogView.findViewById(R.id.select_weighing_location);
         AutoCompleteTextView selectDestination = dialogView.findViewById(R.id.select_destination_city);
 
         // Set current date and time
@@ -283,6 +275,10 @@ public class HomeFragment extends Fragment {
         // Set up AutoCompleteTextViews with location options
         setupOptionLocation(selectLocation);
         setupOptionLocation(selectDestination);
+
+        // Set up backspace clear-all
+        InputDirectiveUtil.setClearAllAutoCompleteTextViewOnBackspace(selectLocation);
+        InputDirectiveUtil.setClearAllAutoCompleteTextViewOnBackspace(selectDestination);
 
         // Store selected city IDs
         final String[] deliveryDestinationID = new String[1];

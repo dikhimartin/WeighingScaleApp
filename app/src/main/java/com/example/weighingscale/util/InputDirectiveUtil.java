@@ -1,8 +1,17 @@
 package com.example.weighingscale.util;
 
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -53,4 +62,17 @@ public class InputDirectiveUtil {
             return 0;
         }
     }
+
+    public static void setClearAllAutoCompleteTextViewOnBackspace(final AutoCompleteTextView autoCompleteTextView) {
+        autoCompleteTextView.setFilters(new InputFilter[]{
+                (source, start, end, dest, dstart, dend) -> {
+                    if (source.length() == 0 && dstart > 0) {
+                        autoCompleteTextView.setText("");
+                        return "";
+                    }
+                    return source;
+                }
+        });
+    }
+
 }

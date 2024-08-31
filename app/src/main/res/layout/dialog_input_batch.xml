@@ -143,7 +143,7 @@
 
             <!-- Weighing Location City -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_weighing_location__city"
+                android:id="@+id/til_weighing_location"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
                 android:layout_marginBottom="16dp"
                 tools:ignore="HardcodedText">
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/select_weighing_location_city"
+                    android:id="@+id/select_weighing_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
