@@ -3,37 +3,39 @@ package com.example.weighingscale.data.repository;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+
+import com.example.weighingscale.data.dto.AddressDTO;
 import com.example.weighingscale.data.local.database.AppDatabase;
 import com.example.weighingscale.data.local.database.dao.CityDao;
 import com.example.weighingscale.data.local.database.dao.ProvinceDao;
-import com.example.weighingscale.data.local.database.dao.SubdistrictDao;
 import com.example.weighingscale.data.model.Province;
 import com.example.weighingscale.data.model.City;
-import com.example.weighingscale.data.model.Subdistrict;
 
 import java.util.List;
 
 public class AddressRepository {
-    private ProvinceDao provinceDao;
-    private CityDao cityDao;
-    private SubdistrictDao subdistrictDao;
+    private final ProvinceDao provinceDao;
+    private final CityDao cityDao;
 
     public AddressRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
         provinceDao = database.provinceDao();
         cityDao = database.cityDao();
-        subdistrictDao = database.subdistrictDao();
+    }
+
+    public LiveData<List<AddressDTO>> getAddress() {
+        return cityDao.getDatas();
     }
 
     public LiveData<List<Province>> getAllProvinces() {
         return provinceDao.getAll();
     }
 
-    public LiveData<List<City>> getCitiesByProvinceID(String provinceID) {
-        return cityDao.getCitiesByProvinceId(provinceID);
+    public LiveData<List<City>> getAllCities() {
+        return cityDao.getAll();
     }
 
-    public LiveData<List<Subdistrict>> getSubdistrictsByCityId(String cityID) {
-        return subdistrictDao.getSubdistrictsByCityId(cityID);
+    public LiveData<List<City>> getCitiesByProvinceID(String provinceID) {
+        return cityDao.getCitiesByProvinceID(provinceID);
     }
 }

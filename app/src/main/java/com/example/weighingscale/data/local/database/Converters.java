@@ -1,7 +1,6 @@
 package com.example.weighingscale.data.local.database;
 
 import androidx.room.TypeConverter;
-
 import java.util.Date;
 
 public class Converters {

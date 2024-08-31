@@ -141,22 +141,6 @@
                     android:clickable="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Weighing Location Province -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_weighing_location_province"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Pilih Provinsi Penimbangan"
-                app:boxBackgroundColor="@color/white"
-                android:layout_marginBottom="16dp"
-                tools:ignore="HardcodedText">
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/select_weighing_location_province"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
             <!-- Weighing Location City -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_weighing_location__city"
@@ -223,22 +207,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Destination Province -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_destination_province"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Pilih Provinsi Tujuan"
-                app:boxBackgroundColor="@color/white"
-                android:layout_marginBottom="16dp"
-                tools:ignore="HardcodedText">
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/select_destination_province"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Destination City -->

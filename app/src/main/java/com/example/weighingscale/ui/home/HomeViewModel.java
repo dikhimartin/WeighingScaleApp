@@ -22,13 +22,11 @@ import java.util.List;
 public class HomeViewModel extends AndroidViewModel {
     private final BatchRepository batchRepository;
     private final BatchDetailRepository batchDetailRepository;
-    private final AddressRepository addressRepository;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
         batchRepository = new BatchRepository(application);
         batchDetailRepository = new BatchDetailRepository(application);
-        addressRepository = new AddressRepository(application);
     }
 
     public LiveData<List<BatchDetail>> getBatchDetails(String batchId) {

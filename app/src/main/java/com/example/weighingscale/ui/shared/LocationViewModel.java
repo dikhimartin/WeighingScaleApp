@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
+import com.example.weighingscale.data.dto.AddressDTO;
 import com.example.weighingscale.data.model.City;
 import com.example.weighingscale.data.model.Province;
 import com.example.weighingscale.data.repository.AddressRepository;
@@ -22,12 +23,20 @@ public class LocationViewModel extends AndroidViewModel {
     }
 
     // Address Methods
+    public LiveData<List<AddressDTO>> getAddress() {
+        return addressRepository.getAddress();
+    }    
+
     public LiveData<List<Province>> getAllProvinces() {
         return addressRepository.getAllProvinces();
     }
 
-    public static LiveData<List<City>> getCitiesByProvinceId(String provinceId) {
-        return addressRepository.getCitiesByProvinceID(provinceId);
+    public LiveData<List<City>> getAllCities() {
+        return addressRepository.getAllCities();
+    }
+
+    public static LiveData<List<City>> getCitiesByProvinceID(String provinceID) {
+        return addressRepository.getCitiesByProvinceID(provinceID);
     }
 }
 

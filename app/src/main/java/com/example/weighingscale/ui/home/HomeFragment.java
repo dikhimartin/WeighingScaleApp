@@ -3,6 +3,7 @@ package com.example.weighingscale.ui.home;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.weighingscale.R;
+import com.example.weighingscale.data.dto.AddressDTO;
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.data.model.City;
@@ -34,6 +36,8 @@ import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.DateTimeUtil;
 import com.example.weighingscale.util.FormatterUtil;
+import com.example.weighingscale.util.LogModelUtils;
+import com.example.weighingscale.util.SafeValueUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -45,6 +49,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
 
@@ -262,10 +267,8 @@ public class HomeFragment extends Fragment {
         TextInputEditText editTruckDriver = dialogView.findViewById(R.id.et_truck_driver);
         TextInputEditText editTruckDriverPhoneNumber = dialogView.findViewById(R.id.et_truck_driver_phone_number);
         TextInputEditText tvDatetime = dialogView.findViewById(R.id.tv_datetime);
-        AutoCompleteTextView selectLocProvince = dialogView.findViewById(R.id.select_weighing_location_province);
-        AutoCompleteTextView selectLocCity = dialogView.findViewById(R.id.select_weighing_location_city);
-        AutoCompleteTextView selectDestProvince = dialogView.findViewById(R.id.select_destination_province);
-        AutoCompleteTextView selectDestCity = dialogView.findViewById(R.id.select_destination_city);
+        AutoCompleteTextView selectLocation = dialogView.findViewById(R.id.select_weighing_location_city);
+        AutoCompleteTextView selectDestination = dialogView.findViewById(R.id.select_destination_city);
 
         // Set current date and time
         tvDatetime.setText(DateTimeUtil.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -278,21 +281,21 @@ public class HomeFragment extends Fragment {
         });
 
         // Set up AutoCompleteTextViews with location options
-        setupOptionLocation(selectLocProvince, selectLocCity);
-        setupOptionLocation(selectDestProvince, selectDestCity);
+        setupOptionLocation(selectLocation);
+        setupOptionLocation(selectDestination);
 
         // Store selected city IDs
         final String[] deliveryDestinationID = new String[1];
         final String[] weighingLocationID = new String[1];
 
-        selectDestCity.setOnItemClickListener((parent, view, position, id) -> {
+        selectDestination.setOnItemClickListener((parent, view, position, id) -> {
             SelectOptionWrapper selectedCity = (SelectOptionWrapper) parent.getAdapter().getItem(position);
             if (selectedCity != null) {
                 deliveryDestinationID[0] = selectedCity.getId();
             }
         });
 
-        selectLocCity.setOnItemClickListener((parent, view, position, id) -> {
+        selectLocation.setOnItemClickListener((parent, view, position, id) -> {
             SelectOptionWrapper selectedCity = (SelectOptionWrapper) parent.getAdapter().getItem(position);
             if (selectedCity != null) {
                 weighingLocationID[0] = selectedCity.getId();
@@ -335,32 +338,23 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void setupOptionLocation(AutoCompleteTextView selectProvince, AutoCompleteTextView selectCity) {
-        locationViewModel.getAllProvinces().observe(getViewLifecycleOwner(), provinces -> {
-            if (provinces != null && !provinces.isEmpty()) {
-                List<SelectOptionWrapper> provinceWrappers = new ArrayList<>();
-                for (Province province : provinces) {
-                    provinceWrappers.add(new SelectOptionWrapper(province.getID(), province.getName()));
-                }
-                EntityAdapter provinceAdapter = new EntityAdapter(requireContext(), provinceWrappers);
-                selectProvince.setAdapter(provinceAdapter);
-
-                selectProvince.setOnItemClickListener((parent, view, position, id) -> {
-                    SelectOptionWrapper selectedWrapper = (SelectOptionWrapper) parent.getAdapter().getItem(position);
-                    if (selectedWrapper != null) {
-                        LocationViewModel.getCitiesByProvinceId(selectedWrapper.getId()).observe(getViewLifecycleOwner(), cities -> {
-                            if (cities != null && !cities.isEmpty()) {
-                                List<SelectOptionWrapper> cityWrappers = new ArrayList<>();
-                                for (City city : cities) {
-                                    cityWrappers.add(new SelectOptionWrapper(city.getID(), city.getType() + " " + city.getName()));
-                                }
-                                EntityAdapter cityAdapter = new EntityAdapter(requireContext(), cityWrappers);
-                                selectCity.setAdapter(cityAdapter);
-                            }
-                        });
-                    }
-                });
+    private void setupOptionLocation(AutoCompleteTextView selectAddress) {
+        locationViewModel.getAddress().observe(getViewLifecycleOwner(), addresses -> {
+            if (addresses == null || addresses.isEmpty()) {
+                return; // Early return if the address list is null or empty
             }
+            List<SelectOptionWrapper> addressWrappers = new ArrayList<>();
+            for (AddressDTO address : addresses) {
+                String formattedAddress = String.format("%s %s - %s",
+                    address.getCityType() != null ? address.getCityType() : "",
+                    address.getCityName() != null ? address.getCityName() : "",
+                    address.getProvinceName() != null ? address.getProvinceName() : "");
+
+                addressWrappers.add(new SelectOptionWrapper(address.getID(), formattedAddress));
+            }
+
+            EntityAdapter addressAdapter = new EntityAdapter(requireContext(), addressWrappers);
+            selectAddress.setAdapter(addressAdapter);
         });
     }
 
