@@ -55,5 +55,7 @@ public class Batch {
     public String getUnit() { return unit; }
 
     public Date getDatetime() { return datetime; }
+
+    public Date getStartDate() { return start_date; }
 }
 

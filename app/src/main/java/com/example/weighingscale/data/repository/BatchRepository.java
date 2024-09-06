@@ -1,10 +1,9 @@
 package com.example.weighingscale.data.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
-import android.util.Log;
-
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 
 import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.data.local.database.AppDatabase;
@@ -13,6 +12,9 @@ import com.example.weighingscale.data.local.database.dao.BatchDetailDao;
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +28,19 @@ public class BatchRepository {
         batchDetailDao = database.batchDetailDao();
     }
 
-    public LiveData<List<BatchDTO>> getDatas(String searchQuery, Date startDate, Date endDate) {
-        return batchDao.getDatas(searchQuery, startDate, endDate);
+    public LiveData<List<BatchDTO>> getDatas(String searchQuery, Date startDate, Date endDate, @Nullable String sortOrder) {
+        LiveData<List<BatchDTO>> data = batchDao.getDatas(searchQuery, startDate, endDate);
+
+        return Transformations.map(data, list -> {
+            if (list == null) {
+                return null;
+            }
+
+            List<BatchDTO> sortedList = new ArrayList<>(list);
+            Collections.sort(sortedList, getComparator(sortOrder));
+
+            return sortedList;
+        });
     }
 
     public LiveData<BatchDTO> getDataByID(String id) {
@@ -87,5 +100,24 @@ public class BatchRepository {
 
     public void deleteAll() {
         AppDatabase.databaseWriteExecutor.execute(batchDao::deleteAll);
+    }
+
+    // Method to get Comparator based on sortOrder
+    private Comparator<BatchDTO> getComparator(@Nullable String sortOrder) {
+        if ("ASC".equalsIgnoreCase(sortOrder)) {
+            return new Comparator<BatchDTO>() {
+                @Override
+                public int compare(BatchDTO o1, BatchDTO o2) {
+                    return o1.getStartDate().compareTo(o2.getStartDate());
+                }
+            };
+        } else {
+            return new Comparator<BatchDTO>() {
+                @Override
+                public int compare(BatchDTO o1, BatchDTO o2) {
+                    return o2.getStartDate().compareTo(o1.getStartDate());
+                }
+            };
+        }
     }
 }

@@ -70,7 +70,7 @@
     <string name="bag">karung (sak)</string>
     <string name="share">Bagikan</string>
     <string name="amount">Nilai</string>
-    <string name="no_data_available">Data belum ada</string>
+    <string name="no_data_available">Data tidak ditemukan</string>
     <string name="filter">Filter</string>
     <string name="search_hint">Cari data</string>
     <string name="choose_startdate">Pilih tanggal awal</string>
@@ -79,4 +79,5 @@
     <string name="reset">Reset</string>
     <string name="apply">Terapkan</string>
     <string name="choose_date_range">Pilih rentang tanggal</string>
+    <string name="sort">Urut</string>
 </resources>

@@ -44,11 +44,11 @@ public class HistoryViewModel extends AndroidViewModel {
     }
 
     // Data model
-    public LiveData<List<BatchDTO>> getAllBatch(@Nullable String searchQuery, @Nullable Date startDate, @Nullable Date endDate) {
+    public LiveData<List<BatchDTO>> getAllBatch(@Nullable String searchQuery, @Nullable Date startDate, @Nullable Date endDate, @Nullable String sortOrder) {
         if (searchQuery != null && searchQuery.trim().isEmpty()) {
             searchQuery = null;
         }
-        return batchRepository.getDatas(searchQuery, startDate, endDate);
+        return batchRepository.getDatas(searchQuery, startDate, endDate, sortOrder);
     }
 
     public LiveData<BatchDTO> getBatchByID(String id) {

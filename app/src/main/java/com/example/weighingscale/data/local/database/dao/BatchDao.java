@@ -44,10 +44,8 @@ public interface BatchDao {
            "AND (:startDate IS NULL OR :endDate IS NULL OR " +
            "     b.start_date BETWEEN :startDate AND :endDate OR " +
            "     b.end_date BETWEEN :startDate AND :endDate) " +
-           "GROUP BY b.id " +
-           "ORDER BY b.datetime DESC")
+           "GROUP BY b.id")
     LiveData<List<BatchDTO>> getDatas(@Nullable String searchQuery, @Nullable Date startDate, @Nullable Date endDate);
-
 
     @Query(
         "SELECT " +

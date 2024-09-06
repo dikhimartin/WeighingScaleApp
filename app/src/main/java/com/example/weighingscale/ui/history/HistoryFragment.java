@@ -35,10 +35,11 @@ public class HistoryFragment extends Fragment {
     private HistoryAdapter adapter;
     private RecyclerView recyclerView;
     private EditText searchField;
-    private ImageView imageNoData, filterIcon;
+    private ImageView imageNoData, filterIcon, sortIcon;
     private TextView textNoData;
     private View deleteAllButton;
     private boolean isSelectionMode = false;
+    private boolean isSortAsc = false;
 
     @Nullable
     @Override
@@ -50,6 +51,7 @@ public class HistoryFragment extends Fragment {
         setupViewModel();
         setupDeleteAllButton();
         setupFilterButton();
+        setupSortButton();
         return view;
     }
 
@@ -58,8 +60,9 @@ public class HistoryFragment extends Fragment {
         imageNoData = view.findViewById(R.id.image_no_data);
         textNoData = view.findViewById(R.id.text_no_data);
         deleteAllButton = view.findViewById(R.id.button_delete_all);
-        filterIcon = view.findViewById(R.id.icon_filter);
         searchField = view.findViewById(R.id.search_field);
+        filterIcon = view.findViewById(R.id.icon_filter);
+        sortIcon = view.findViewById(R.id.icon_sort);
     }
 
     private void setupSearchField() {
@@ -92,14 +95,45 @@ public class HistoryFragment extends Fragment {
         });
     }
 
+    private void setupSortButton() {
+        // Set initial icon to descending (since we default to DESC)
+        sortIcon.setImageResource(R.drawable.ic_sort_desc);
+        sortIcon.setOnClickListener(v -> {
+            // Toggle sorting order
+            isSortAsc = !isSortAsc;
+            // Change icon based on sort order
+            if (isSortAsc) {
+                sortIcon.setImageResource(R.drawable.ic_sort_asc);  // ASC icon
+            } else {
+                sortIcon.setImageResource(R.drawable.ic_sort_desc); // DESC icon
+            }
+            // Apply sorting
+            applySorting();
+        });
+    }
+
     private void applyFilters(String searchQuery, Date startDate, Date endDate) {
         historyViewModel.setFilter("start_date", startDate);
         historyViewModel.setFilter("end_date", endDate);
         historyViewModel.setFilter("search_query", searchQuery);
-        historyViewModel.getAllBatch("%" + searchQuery + "%", startDate, endDate).observe(getViewLifecycleOwner(), batches -> {
+        historyViewModel.getAllBatch("%" + searchQuery + "%", startDate, endDate, isSortAsc ? "ASC" : "DESC").observe(getViewLifecycleOwner(), batches -> {
             adapter.submitList(batches);
             toggleEmptyState(batches.isEmpty());
         });
+    }
+
+    private void applySorting() {
+        String searchQuery = searchField.getText().toString().trim();
+        Date startDate = (Date) historyViewModel.getFilter("start_date");
+        Date endDate = (Date) historyViewModel.getFilter("end_date");
+        Log.d("SORT_APANICH", String.valueOf(isSortAsc));
+
+        // Fetch sorted data by calling ViewModel method with sort order DESC by default
+        historyViewModel.getAllBatch("%" + searchQuery + "%", startDate, endDate, isSortAsc ? "ASC" : "DESC")
+            .observe(getViewLifecycleOwner(), batches -> {
+                adapter.submitList(batches);
+                toggleEmptyState(batches.isEmpty());
+            });
     }
 
     private void setupRecyclerView() {
@@ -163,7 +197,7 @@ public class HistoryFragment extends Fragment {
 
     private void setupViewModel() {
         historyViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
-        historyViewModel.getAllBatch(null, null, null).observe(getViewLifecycleOwner(), batches -> {
+        historyViewModel.getAllBatch(null, null, null, null).observe(getViewLifecycleOwner(), batches -> {
             HistoryAdapter adapter = (HistoryAdapter) ((RecyclerView) requireView().findViewById(R.id.recycler_view)).getAdapter();
             if (adapter != null) {
                 adapter.submitList(batches);

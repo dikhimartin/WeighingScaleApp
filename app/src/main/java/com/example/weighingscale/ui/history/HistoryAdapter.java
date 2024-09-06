@@ -55,7 +55,7 @@ public class HistoryAdapter extends ListAdapter<BatchDTO, HistoryAdapter.History
     public void onBindViewHolder(@NonNull HistoryHolder holder, int position) {
         BatchDTO currentData = getItem(position);
         holder.textViewTitle.setText(currentData.getTitle());
-        holder.textViewDateTime.setText(DateTimeUtil.formatDateTime(currentData.getDatetime(), "dd MMMM yyyy HH:mm"));
+        holder.textViewDateTime.setText(DateTimeUtil.formatDateTime(currentData.start_date, "dd MMMM yyyy HH:mm"));
         holder.textViewTotalWeight.setText(String.format("%d %s", currentData.getTotalAmount(), currentData.getUnit()));
 
         holder.itemView.setBackgroundColor(selectedItems.contains(currentData.getID()) ?
