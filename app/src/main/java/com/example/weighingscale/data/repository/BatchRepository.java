@@ -19,17 +19,15 @@ import java.util.List;
 public class BatchRepository {
     private final BatchDao batchDao;
     private final BatchDetailDao batchDetailDao;
-    private final LiveData<List<BatchDTO>> listBatch;
 
     public BatchRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
         batchDao = database.batchDao();
         batchDetailDao = database.batchDetailDao();
-        listBatch = batchDao.getDatas();
     }
 
-    public LiveData<List<BatchDTO>> getDatas() {
-        return listBatch;
+    public LiveData<List<BatchDTO>> getDatas(String searchQuery, Date startDate, Date endDate) {
+        return batchDao.getDatas(searchQuery, startDate, endDate);
     }
 
     public LiveData<BatchDTO> getDataByID(String id) {

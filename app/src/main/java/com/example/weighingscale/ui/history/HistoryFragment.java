@@ -2,9 +2,12 @@ package com.example.weighingscale.ui.history;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class HistoryFragment extends Fragment {
@@ -30,7 +34,8 @@ public class HistoryFragment extends Fragment {
     private HistoryViewModel historyViewModel;
     private HistoryAdapter adapter;
     private RecyclerView recyclerView;
-    private ImageView imageNoData;
+    private EditText searchField;
+    private ImageView imageNoData, filterIcon;
     private TextView textNoData;
     private View deleteAllButton;
     private boolean isSelectionMode = false;
@@ -40,9 +45,11 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         initViews(view);
+        setupSearchField();
         setupRecyclerView();
         setupViewModel();
         setupDeleteAllButton();
+        setupFilterButton();
         return view;
     }
 
@@ -51,6 +58,48 @@ public class HistoryFragment extends Fragment {
         imageNoData = view.findViewById(R.id.image_no_data);
         textNoData = view.findViewById(R.id.text_no_data);
         deleteAllButton = view.findViewById(R.id.button_delete_all);
+        filterIcon = view.findViewById(R.id.icon_filter);
+        searchField = view.findViewById(R.id.search_field);
+    }
+
+    private void setupSearchField() {
+        searchField.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String query = searchField.getText().toString().trim();
+                applyFilters(query, null, null);  // Apply filter with search query
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void setupFilterButton() {
+        filterIcon.setOnClickListener(v -> {
+            FilterFragment filterFragment = new FilterFragment();
+
+            // Set Bundle to send data
+            Bundle args = new Bundle();
+            args.putSerializable("start_date", (Date) historyViewModel.getFilter("start_date"));
+            args.putSerializable("end_date", (Date) historyViewModel.getFilter("end_date"));
+            filterFragment.setArguments(args);
+
+            // Set listener to get result filter
+            filterFragment.setFilterListener((startDate, endDate) -> {
+                String query = searchField.getText().toString().trim();
+                applyFilters(query, startDate, endDate);
+            });
+            filterFragment.show(getParentFragmentManager(), filterFragment.getTag());
+        });
+    }
+
+    private void applyFilters(String searchQuery, Date startDate, Date endDate) {
+        historyViewModel.setFilter("start_date", startDate);
+        historyViewModel.setFilter("end_date", endDate);
+        historyViewModel.setFilter("search_query", searchQuery);
+        historyViewModel.getAllBatch("%" + searchQuery + "%", startDate, endDate).observe(getViewLifecycleOwner(), batches -> {
+            adapter.submitList(batches);
+            toggleEmptyState(batches.isEmpty());
+        });
     }
 
     private void setupRecyclerView() {
@@ -114,7 +163,7 @@ public class HistoryFragment extends Fragment {
 
     private void setupViewModel() {
         historyViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
-        historyViewModel.getAllBatch().observe(getViewLifecycleOwner(), batches -> {
+        historyViewModel.getAllBatch(null, null, null).observe(getViewLifecycleOwner(), batches -> {
             HistoryAdapter adapter = (HistoryAdapter) ((RecyclerView) requireView().findViewById(R.id.recycler_view)).getAdapter();
             if (adapter != null) {
                 adapter.submitList(batches);
