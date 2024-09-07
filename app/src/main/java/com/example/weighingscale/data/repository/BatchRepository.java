@@ -29,8 +29,11 @@ public class BatchRepository {
     }
 
     public LiveData<List<BatchDTO>> getDatas(String searchQuery, Date startDate, Date endDate, @Nullable String sortOrder) {
-        LiveData<List<BatchDTO>> data = batchDao.getDatas(searchQuery, startDate, endDate);
-
+        LiveData<List<BatchDTO>> data = batchDao.getDatas(
+                searchQuery,
+                startDate,
+                endDate
+        );
         return Transformations.map(data, list -> {
             if (list == null) {
                 return null;

@@ -42,8 +42,7 @@ public interface BatchDao {
            "       wlc.name LIKE :searchQuery OR " +
            "       ddc.name LIKE :searchQuery) " +
            "AND (:startDate IS NULL OR :endDate IS NULL OR " +
-           "     b.start_date BETWEEN :startDate AND :endDate OR " +
-           "     b.end_date BETWEEN :startDate AND :endDate) " +
+           "     b.start_date BETWEEN :startDate AND :endDate) " +
            "GROUP BY b.id")
     LiveData<List<BatchDTO>> getDatas(@Nullable String searchQuery, @Nullable Date startDate, @Nullable Date endDate);
 

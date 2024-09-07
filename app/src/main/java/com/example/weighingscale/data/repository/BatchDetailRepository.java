@@ -11,8 +11,8 @@ import com.example.weighingscale.data.model.BatchDetail;
 import java.util.List;
 
 public class BatchDetailRepository {
-    private BatchDetailDao batchDetailDao;
-    private LiveData<List<BatchDetail>> listBatchDetail;
+    private final BatchDetailDao batchDetailDao;
+    private final LiveData<List<BatchDetail>> listBatchDetail;
 
     public BatchDetailRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);

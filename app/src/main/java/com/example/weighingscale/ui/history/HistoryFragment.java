@@ -69,7 +69,9 @@ public class HistoryFragment extends Fragment {
         searchField.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 String query = searchField.getText().toString().trim();
-                applyFilters(query, null, null);  // Apply filter with search query
+                Date startDate = (Date) historyViewModel.getFilter("start_date");
+                Date endDate = (Date) historyViewModel.getFilter("end_date");
+                applyFilters(query, startDate, endDate);  // Apply filter with search query
                 return true;
             }
             return false;
@@ -113,6 +115,8 @@ public class HistoryFragment extends Fragment {
     }
 
     private void applyFilters(String searchQuery, Date startDate, Date endDate) {
+        Log.d("APPLY_FILTER", String.valueOf(startDate));
+        Log.d("APPLY_FILTER", String.valueOf(endDate));
         historyViewModel.setFilter("start_date", startDate);
         historyViewModel.setFilter("end_date", endDate);
         historyViewModel.setFilter("search_query", searchQuery);
@@ -126,8 +130,6 @@ public class HistoryFragment extends Fragment {
         String searchQuery = searchField.getText().toString().trim();
         Date startDate = (Date) historyViewModel.getFilter("start_date");
         Date endDate = (Date) historyViewModel.getFilter("end_date");
-        Log.d("SORT_APANICH", String.valueOf(isSortAsc));
-
         // Fetch sorted data by calling ViewModel method with sort order DESC by default
         historyViewModel.getAllBatch("%" + searchQuery + "%", startDate, endDate, isSortAsc ? "ASC" : "DESC")
             .observe(getViewLifecycleOwner(), batches -> {
