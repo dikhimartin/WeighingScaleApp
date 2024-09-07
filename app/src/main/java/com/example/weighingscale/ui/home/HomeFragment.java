@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        adapter = new LogAdapter(requireContext());
+        adapter = new LogAdapter(requireContext(), currentSetting);
         recyclerView.setAdapter(adapter);
 
         // Observe active batch

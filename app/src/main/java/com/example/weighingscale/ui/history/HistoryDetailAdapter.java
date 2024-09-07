@@ -9,13 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.databinding.ItemHistoryDetailBinding;
 import com.example.weighingscale.util.DateTimeUtil;
 import java.util.Locale;
 
 public class HistoryDetailAdapter extends ListAdapter<BatchDetail, HistoryDetailAdapter.BatchDetailHolder> {
+    private final Batch currentBatch;
+
+    public HistoryDetailAdapter(Context context, Batch batch) {
+        super(DIFF_CALLBACK);
+        this.currentBatch = batch;
+    }
 
     private static final DiffUtil.ItemCallback<BatchDetail> DIFF_CALLBACK = new DiffUtil.ItemCallback<BatchDetail>() {
         @Override
@@ -30,10 +36,6 @@ public class HistoryDetailAdapter extends ListAdapter<BatchDetail, HistoryDetail
         }
     };
 
-    public HistoryDetailAdapter(Context context) {
-        super(DIFF_CALLBACK);
-    }
-
     @NonNull
     @Override
     public BatchDetailHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,9 +46,9 @@ public class HistoryDetailAdapter extends ListAdapter<BatchDetail, HistoryDetail
     @Override
     public void onBindViewHolder(@NonNull BatchDetailHolder holder, int position) {
         BatchDetail currentData = getItem(position);
-        if (currentData == null) return; // Early return if null
+        if (currentData == null) return;
 
-        holder.bind(currentData);
+        holder.bind(currentData, currentBatch);
     }
 
     public static class BatchDetailHolder extends RecyclerView.ViewHolder {
@@ -57,9 +59,9 @@ public class HistoryDetailAdapter extends ListAdapter<BatchDetail, HistoryDetail
             this.binding = binding;
         }
 
-        public void bind(BatchDetail batchDetail) {
+        public void bind(BatchDetail batchDetail, Batch currentBatch) {
             String formattedDate = DateTimeUtil.formatDateTime(batchDetail.getDatetime(), "dd/MM/yyyy HH:mm");
-            String amountText = String.format(Locale.getDefault(), "%d %s", batchDetail.getAmount(), batchDetail.getUnit());
+            String amountText = String.format(Locale.getDefault(), "%d %s", batchDetail.getAmount(), currentBatch != null ? currentBatch.unit : "Kg");
             binding.textViewWeight.setText(amountText);
             binding.textViewDate.setText(formattedDate);
         }

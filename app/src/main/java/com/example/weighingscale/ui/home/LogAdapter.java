@@ -16,16 +16,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.BatchDetail;
+import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.util.DateTimeUtil;
 import java.util.Locale;
 
 public class LogAdapter extends ListAdapter<BatchDetail, LogAdapter.LogHolder> {
     private final Context context;
     private OnItemClickListener listener;
+    private final Setting currentSetting;
 
-    public LogAdapter(Context context) {
+    public LogAdapter(Context context, Setting currentSetting) {
         super(DIFF_CALLBACK);
         this.context = context;
+        this.currentSetting = currentSetting;
     }
 
     private static final DiffUtil.ItemCallback<BatchDetail> DIFF_CALLBACK = new DiffUtil.ItemCallback<BatchDetail>() {
@@ -59,7 +62,7 @@ public class LogAdapter extends ListAdapter<BatchDetail, LogAdapter.LogHolder> {
         String formattedDate = DateTimeUtil.formatDateTime(currentData.getDatetime(), "dd/MM/yyyy HH:mm");
 
         // Format the amount text including the unit
-        String amountText = String.format(Locale.getDefault(), "%d %s", currentData.getAmount(), currentData.getUnit());
+        String amountText = String.format(Locale.getDefault(), "%d %s", currentData.getAmount(), currentSetting != null ? currentSetting.unit : "Kg");
         holder.textViewWeight.setText(amountText);
         holder.textViewDate.setText(formattedDate);
 

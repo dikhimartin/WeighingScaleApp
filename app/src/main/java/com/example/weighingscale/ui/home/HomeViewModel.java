@@ -46,7 +46,7 @@ public class HomeViewModel extends AndroidViewModel {
         batchDetail.batch_id = batchId;
         batchDetail.datetime = new Date();
         batchDetail.amount = amount;
-        batchDetail.unit = (setting != null ? setting.unit : "kg");
+//        batchDetail.unit = (setting != null ? setting.unit : "kg");
         batchDetailRepository.insert(batchDetail);
     }
 

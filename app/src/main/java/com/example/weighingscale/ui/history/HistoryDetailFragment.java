@@ -182,7 +182,7 @@ public class HistoryDetailFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        HistoryDetailAdapter adapter = new HistoryDetailAdapter(requireContext());
+        HistoryDetailAdapter adapter = new HistoryDetailAdapter(requireContext(), currentBatch);
         recyclerView.setAdapter(adapter);
         historyViewModel.getBatchDetails(batchID).observe(getViewLifecycleOwner(), data -> {
             adapter.submitList(data);

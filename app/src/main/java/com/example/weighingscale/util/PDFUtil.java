@@ -38,7 +38,7 @@ public class PDFUtil {
 
             addTitle(document, "NOTA PENIMBANGAN");
             addHeaderTable(document, batch);
-            addBatchDetailsTable(document, batchDetails);
+            addBatchDetailsTable(document, batch, batchDetails);
             addSummary(document, batch, batchDetails.size());
             addFooter(document, batch);
 
@@ -92,7 +92,7 @@ public class PDFUtil {
         document.add(headerTable);
     }
 
-    private static void addBatchDetailsTable(Document document, List<BatchDetail> batchDetails) {
+    private static void addBatchDetailsTable(Document document, BatchDTO batch, List<BatchDetail> batchDetails) {
         Table table = new Table(new float[]{1, 4, 3});
         table.setMarginBottom(20f);
         table.setWidth(UnitValue.createPercentValue(100));
@@ -103,11 +103,9 @@ public class PDFUtil {
 
         for (int i = 0; i < batchDetails.size(); i++) {
             BatchDetail detail = batchDetails.get(i);
-            String unit = detail.getUnit() != null ? detail.getUnit() : "Kg";
-
             table.addCell(createCell(String.valueOf(i + 1)));
             table.addCell(createCell(DateTimeUtil.formatDateTime(detail.getDatetime(), "dd/MM/yyyy HH:mm")));
-            table.addCell(createCell(detail.getAmount() + " " + unit));
+            table.addCell(createCell(detail.getAmount() + " " + batch.unit));
         }
 
         document.add(table);

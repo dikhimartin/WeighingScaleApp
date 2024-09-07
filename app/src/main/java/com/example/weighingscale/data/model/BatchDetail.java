@@ -19,7 +19,6 @@ public class BatchDetail {
     public String id;
     public String batch_id;
     public Date datetime;
-    public String unit;
     public int amount;
 
     // Constructor
@@ -32,19 +31,11 @@ public class BatchDetail {
         return id;
     }
 
-    public String getBatchID() {
-        return batch_id;
-    }
-
     public Date getDatetime() {
         return datetime;
     }
 
     public int getAmount() {
         return amount;
-    }
-
-    public String getUnit(){
-        return unit;
     }
 }
