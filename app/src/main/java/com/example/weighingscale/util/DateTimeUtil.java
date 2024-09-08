@@ -82,30 +82,30 @@ public class DateTimeUtil {
         });
     }
 
-    /**
-     * Shows a Material Date Range Picker dialog.
-     * Once the user selects a date range, it invokes the provided callback with the selected start and end dates.
-     *
-     * @param fragmentManager The FragmentManager used to show the dialog.
-     * @param onDateRangeSelected Callback invoked when the date range is selected, passing the start and end dates.
-     */
     public static void showDateRangePicker(FragmentManager fragmentManager, OnDateRangeSelectedListener onDateRangeSelected) {
         MaterialDatePicker.Builder<?> builder = MaterialDatePicker.Builder.dateRangePicker();
         MaterialDatePicker<?> picker = builder.build();
 
         picker.addOnPositiveButtonClickListener(selection -> {
-            // `selection` will be a Pair<Long, Long> where the first value is start date and the second is end date
             if (selection instanceof androidx.core.util.Pair) {
                 @SuppressWarnings("unchecked")
                 androidx.core.util.Pair<Long, Long> dateRange = (androidx.core.util.Pair<Long, Long>) selection;
                 Calendar calendar = Calendar.getInstance(); // Local timezone
 
-                // Set start date
+                // Set start date (00:00:00)
                 calendar.setTimeInMillis(dateRange.first);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
                 Date startDate = calendar.getTime();
 
-                // Set end date
+                // Set end date (23:59:59)
                 calendar.setTimeInMillis(dateRange.second);
+                calendar.set(Calendar.HOUR_OF_DAY, 23);
+                calendar.set(Calendar.MINUTE, 59);
+                calendar.set(Calendar.SECOND, 59);
+                calendar.set(Calendar.MILLISECOND, 999);
                 Date endDate = calendar.getTime();
 
                 // Invoke the callback with the selected start and end dates
@@ -115,6 +115,7 @@ public class DateTimeUtil {
 
         picker.show(fragmentManager, picker.toString());
     }
+
 
     /**
      * Interface to handle the date range selection callback.

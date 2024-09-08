@@ -115,8 +115,6 @@ public class HistoryFragment extends Fragment {
     }
 
     private void applyFilters(String searchQuery, Date startDate, Date endDate) {
-        Log.d("APPLY_FILTER", String.valueOf(startDate));
-        Log.d("APPLY_FILTER", String.valueOf(endDate));
         historyViewModel.setFilter("start_date", startDate);
         historyViewModel.setFilter("end_date", endDate);
         historyViewModel.setFilter("search_query", searchQuery);
