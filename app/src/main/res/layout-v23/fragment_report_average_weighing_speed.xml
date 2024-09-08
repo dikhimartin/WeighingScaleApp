@@ -19,6 +19,6 @@
         android:backgroundTint="?attr/colorSecondary"
         android:padding="8dp"
         android:textAllCaps="true"
-        tools:ignore="RtlHardcoded,UnusedAttribute" />
+        tools:ignore="RtlHardcoded" />
 
 </LinearLayout>

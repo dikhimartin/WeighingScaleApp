@@ -23,14 +23,15 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="13dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rata-Rata Kecepatan Penimbangan"
                 android:textSize="16sp"
-                android:textColor="?attr/colorPrimary" />
+                android:textColor="?attr/colorPrimary"
+                tools:ignore="HardcodedText"/>
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
@@ -51,14 +52,15 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="13dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Frekuensi Total Berat per Lokasi"
                 android:textSize="16sp"
-                android:textColor="?attr/colorPrimary" />
+                android:textColor="?attr/colorPrimary"
+                tools:ignore="HardcodedText" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

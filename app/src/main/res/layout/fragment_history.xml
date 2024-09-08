@@ -36,7 +36,7 @@
             android:id="@+id/icon_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_filter"
+            android:src="@drawable/ic_filter_circle"
             android:contentDescription="@string/filter"
             android:layout_marginStart="@dimen/filter_icon_margin_start"
             app:tint="?attr/colorSecondary" />
@@ -45,7 +45,7 @@
             android:id="@+id/icon_sort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_sort_desc"
+            android:src="@drawable/ic_sort_circle_desc"
             android:contentDescription="@string/sort"
             android:layout_marginStart="@dimen/filter_icon_margin_start"
             app:tint="?attr/colorSecondary" />

@@ -98,15 +98,15 @@ public class HistoryFragment extends Fragment {
 
     private void setupSortButton() {
         // Set initial icon to descending (since we default to DESC)
-        sortIcon.setImageResource(R.drawable.ic_sort_desc);
+        sortIcon.setImageResource(R.drawable.ic_sort_circle_desc);
         sortIcon.setOnClickListener(v -> {
             // Toggle sorting order
             isSortAsc = !isSortAsc;
             // Change icon based on sort order
             if (isSortAsc) {
-                sortIcon.setImageResource(R.drawable.ic_sort_asc);  // ASC icon
+                sortIcon.setImageResource(R.drawable.ic_sort_circle_asc);  // ASC icon
             } else {
-                sortIcon.setImageResource(R.drawable.ic_sort_desc); // DESC icon
+                sortIcon.setImageResource(R.drawable.ic_sort_circle_desc); // DESC icon
             }
             // Apply sorting
             applySorting();
