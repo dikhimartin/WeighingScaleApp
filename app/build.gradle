@@ -56,5 +56,6 @@ dependencies {
 
     // Tools
     implementation libs.itextpdf;
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
 

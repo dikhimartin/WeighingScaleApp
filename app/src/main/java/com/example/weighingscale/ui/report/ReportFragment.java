@@ -21,16 +21,11 @@ public class ReportFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_report, container, false);
 
         // Initialize CardViews
-        CardView cardAverageWeighingSpeed = view.findViewById(R.id.card_average_weighing_speed);
-        CardView cardTotalWeightFrequency = view.findViewById(R.id.card_total_weight_frequency);
+        CardView cardAverageWeighingSpeed = view.findViewById(R.id.card_report_average);
 
         // Set click listeners
         cardAverageWeighingSpeed.setOnClickListener(v ->
             Navigation.findNavController(v).navigate(R.id.action_reportFragment_to_reportAverageWeighingSpeed)
-        );
-
-        cardTotalWeightFrequency.setOnClickListener(v ->
-            Navigation.findNavController(v).navigate(R.id.action_reportFragment_to_reportTotalWeightFrequency)
         );
 
         return view;

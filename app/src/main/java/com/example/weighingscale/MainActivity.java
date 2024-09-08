@@ -97,8 +97,7 @@ public class MainActivity extends AppCompatActivity {
             if (destination.getId() == R.id.navigation_setting ||
                     destination.getId() == R.id.navigation_device ||
                     destination.getId() == R.id.navigation_history_detail ||
-                    destination.getId() == R.id.navigation_report_average_weighing_speed ||
-                    destination.getId() == R.id.navigation_report_total_weight_frequency
+                    destination.getId() == R.id.navigation_report_average
             ) {
                 // Enable navigation and back action
                 navView.setVisibility(View.GONE);

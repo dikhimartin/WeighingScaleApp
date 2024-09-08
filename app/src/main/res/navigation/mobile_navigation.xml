@@ -40,21 +40,13 @@
         tools:layout="@layout/fragment_report">
         <action
             android:id="@+id/action_reportFragment_to_reportAverageWeighingSpeed"
-            app:destination="@id/navigation_report_average_weighing_speed" />
-        <action
-            android:id="@+id/action_reportFragment_to_reportTotalWeightFrequency"
-            app:destination="@id/navigation_report_total_weight_frequency" />
+            app:destination="@id/navigation_report_average" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_report_average_weighing_speed"
-        android:name="com.example.weighingscale.ui.report.ReportAverageWeighingSpeed"
+        android:id="@+id/navigation_report_average"
+        android:name="com.example.weighingscale.ui.report.ReportAverage"
         android:label="@string/average_weighing_speed"
-        tools:layout="@layout/fragment_report_average_weighing_speed" />
-    <fragment
-        android:id="@+id/navigation_report_total_weight_frequency"
-        android:name="com.example.weighingscale.ui.report.ReportTotalWeightFrequency"
-        android:label="@string/total_weight_frequency"
-        tools:layout="@layout/fragment_report_total_weight_frequency" />
+        tools:layout="@layout/fragment_report_average_weighing" />
 
     <!-- Pengaturan -->
     <fragment
