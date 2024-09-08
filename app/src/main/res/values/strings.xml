@@ -39,6 +39,11 @@
     <string name="history">Riwayat</string>
     <string name="history_detail">Detail Riwayat</string>
 
+    <!-- Report -->
+    <string name="report">Laporan</string>
+    <string name="average_weighing_speed">Rata-Rata Kecepatan Penimbangan</string>
+    <string name="total_weight_frequency">Frekuensi Total Berat per Lokasi</string>
+
     <!--  main  -->
     <string name="error_socket_create">Socket creation failed</string>
     <string name="permission_denied">Permission denied</string>

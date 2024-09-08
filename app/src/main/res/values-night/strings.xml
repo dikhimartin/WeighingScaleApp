@@ -80,4 +80,6 @@
     <string name="apply">Terapkan</string>
     <string name="choose_date_range">Pilih rentang tanggal</string>
     <string name="sort">Urut</string>
+    <string name="report">Laporan</string>
+    <string name="total_weight_frequency">Frekuensi Total Berat per Lokasi</string>
 </resources>

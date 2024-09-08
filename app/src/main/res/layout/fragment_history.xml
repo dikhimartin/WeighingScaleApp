@@ -9,38 +9,6 @@
     tools:context=".ui.history.HistoryFragment">
 
     <!-- Search Field and Filter Icon -->
-<!--    <LinearLayout-->
-<!--        android:id="@+id/search_filter_layout"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:gravity="center_vertical"-->
-<!--        android:layout_marginBottom="@dimen/search_field_margin_bottom"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent">-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/search_field"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            android:autofillHints=""-->
-<!--            android:hint="@string/search_hint"-->
-<!--            android:imeOptions="actionSearch"-->
-<!--            android:inputType="text"-->
-<!--            android:padding="@dimen/search_field_padding"-->
-<!--            tools:ignore="HardcodedText" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/icon_filter"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/ic_filter"-->
-<!--            android:contentDescription="@string/filter"-->
-<!--            android:layout_marginStart="@dimen/filter_icon_margin_start"-->
-<!--            app:tint="?attr/colorSecondary" />-->
-<!--    </LinearLayout>-->
     <LinearLayout
         android:id="@+id/search_filter_layout"
         android:layout_width="0dp"

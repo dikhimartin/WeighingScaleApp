@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Bottom navigation
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_history)
+                R.id.navigation_home, R.id.navigation_history, R.id.navigation_report)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -94,8 +94,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Listen for destination changes
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.navigation_setting || destination.getId() == R.id.navigation_device || destination.getId() == R.id.navigation_history_detail) {
-                // Enable navigation
+            if (destination.getId() == R.id.navigation_setting ||
+                    destination.getId() == R.id.navigation_device ||
+                    destination.getId() == R.id.navigation_history_detail ||
+                    destination.getId() == R.id.navigation_report_average_weighing_speed ||
+                    destination.getId() == R.id.navigation_report_total_weight_frequency
+            ) {
+                // Enable navigation and back action
                 navView.setVisibility(View.GONE);
                 if (getSupportActionBar() != null) {
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -105,12 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 navView.setVisibility(View.VISIBLE);
                 if (getSupportActionBar() != null) {
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                }
-            }
-            // Back action
-            if (destination.getId() == R.id.navigation_history_detail) {
-                if (getSupportActionBar() != null) {
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 }
             }
         });
