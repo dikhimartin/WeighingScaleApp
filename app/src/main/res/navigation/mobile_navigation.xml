@@ -44,7 +44,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_report_average"
-        android:name="com.example.weighingscale.ui.report.ReportAverage"
+        android:name="com.example.weighingscale.ui.report.ReportAverageFragment"
         android:label="@string/average_weighing_speed"
         tools:layout="@layout/fragment_report_average_weighing" />
 
