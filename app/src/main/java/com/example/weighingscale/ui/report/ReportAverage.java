@@ -18,6 +18,8 @@ import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.data.dto.ReportDTO;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -26,6 +28,9 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -131,60 +136,94 @@ public class ReportAverage extends Fragment {
         return calendar.getTime();
     }
 
-private void displayChart(List<BatchDTO> batchList) {
-    if (barChart == null || batchList == null || batchList.isEmpty()) {
-        return;
+    private void displayChart(List<BatchDTO> batchList) {
+        if (barChart == null || batchList == null || batchList.isEmpty()) {
+            return;
+        }
+
+        ArrayList<BarEntry> durationEntries = new ArrayList<>();
+        ArrayList<BarEntry> speedEntries = new ArrayList<>();
+        ArrayList<String> batchLabels = new ArrayList<>(); // For dynamic batch labels
+
+        // Create dummy data and batch labels dynamically
+        for (int i = 0; i < batchList.size(); i++) {
+            BatchDTO batch = batchList.get(i);
+
+            // Example dummy values (Replace with actual values in real data)
+            float durationInMinutes = 80f + (i * 30); // Total duration in minutes
+            float speed = 200f + (i * 50f);           // Speed in kg/hour
+
+            // Convert duration to hours and minutes (e.g., 80 minutes becomes 1 hour 20 minutes)
+            float durationInHours = durationInMinutes / 60f;
+
+            durationEntries.add(new BarEntry(i, durationInHours)); // Add duration entry
+            speedEntries.add(new BarEntry(i, speed));              // Add speed entry
+
+            // Add batch label dynamically
+            batchLabels.add("Batch " + (i + 1));
+        }
+
+        // Creating BarDataSet for Duration Penimbangan
+        BarDataSet durationSet = new BarDataSet(durationEntries, "Durasi Penimbangan");
+        durationSet.setColor(Color.BLUE);
+        durationSet.setAxisDependency(YAxis.AxisDependency.LEFT); // Assign to left y-axis
+
+        // Creating BarDataSet for Kecepatan Penimbangan
+        BarDataSet speedSet = new BarDataSet(speedEntries, "Kecepatan Penimbangan");
+        speedSet.setColor(Color.RED);
+        speedSet.setAxisDependency(YAxis.AxisDependency.RIGHT); // Assign to right y-axis
+
+        // Combine the datasets into a BarData object
+        BarData barData = new BarData(durationSet, speedSet);
+
+        // Adjust bar width (adjust based on your needs)
+        float groupSpace = 0.4f; // Space between groups of bars (batches)
+        float barSpace = 0.05f;  // Space between bars within a group
+        float barWidth = 0.4f;   // Width of each bar (duration and speed)
+
+        // Set bar width
+        barData.setBarWidth(barWidth);
+
+        // Set the data to the chart
+        barChart.setData(barData);
+
+        // Group the bars
+        barChart.groupBars(0f, groupSpace, barSpace); // Grouping starts from index 0
+
+        // Format the x-axis labels dynamically based on batchList size
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setGranularity(1f); // Ensure proper label spacing
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(batchLabels)); // Use dynamic labels
+
+        // Configure Y-axis for duration (left) and speed (right)
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setGranularity(1f);  // Set granularity for left axis (duration in hours)
+        leftAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                // Convert float hours back to "x Jam y Menit"
+                int hours = (int) value;
+                int minutes = Math.round((value - hours) * 60);
+                return hours + " Jam " + minutes + " Menit";
+            }
+        });
+
+        YAxis rightAxis = barChart.getAxisRight();
+        rightAxis.setGranularity(50f);  // Set granularity for right axis (speed in kg/hour)
+        rightAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return Math.round(value) + " kg/jam";
+            }
+        });
+
+        // Adding Custom MarkerView for more interactive data display
+        CustomMarkerView mv = new CustomMarkerView(barChart.getContext(), R.layout.custom_marker_view);
+        barChart.setMarker(mv);
+
+        // Refresh the chart
+        barChart.invalidate();  // Re-draw the chart with the grouped bars
     }
-
-    ArrayList<BarEntry> durationEntries = new ArrayList<>();
-    ArrayList<BarEntry> speedEntries = new ArrayList<>();
-
-    // Assigning batch index for grouping
-    for (int i = 0; i < batchList.size(); i++) {
-        BatchDTO batch = batchList.get(i);
-
-        // Use dummy data as requested
-        durationEntries.add(new BarEntry(i, 100f)); // Dummy value for duration
-        speedEntries.add(new BarEntry(i, 200f));    // Dummy value for speed
-    }
-
-    // Creating BarDataSet for Duration Penimbangan
-    BarDataSet durationSet = new BarDataSet(durationEntries, "Durasi Penimbangan");
-    durationSet.setColor(Color.BLUE);
-    durationSet.setAxisDependency(YAxis.AxisDependency.LEFT); // Assign to left y-axis
-
-    // Creating BarDataSet for Kecepatan Penimbangan
-    BarDataSet speedSet = new BarDataSet(speedEntries, "Kecepatan Penimbangan");
-    speedSet.setColor(Color.RED);
-    speedSet.setAxisDependency(YAxis.AxisDependency.RIGHT); // Assign to right y-axis
-
-    // Combine BarData
-    BarData barData = new BarData(durationSet, speedSet);
-
-    // Adjust bar width (adjust based on your needs, 0.45f works well for grouped bars)
-    float groupSpace = 0.4f; // Space between groups of bars (batches)
-    float barSpace = 0.05f;  // Space between bars within a group
-    float barWidth = 0.4f;   // Width of each bar (duration and speed)
-
-    // Set bar width
-    barData.setBarWidth(barWidth);
-
-    // Set the data to the chart first
-    barChart.setData(barData);
-
-    // Now group the bars by X-axis index
-    barChart.groupBars(0f, groupSpace, barSpace); // Grouping starts from index 0
-
-    // Configure axes
-    YAxis leftAxis = barChart.getAxisLeft();
-    leftAxis.setGranularity(1f);  // Set granularity for left axis
-
-    YAxis rightAxis = barChart.getAxisRight();
-    rightAxis.setGranularity(1f);  // Set granularity for right axis
-
-    // Refresh the chart
-    barChart.invalidate();  // Re-draw the chart with the grouped bars
-}
 
 
 
