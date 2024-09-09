@@ -2,9 +2,11 @@ package com.example.weighingscale.ui.report;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.weighingscale.R;
+import com.example.weighingscale.util.FormatterUtil;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
@@ -18,11 +20,13 @@ public class CustomMarkerView extends MarkerView {
 
     private final TextView tvContent;
     private final List<Float> speedEntries;
+    private final List<Long> durationEntries;
     private final List<String> labels;
 
-    public CustomMarkerView(Context context, int layoutResource, List<Float> speedEntries, List<String> labels) {
+    public CustomMarkerView(Context context, int layoutResource, List<Float> speedEntries, List<Long> durationEntries, List<String> labels) {
         super(context, layoutResource);
         this.speedEntries = speedEntries;
+        this.durationEntries = durationEntries;
         this.labels = labels;
         tvContent = findViewById(R.id.tvContent);
     }
@@ -35,17 +39,15 @@ public class CustomMarkerView extends MarkerView {
 
         // Get corresponding speed and batch label
         float speed = speedEntries.get(batchIndex);
+        long duration = durationEntries.get(batchIndex);
         String batchLabel = labels.get(batchIndex);
 
-        // Format duration
-        float durationInHours = barEntry.getY();
-        int hours = (int) durationInHours;
-        int minutes = Math.round((durationInHours - hours) * 60);
-        String duration = hours + " Jam " + minutes + " Menit";
+        // Format
+        String durationFormat = FormatterUtil.formatDuration(duration);
 
         // Set content for the marker
         String speedText = Math.round(speed) + " kg/jam";
-        tvContent.setText(batchLabel + "\nDurasi: " + duration + "\nKecepatan: " + speedText);
+        tvContent.setText(batchLabel + "\nDurasi: " + durationFormat + "\nKecepatan: " + speedText);
 
         super.refreshContent(e, highlight);
     }

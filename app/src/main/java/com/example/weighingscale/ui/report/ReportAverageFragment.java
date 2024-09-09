@@ -1,6 +1,8 @@
 package com.example.weighingscale.ui.report;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +18,13 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.util.DateTimeUtil;
+import com.example.weighingscale.util.FormatterUtil;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,7 +36,8 @@ public class ReportAverageFragment extends Fragment {
     private BarChart barChart;
     private Button filterButton;
     private TextView dateTextView;
-    private final List<Float> speedEntries = new ArrayList<>(); // Store speeds for CustomMarkerView
+    private final List<Float> speedEntries = new ArrayList<>();    // Store speeds for CustomMarkerView
+    private final List<Long> durationEntries = new ArrayList<>(); // Store duration for CustomMarkerView
 
     @Nullable
     @Override
@@ -99,24 +105,25 @@ public class ReportAverageFragment extends Fragment {
     private void setupChart(List<BatchDTO> batchList) {
         if (barChart == null || batchList == null || batchList.isEmpty()) return;
 
-        List<BarEntry> durationEntries = new ArrayList<>();
+        List<BarEntry> barEntries = new ArrayList<>();
         List<String> labels = new ArrayList<>();
 
         for (int i = 0; i < batchList.size(); i++) {
             BatchDTO batch = batchList.get(i);
 
-            float durationInMinutes = 80f + (i * 30); // Total duration in minutes
             float speed = 200f + (i * 50f);           // Speed in kg/hour
 
-            float durationInHours = durationInMinutes / 60f;
-            durationEntries.add(new BarEntry(i, durationInHours));
+            float durationInHours = WeighingUtils.convertDurationToBarChartFormat(batch.duration);
+            barEntries.add(new BarEntry(i, durationInHours));
+
+            durationEntries.add(batch.duration);
             speedEntries.add(speed);
 
             labels.add("Batch " + (i + 1));
         }
 
         int colorSecondary = ContextCompat.getColor(requireContext(), R.color.gold);
-        BarDataSet durationDataSet = new BarDataSet(durationEntries, "Durasi Penimbangan (jam)");
+        BarDataSet durationDataSet = new BarDataSet(barEntries, "Durasi Penimbangan (jam)");
         durationDataSet.setColor(colorSecondary);
         durationDataSet.setValueTextSize(10f);
 
@@ -128,7 +135,7 @@ public class ReportAverageFragment extends Fragment {
         barChart.animateY(500);
 
         // Adding Custom MarkerView for interactive data display
-        CustomMarkerView mv = new CustomMarkerView(barChart.getContext(), R.layout.custom_marker_view, speedEntries, labels);
+        CustomMarkerView mv = new CustomMarkerView(barChart.getContext(), R.layout.custom_marker_view, speedEntries, durationEntries, labels);
         barChart.setMarker(mv);
     }
 
@@ -141,16 +148,15 @@ public class ReportAverageFragment extends Fragment {
         // xAxis.setLabelRotationAngle(45f);
 
         // Left Axis
-        //  YAxis leftAxis = barChart.getAxisLeft();
-        //  leftAxis.setGranularity(1f);
-        //  leftAxis.setValueFormatter(new ValueFormatter() {
-        //      @Override
-        //      public String getFormattedValue(float value) {
-        //          int hours = (int) value;
-        //          int minutes = Math.round((value - hours) * 60);
-        //          return hours + " Jam " + minutes + " Menit";
-        //      }
-        //  });
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setGranularity(1f);
+        leftAxis.setValueFormatter(new ValueFormatter() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format("%d Jam", (int) value);
+            }
+        });
         barChart.getAxisRight().setEnabled(false);
     }
 
