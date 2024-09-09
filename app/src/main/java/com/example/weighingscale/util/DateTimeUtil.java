@@ -168,4 +168,52 @@ public class DateTimeUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.getDefault());
         return sdf.format(date);
     }
+
+  /**
+     * Format date range into a readable string based on the start and end dates.
+     * The output will vary depending on whether the dates are the same or different
+     * in terms of day, month, and year.
+     *
+     * @param startDate The start date of the range
+     * @param endDate   The end date of the range
+     * @return A formatted date range string
+     */
+    public static String formatDateRange(Date startDate, Date endDate) {
+        SimpleDateFormat dayFormat = new SimpleDateFormat("d", Locale.getDefault());
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
+        SimpleDateFormat fullFormat = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
+
+        // If dates are the same, return a single date
+        if (startDate.equals(endDate)) {
+            return fullFormat.format(startDate);
+        }
+
+        String startDay = dayFormat.format(startDate);
+        String startMonth = monthFormat.format(startDate);
+        String startYear = yearFormat.format(startDate);
+
+        String endDay = dayFormat.format(endDate);
+        String endMonth = monthFormat.format(endDate);
+        String endYear = yearFormat.format(endDate);
+
+        // Same day, same month, same year
+        if (startDay.equals(endDay) && startMonth.equals(endMonth) && startYear.equals(endYear)) {
+            return fullFormat.format(startDate);
+        }
+
+        // Different day, same month, same year
+        if (!startDay.equals(endDay) && startMonth.equals(endMonth) && startYear.equals(endYear)) {
+            return startDay + " - " + endDay + " " + startMonth + " " + startYear;
+        }
+
+        // Different month, same year
+        if (!startMonth.equals(endMonth) && startYear.equals(endYear)) {
+            return startDay + " " + startMonth + " - " + endDay + " " + endMonth + " " + startYear;
+        }
+
+        // Different year
+        return startDay + " " + startMonth + " " + startYear + " - " + endDay + " " + endMonth + " " + endYear;
+    }
+
 }

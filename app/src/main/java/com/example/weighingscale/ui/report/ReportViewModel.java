@@ -46,6 +46,8 @@ public class ReportViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<BatchDTO>> getAllBatch(@Nullable String searchQuery, @Nullable Date startDate, @Nullable Date endDate, @Nullable String sortOrder) {
+        Log.d("MODULE_REPORT model_v", String.valueOf(startDate));
+        Log.d("MODULE_REPORT model_v", String.valueOf(endDate));
         if (searchQuery != null && searchQuery.trim().isEmpty()) {
             searchQuery = null;
         }
@@ -53,8 +55,6 @@ public class ReportViewModel extends AndroidViewModel {
     }
 
     public LiveData<ReportDTO> getAverageWeighingSpeed(Date startDate, Date endDate) {
-        Log.d("MODULE_REPORT model_v", String.valueOf(startDate));
-        Log.d("MODULE_REPORT model_v", String.valueOf(endDate));
         if (reportData == null) {
             reportData = reportRepository.getAverageWeighingSpeed(startDate, endDate);
         }

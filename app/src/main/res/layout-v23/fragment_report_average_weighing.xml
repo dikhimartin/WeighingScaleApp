@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
 
-    <!-- Button Filter  -->
+    <!-- Button Filter di Pojok Kanan dengan ukuran lebih kecil dan lebih rapi -->
     <Button
         android:id="@+id/button_filter"
         android:layout_width="wrap_content"
@@ -20,10 +20,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        tools:ignore="RtlHardcoded,UnusedAttribute" />
+        android:layout_marginEnd="8dp"/>
 
-    <!-- TextView Date range -->
+
+    <!-- TextView untuk menampilkan tanggal dengan jarak yang sesuai -->
     <TextView
         android:id="@+id/text_date_range"
         android:layout_width="wrap_content"
@@ -35,10 +35,10 @@
         app:layout_constraintTop_toBottomOf="@+id/button_filter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="30dp"
         tools:ignore="HardcodedText" />
 
-    <!-- BarChart  -->
+    <!-- BarChart di bawah TextView Tanggal -->
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
         android:layout_width="0dp"
@@ -47,22 +47,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/text_average_speed"
-        android:layout_marginTop="35dp"
-        app:layout_constraintHeight_percent="0.6"/>
+        android:layout_marginTop="16dp"
+        app:layout_constraintHeight_percent="0.5"/>
 
-    <!-- TextView Average -->
+    <!-- TextView untuk menampilkan rata-rata kecepatan di bawah BarChart -->
     <TextView
         android:id="@+id/text_average_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rata rata kecepatan : 255 Jam"
         android:textColor="@android:color/holo_red_dark"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/barChart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp"
-        tools:ignore="HardcodedText" />
+        android:layout_marginTop="30dp"/>
+
+<!--        <TextView-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Data Riwayat"-->
+<!--            android:textSize="13sp"-->
+<!--            android:textColor="?attr/colorPrimary"-->
+<!--            android:textStyle="bold"-->
+<!--            tools:ignore="HardcodedText" />    -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

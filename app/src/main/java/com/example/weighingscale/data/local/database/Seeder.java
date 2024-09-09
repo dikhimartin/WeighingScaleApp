@@ -39,9 +39,9 @@ public class Seeder {
             List<Subdistrict> subdistricts = JsonUtils.parseJson(context, R.raw.subdistrict, Subdistrict[].class);
 
             // Log the size of lists to verify data parsing
-            Log.d("Seeder", "Provinces count: " + (provinces != null ? provinces.size() : 0));
-            Log.d("Seeder", "Cities count: " + (cities != null ? cities.size() : 0));
-            Log.d("Seeder", "Subdistricts count: " + (subdistricts != null ? subdistricts.size() : 0));
+            Log.d("Seeder", "Provinces count: " + provinces.size());
+            Log.d("Seeder", "Cities count: " + cities.size());
+            Log.d("Seeder", "Subdistricts count: " + subdistricts.size());
 
             // Insert data with duplicate check
             insertWithCheck(provinces, provinceDao::insertAll);
