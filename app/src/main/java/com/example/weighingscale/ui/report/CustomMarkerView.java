@@ -52,6 +52,17 @@ public class CustomMarkerView extends MarkerView {
         super.refreshContent(e, highlight);
     }
 
+    public void updateData(List<Float> newSpeedEntries, List<Long> newDurationEntries, List<String> newLabels) {
+        this.speedEntries.clear();
+        this.speedEntries.addAll(newSpeedEntries);
+
+        this.durationEntries.clear();
+        this.durationEntries.addAll(newDurationEntries);
+
+        this.labels.clear();
+        this.labels.addAll(newLabels);
+    }
+
     @Override
     public MPPointF getOffset() {
         return new MPPointF(-((float) getWidth() / 2), -getHeight()); // Center the marker above the point

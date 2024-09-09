@@ -37,7 +37,7 @@ public class ReportAverageFragment extends Fragment {
     private Button filterButton;
     private TextView dateTextView;
     private final List<Float> speedEntries = new ArrayList<>();    // Store speeds for CustomMarkerView
-    private final List<Long> durationEntries = new ArrayList<>(); // Store duration for CustomMarkerView
+    private final List<Long> durationEntries = new ArrayList<>();  // Store duration for CustomMarkerView
 
     @Nullable
     @Override
@@ -107,18 +107,18 @@ public class ReportAverageFragment extends Fragment {
 
         List<BarEntry> barEntries = new ArrayList<>();
         List<String> labels = new ArrayList<>();
+        List<Float> newSpeedEntries = new ArrayList<>();
+        List<Long> newDurationEntries = new ArrayList<>();
 
         for (int i = 0; i < batchList.size(); i++) {
             BatchDTO batch = batchList.get(i);
 
             float speed = 200f + (i * 50f);           // Speed in kg/hour
-
             float durationInHours = WeighingUtils.convertDurationToBarChartFormat(batch.duration);
             barEntries.add(new BarEntry(i, durationInHours));
 
-            durationEntries.add(batch.duration);
-            speedEntries.add(speed);
-
+            newDurationEntries.add(batch.duration);
+            newSpeedEntries.add(speed);
             labels.add("Batch " + (i + 1));
         }
 
@@ -134,10 +134,16 @@ public class ReportAverageFragment extends Fragment {
         setupAxes(labels);
         barChart.animateY(500);
 
-        // Adding Custom MarkerView for interactive data display
-        CustomMarkerView mv = new CustomMarkerView(barChart.getContext(), R.layout.custom_marker_view, speedEntries, durationEntries, labels);
-        barChart.setMarker(mv);
+        // Update data in CustomMarkerView and set it again
+        CustomMarkerView mv = (CustomMarkerView) barChart.getMarker();
+        if (mv != null) {
+            mv.updateData(newSpeedEntries, newDurationEntries, labels);
+        } else {
+            mv = new CustomMarkerView(barChart.getContext(), R.layout.custom_marker_view, newSpeedEntries, newDurationEntries, labels);
+            barChart.setMarker(mv);
+        }
     }
+
 
     private void setupAxes(List<String> labels) {
         // Bottom Axis
