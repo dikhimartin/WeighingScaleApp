@@ -1,27 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp">
-
-    <Button
-        android:id="@+id/button_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_filter"
-        android:drawableTint="@color/white"
-        android:text="@string/filter"
-        android:backgroundTint="?attr/colorSecondary"
-        android:padding="8dp"
-        android:textAllCaps="true"
-        tools:ignore="RtlHardcoded,UnusedAttribute" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/bar_chart"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-    />
+        android:layout_height="match_parent"/>
 
-</LinearLayout>
+</RelativeLayout>
