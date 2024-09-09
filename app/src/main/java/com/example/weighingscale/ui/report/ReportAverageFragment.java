@@ -81,5 +81,9 @@ public class ReportAverageFragment extends Fragment {
         barChart.getDescription().setEnabled(false);
         barChart.getLegend().setEnabled(true);
         barChart.animateY(500);
+
+         // Adding Custom MarkerView for more interactive data display
+         CustomMarkerView mv = new CustomMarkerView(barChart.getContext(), R.layout.custom_marker_view);
+         barChart.setMarker(mv);
     }
 }
