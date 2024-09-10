@@ -36,8 +36,6 @@ public class ReportAverageFragment extends Fragment {
     private BarChart barChart;
     private Button filterButton;
     private TextView dateTextView;
-    private final List<Float> speedEntries = new ArrayList<>();    // Store speeds for CustomMarkerView
-    private final List<Long> durationEntries = new ArrayList<>();  // Store duration for CustomMarkerView
 
     @Nullable
     @Override
@@ -106,20 +104,24 @@ public class ReportAverageFragment extends Fragment {
         if (barChart == null || batchList == null || batchList.isEmpty()) return;
 
         List<BarEntry> barEntries = new ArrayList<>();
-        List<String> labels = new ArrayList<>();
-        List<Float> newSpeedEntries = new ArrayList<>();
-        List<Long> newDurationEntries = new ArrayList<>();
+        // List<String> labels = new ArrayList<>();
+        // List<Float> speedEntries = new ArrayList<>();
+        // List<Long> durationEntries = new ArrayList<>();
+        List<BatchDTO> batchEntries = new ArrayList<>();
 
         for (int i = 0; i < batchList.size(); i++) {
             BatchDTO batch = batchList.get(i);
 
-            float speed = 200f + (i * 50f);           // Speed in kg/hour
+            float speed = 200f + (i * 50f);  // Speed in kg/hour
+
             float durationInHours = WeighingUtils.convertDurationToBarChartFormat(batch.duration);
             barEntries.add(new BarEntry(i, durationInHours));
 
-            newDurationEntries.add(batch.duration);
-            newSpeedEntries.add(speed);
-            labels.add("Batch " + (i + 1));
+            batchEntries.add(batch);
+
+            // durationEntries.add(batch.duration);
+            // speedEntries.add(speed);
+            // labels.add("Batch " + (i + 1));
         }
 
         int colorSecondary = ContextCompat.getColor(requireContext(), R.color.gold);
@@ -129,38 +131,43 @@ public class ReportAverageFragment extends Fragment {
 
         BarData barData = new BarData(durationDataSet);
         barData.setBarWidth(0.6f);
+        barData.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return formatDuration(value);
+            }
+        });
+
         barChart.setData(barData);
         barChart.setFitBars(true);
-        setupAxes(labels);
         barChart.animateY(500);
 
         // Update data in CustomMarkerView and set it again
         CustomMarkerView mv = (CustomMarkerView) barChart.getMarker();
         if (mv != null) {
-            mv.updateData(newSpeedEntries, newDurationEntries, labels);
+            mv.updateData(batchEntries);
         } else {
-            mv = new CustomMarkerView(barChart.getContext(), R.layout.custom_marker_view, newSpeedEntries, newDurationEntries, labels);
+            mv = new CustomMarkerView(barChart.getContext(), R.layout.custom_marker_view, batchEntries);
             barChart.setMarker(mv);
         }
     }
 
-
-    private void setupAxes(List<String> labels) {
+    private void setupAxes() {
         // Bottom Axis
         // XAxis xAxis = barChart.getXAxis();
-        // xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+        // xAxis.setValueFormatter(new IndexAxisValueFormatter("labels name"));
         // xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         // xAxis.setGranularity(1f);
         // xAxis.setLabelRotationAngle(45f);
 
         // Left Axis
         YAxis leftAxis = barChart.getAxisLeft();
-        leftAxis.setGranularity(1f);
+        leftAxis.setGranularity(1f);  // Only display full hours
         leftAxis.setValueFormatter(new ValueFormatter() {
             @SuppressLint("DefaultLocale")
             @Override
             public String getFormattedValue(float value) {
-                return String.format("%d Jam", (int) value);
+                return String.format("%d Jam", (int) value);  // Display as "X Jam"
             }
         });
         barChart.getAxisRight().setEnabled(false);
@@ -175,5 +182,20 @@ public class ReportAverageFragment extends Fragment {
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
+
+    @SuppressLint("DefaultLocale")
+    public String formatDuration(float value) {
+        long hours = (long) value;
+        long minutes = Math.round((value - hours) * 60);
+
+        if (hours == 0) {
+            return String.format("%d Menit", minutes);
+        } else if (minutes == 0) {
+            return String.format("%d Jam", hours);
+        } else {
+            return String.format("%d Jam %02d Menit", hours, minutes);
+        }
+    }
+
 
 }

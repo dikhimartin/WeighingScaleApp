@@ -8,18 +8,13 @@ import com.example.weighingscale.util.FormatterUtil;
 
 public class WeighingUtils {
 
-    @SuppressLint("DefaultLocale")
     public static float convertDurationToBarChartFormat(long durationInMillis) {
         // Calculate hours and minutes from the given duration
         long hours = durationInMillis / (1000 * 60 * 60);
         long minutes = (durationInMillis / (1000 * 60)) % 60;
-
-        // Combine hours and minutes as a float (e.g., 6.30 for 6 hours and 30 minutes)
-        return Float.parseFloat(String.format("%d.%02d", hours, minutes));
+        // Return the time in float format (hours.fractionalMinutes)
+        return hours + (minutes / 60f);
     }
-
-
-
 
     // Menghitung durasi penimbangan dalam jam
 //    public static double calculateDurationInHours(Date startDate, Date endDate) {
