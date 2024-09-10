@@ -22,17 +22,17 @@ public class MarkerViewReportAverage extends MarkerView {
     private final TextView valueDurasiPenimbangan;
     private final TextView valueJamMulai;
     private final TextView valueJamBerakhir;
-    private TextView valueLokasiPenimbanganProvinsi;
-    private TextView valueLokasiPenimbanganKota;
-    private TextView valueTujuanPengirimanProvinsi;
-    private TextView valueTujuanPengirimanKota;
+    private final TextView valueLokasiPenimbanganProvinsi;
+    private final TextView valueLokasiPenimbanganKota;
+    private final TextView valueTujuanPengirimanProvinsi;
+    private final TextView valueTujuanPengirimanKota;
     private final List<BatchDTO> batchEntries;
 
     public MarkerViewReportAverage(Context context, int layoutResource, List<BatchDTO> batchEntries) {
         super(context, layoutResource);
         this.batchEntries = batchEntries;
 
-        // Inisialisasi TextView
+        // Initialize TextViews
         valueTanggalPenimbangan = findViewById(R.id.valueTanggalPenimbangan);
         valueDurasiPenimbangan = findViewById(R.id.valueDurasiPenimbangan);
         valueJamMulai = findViewById(R.id.valueJamMulai);
@@ -49,16 +49,15 @@ public class MarkerViewReportAverage extends MarkerView {
         BarEntry barEntry = (BarEntry) e;
         int batchIndex = (int) barEntry.getX();
 
-        // Dapatkan batch yang sesuai
         BatchDTO batch = batchEntries.get(batchIndex);
 
-        // Format data tanggal dan waktu
+        // Format data
         String textDatetime = SafeValueUtil.getFormattedDate(batch.datetime, "dd MMMM yyyy");
         String durationFormat = FormatterUtil.formatDuration(batch.duration);
         String textStartDate = SafeValueUtil.getFormattedDate(batch.start_date, "dd/MM/yyyy HH:mm:ss");
         String textEndDate = SafeValueUtil.getFormattedDate(batch.end_date, "dd/MM/yyyy HH:mm:ss");
 
-        // Set Lokasi Penimbangan
+        // Set locations
         String weighingLocationCity = getNonEmptyText(setLocationText(
             batch.weighing_location_city_type,
             batch.weighing_location_city_name
@@ -67,8 +66,6 @@ public class MarkerViewReportAverage extends MarkerView {
             "Provinsi",
             batch.weighing_location_province_name
         ));
-
-        // Set Tujuan Pengiriman
         String deliveryDestinationCity = getNonEmptyText(setLocationText(
             batch.delivery_destination_city_type,
             batch.delivery_destination_city_name
@@ -78,29 +75,25 @@ public class MarkerViewReportAverage extends MarkerView {
             batch.delivery_destination_province_name
         ));
 
-        // Atur konten ke dalam TextView masing-masing
+        // Set content to TextViews
         valueTanggalPenimbangan.setText(getNonEmptyText(textDatetime));
         valueDurasiPenimbangan.setText(getNonEmptyText(durationFormat));
         valueJamMulai.setText(getNonEmptyText(textStartDate));
         valueJamBerakhir.setText(getNonEmptyText(textEndDate));
-
-        // Lokasi Penimbangan
         valueLokasiPenimbanganProvinsi.setText(weighingLocationProvince);
         valueLokasiPenimbanganKota.setText(weighingLocationCity);
-
-        // Tujuan Pengiriman
         valueTujuanPengirimanProvinsi.setText(deliveryDestinationProvince);
         valueTujuanPengirimanKota.setText(deliveryDestinationCity);
 
         super.refreshContent(e, highlight);
     }
 
-    // Helper method untuk menampilkan "-" jika teks kosong atau null
+    // Return "-" if text is empty or null
     private String getNonEmptyText(String text) {
         return (text == null || text.isEmpty()) ? "-" : text;
     }
 
-    // Helper method untuk menggabungkan tipe dan nama lokasi
+    // Combine location type and name
     private String setLocationText(String type, String name) {
         if (type != null && name != null) {
             return type + " " + name;
@@ -111,13 +104,13 @@ public class MarkerViewReportAverage extends MarkerView {
         }
     }
 
-    public void updateData(List <BatchDTO> newBatch) {
+    public void updateData(List<BatchDTO> newBatch) {
         this.batchEntries.clear();
         this.batchEntries.addAll(newBatch);
     }
 
     @Override
     public MPPointF getOffset() {
-        return new MPPointF(-((float) getWidth() / 2), -getHeight()); // Center the marker above the point
+        return new MPPointF(-((float) getWidth() / 2), -getHeight()); // Center marker above the point
     }
 }
