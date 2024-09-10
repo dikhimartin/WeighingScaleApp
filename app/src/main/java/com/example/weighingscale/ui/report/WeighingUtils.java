@@ -1,11 +1,6 @@
 package com.example.weighingscale.ui.report;
 
 
-import android.annotation.SuppressLint;
-import android.util.Log;
-
-import com.example.weighingscale.util.FormatterUtil;
-
 public class WeighingUtils {
 
     public static float convertDurationToBarChartFormat(long durationInMillis) {

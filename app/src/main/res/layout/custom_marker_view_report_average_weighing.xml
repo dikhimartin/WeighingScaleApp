@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/markerTableLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/brown"
+    android:padding="8dp">
+
+    <!-- Tanggal Penimbangan -->
+    <TableRow>
+        <TextView
+            android:id="@+id/labelTanggalPenimbangan"
+            android:text="Tanggal Penimbangan"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:text=" : "
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:id="@+id/valueTanggalPenimbangan"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+    </TableRow>
+
+    <!-- Lokasi Penimbangan -->
+    <TableRow>
+        <TextView
+            android:id="@+id/labelLokasiPenimbangan"
+            android:text="Lokasi Penimbangan"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:text=" : "
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+        <LinearLayout
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/valueLokasiPenimbanganProvinsi"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"/>
+
+            <TextView
+                android:id="@+id/valueLokasiPenimbanganKota"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"/>
+        </LinearLayout>
+    </TableRow>
+
+    <!-- Tujuan Pengiriman -->
+    <TableRow>
+        <TextView
+            android:id="@+id/labelTujuanPengiriman"
+            android:text="Tujuan Pengiriman"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:text=" : "
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+        <LinearLayout
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/valueTujuanPengirimanProvinsi"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"/>
+            <TextView
+                android:id="@+id/valueTujuanPengirimanKota"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"/>
+        </LinearLayout>
+    </TableRow>
+
+    <!-- Space -->
+    <TableRow>
+        <TextView
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+    </TableRow>
+
+    <!-- Durasi Penimbangan -->
+    <TableRow>
+        <TextView
+            android:id="@+id/labelDurasiPenimbangan"
+            android:text="Durasi Penimbangan"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:text=" : "
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:id="@+id/valueDurasiPenimbangan"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+    </TableRow>
+
+    <!-- Jam Mulai -->
+    <TableRow>
+        <TextView
+            android:id="@+id/labelJamMulai"
+            android:text="Jam Mulai"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:text=" : "
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:id="@+id/valueJamMulai"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            tools:ignore="HardcodedText"/>
+    </TableRow>
+
+    <!-- Jam Berakhir -->
+    <TableRow>
+        <TextView
+            android:id="@+id/labelJamBerakhir"
+            android:text="Jam Berakhir"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:text=" : "
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:id="@+id/valueJamBerakhir"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+    </TableRow>
+
+</TableLayout>
