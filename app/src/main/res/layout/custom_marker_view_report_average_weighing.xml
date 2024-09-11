@@ -187,7 +187,7 @@
     <TableRow>
         <TextView
             android:id="@+id/labelBerat"
-            android:text="Berat Padi (kg)"
+            android:text="Berat Padi"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:textSize="12sp"
