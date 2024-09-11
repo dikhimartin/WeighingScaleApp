@@ -15,7 +15,6 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
 
 import java.util.List;
-import java.util.Locale;
 
 @SuppressLint("ViewConstructor")
 public class MarkerViewReportAverage extends MarkerView {
@@ -27,7 +26,7 @@ public class MarkerViewReportAverage extends MarkerView {
     private final TextView valueLokasiPenimbanganKota;
     private final TextView valueTujuanPengirimanProvinsi;
     private final TextView valueTujuanPengirimanKota;
-    private final TextView valuevalueBerat;
+    private final TextView valueBerat;
     private final List<BatchDTO> batchEntries;
 
     public MarkerViewReportAverage(Context context, int layoutResource, List<BatchDTO> batchEntries) {
@@ -43,7 +42,7 @@ public class MarkerViewReportAverage extends MarkerView {
         valueLokasiPenimbanganKota = findViewById(R.id.valueLokasiPenimbanganKota);
         valueTujuanPengirimanProvinsi = findViewById(R.id.valueTujuanPengirimanProvinsi);
         valueTujuanPengirimanKota = findViewById(R.id.valueTujuanPengirimanKota);
-        valuevalueBerat = findViewById(R.id.valueBerat);
+        valueBerat = findViewById(R.id.valueBerat);
     }
 
     @SuppressLint("SetTextI18n")
@@ -88,7 +87,7 @@ public class MarkerViewReportAverage extends MarkerView {
         valueLokasiPenimbanganKota.setText(weighingLocationCity);
         valueTujuanPengirimanProvinsi.setText(deliveryDestinationProvince);
         valueTujuanPengirimanKota.setText(deliveryDestinationCity);
-        valuevalueBerat.setText(weightFormatted);
+        valueBerat.setText(weightFormatted);
 
         super.refreshContent(e, highlight);
     }
