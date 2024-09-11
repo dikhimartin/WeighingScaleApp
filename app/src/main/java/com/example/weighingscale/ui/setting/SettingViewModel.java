@@ -61,11 +61,11 @@ public class SettingViewModel extends AndroidViewModel {
     private void loadUnitOptions() {
         // Define mapping between display text and database values
         unitMap.put("Kilogram (Kg)", "kg");
-        unitMap.put("Gram (g)", "g");
-        unitMap.put("Milligram (mg)", "mg");
+        unitMap.put("Kuintal", "kuintal");
+        unitMap.put("Ton", "ton");
 
         // Convert keys to a list for the adapter
-        List<String> units = Arrays.asList("Kilogram (Kg)", "Gram (g)", "Milligram (mg)");
+        List<String> units = Arrays.asList("Kilogram (Kg)", "Kuintal", "Ton");
         unitOptions.setValue(units);
     }
 }

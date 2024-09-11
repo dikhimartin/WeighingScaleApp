@@ -42,22 +42,20 @@ public class SafeValueUtil {
      * Safely retrieves a non-null Integer value.
      *
      * @param value the input Integer, which may be null.
-     * @param defaultValue the default value to return if the input is null.
      * @return the input Integer if it is not null, otherwise returns the default value.
      */
-    public static int getInt(Integer value, int defaultValue) {
-        return (value != null) ? value : defaultValue;
+    public static int getInt(Integer value) {
+        return (value != null) ? value : 0;
     }
 
     /**
      * Safely retrieves a non-null Double value.
      *
      * @param value the input Double, which may be null.
-     * @param defaultValue the default value to return if the input is null.
      * @return the input Double if it is not null, otherwise returns the default value.
      */
-    public static double getDouble(Double value, double defaultValue) {
-        return (value != null) ? value : defaultValue;
+    public static double getDouble(Double value) {
+        return (value != null) ? value : 0;
     }
 
     /**

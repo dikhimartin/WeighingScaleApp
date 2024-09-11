@@ -132,7 +132,7 @@ public class ReportAverageFragment extends Fragment {
 
     // Create and format the bar chart data set
     private BarData createBarData(List<BarEntry> barEntries) {
-        BarDataSet durationDataSet = new BarDataSet(barEntries, "Durasi Penimbangan (jam)"); // Create dataset for bar chart
+        BarDataSet durationDataSet = new BarDataSet(barEntries, "Durasi Penimbangan (x jam x menit)"); // Create dataset for bar chart
         durationDataSet.setColor(ContextCompat.getColor(requireContext(), R.color.gold)); // Set bar color
         durationDataSet.setValueTextSize(10f); // Set value text size
 

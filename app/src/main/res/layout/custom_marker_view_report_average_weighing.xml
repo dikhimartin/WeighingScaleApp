@@ -175,4 +175,35 @@
             android:textSize="12sp" />
     </TableRow>
 
+    <!-- Space -->
+    <TableRow>
+        <TextView
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+    </TableRow>
+
+    <!-- Berat -->
+    <TableRow>
+        <TextView
+            android:id="@+id/labelBerat"
+            android:text="Berat Padi (kg)"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:text=" : "
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:id="@+id/valueBerat"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+    </TableRow>
+
 </TableLayout>

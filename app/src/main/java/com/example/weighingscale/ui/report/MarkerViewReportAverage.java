@@ -15,6 +15,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
 
 import java.util.List;
+import java.util.Locale;
 
 @SuppressLint("ViewConstructor")
 public class MarkerViewReportAverage extends MarkerView {
@@ -26,6 +27,7 @@ public class MarkerViewReportAverage extends MarkerView {
     private final TextView valueLokasiPenimbanganKota;
     private final TextView valueTujuanPengirimanProvinsi;
     private final TextView valueTujuanPengirimanKota;
+    private final TextView valuevalueBerat;
     private final List<BatchDTO> batchEntries;
 
     public MarkerViewReportAverage(Context context, int layoutResource, List<BatchDTO> batchEntries) {
@@ -41,6 +43,7 @@ public class MarkerViewReportAverage extends MarkerView {
         valueLokasiPenimbanganKota = findViewById(R.id.valueLokasiPenimbanganKota);
         valueTujuanPengirimanProvinsi = findViewById(R.id.valueTujuanPengirimanProvinsi);
         valueTujuanPengirimanKota = findViewById(R.id.valueTujuanPengirimanKota);
+        valuevalueBerat = findViewById(R.id.valueBerat);
     }
 
     @SuppressLint("SetTextI18n")
@@ -56,6 +59,7 @@ public class MarkerViewReportAverage extends MarkerView {
         String durationFormat = FormatterUtil.formatDuration(batch.duration);
         String textStartDate = SafeValueUtil.getFormattedDate(batch.start_date, "dd/MM/yyyy HH:mm:ss");
         String textEndDate = SafeValueUtil.getFormattedDate(batch.end_date, "dd/MM/yyyy HH:mm:ss");
+        String weightFormatted = WeighingUtils.convertWeight(batch.total_amount, batch.unit);
 
         // Set locations
         String weighingLocationCity = getNonEmptyText(setLocationText(
@@ -84,6 +88,7 @@ public class MarkerViewReportAverage extends MarkerView {
         valueLokasiPenimbanganKota.setText(weighingLocationCity);
         valueTujuanPengirimanProvinsi.setText(deliveryDestinationProvince);
         valueTujuanPengirimanKota.setText(deliveryDestinationCity);
+        valuevalueBerat.setText(weightFormatted);
 
         super.refreshContent(e, highlight);
     }
