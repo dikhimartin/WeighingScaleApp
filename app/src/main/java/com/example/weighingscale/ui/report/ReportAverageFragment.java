@@ -139,7 +139,7 @@ public class ReportAverageFragment extends Fragment {
         long averageDuration = WeighingUtils.calculateAverageDuration(batchList);
         float averageSpeed = WeighingUtils.calculateAverageSpeed(batchList);
 
-        durationTextView.setText(DateTimeUtil.formatDuration(averageDuration));
+        durationTextView.setText(DateTimeUtil.formatDuration(averageDuration, true, true, false));
         speedTextView.setText(String.format(Locale.getDefault(), "%s /jam", WeighingUtils.convertWeight(averageSpeed, "kg")));
     }
 
