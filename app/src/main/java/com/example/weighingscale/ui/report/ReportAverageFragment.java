@@ -1,6 +1,8 @@
 package com.example.weighingscale.ui.report;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.util.DateTimeUtil;
+import com.example.weighingscale.util.WeighingUtils;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -27,30 +29,43 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ReportAverageFragment extends Fragment {
     private ReportViewModel reportViewModel;
     private BarChart barChart;
-    private Button filterButton;
-    private TextView dateTextView;
+    private Button filterButton, buttonShowFormula;
+    private TextView dateTextView, durationTextView, speedTextView;
 
-    // Inflate the layout and initialize views for the report fragment
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_report_average_weighing, container, false);
         initViews(view); // Initialize UI elements
         setupViewModel(); // Initialize the ViewModel
         setupFilterButton(); // Set up filter button functionality
         observeReportData(); // Observe data and populate the chart
+
+
+        // set listener
+        buttonShowFormula.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFormulaDialog();
+            }
+        });
+
         return view;
     }
 
     // Initialize UI components like button, chart, and text view
     private void initViews(View view) {
         filterButton = view.findViewById(R.id.button_filter);
+        buttonShowFormula = view.findViewById(R.id.button_show_formula);
         barChart = view.findViewById(R.id.barChart);
         dateTextView = view.findViewById(R.id.text_date_range);
+        durationTextView = view.findViewById(R.id.value_average_weighing_duration);
+        speedTextView = view.findViewById(R.id.value_average_weighing_speed);
     }
 
     // Set up the ViewModel to interact with data
@@ -108,6 +123,7 @@ public class ReportAverageFragment extends Fragment {
     }
 
     // Set up the chart with the list of BatchDTO data
+    @SuppressLint("DefaultLocale")
     private void setupChart(List<BatchDTO> batchList) {
         if (barChart == null || batchList == null || batchList.isEmpty()) return; // Check for valid data
 
@@ -118,13 +134,20 @@ public class ReportAverageFragment extends Fragment {
         barChart.animateY(500); // Add animation for a smooth appearance
         setupAxes(); // Set up chart axes
         setupMarkerView(batchList); // Attach custom marker view to display batch details on tap
+
+
+        long averageDuration = WeighingUtils.calculateAverageDuration(batchList);
+        float averageSpeed = WeighingUtils.calculateAverageSpeed(batchList);
+
+        durationTextView.setText(DateTimeUtil.formatDuration(averageDuration));
+        speedTextView.setText(String.format(Locale.getDefault(), "%s /jam", WeighingUtils.convertWeight(averageSpeed, "kg")));
     }
 
     // Convert the batch list to bar chart entries representing the duration in hours
     private List<BarEntry> createBarEntries(List<BatchDTO> batchList) {
         List<BarEntry> barEntries = new ArrayList<>();
         for (int i = 0; i < batchList.size(); i++) {
-            float durationInHours = WeighingUtils.convertDurationToBarChartFormat(batchList.get(i).duration); // Convert duration
+            float durationInHours = WeighingUtils.convertDuration(batchList.get(i).duration); // Convert duration
             barEntries.add(new BarEntry(i, durationInHours)); // Add entry for each batch
         }
         return barEntries;
@@ -139,12 +162,16 @@ public class ReportAverageFragment extends Fragment {
         // Create BarData object and set the value formatter for custom display format
         BarData barData = new BarData(durationDataSet);
         barData.setBarWidth(0.6f); // Set bar width for better visibility
+
+        // Set the custom ValueFormatter to format duration values in hours, minutes, and seconds
         barData.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return formatDuration(value); // Format bar values into "X Jam X Menit"
+                long durationMillis = (long) (value * 3600000); // Convert hours (float) back to milliseconds
+                return DateTimeUtil.formatDuration(durationMillis, true, true, false); // Show only hours and minutes
             }
         });
+
         return barData;
     }
 
@@ -192,19 +219,21 @@ public class ReportAverageFragment extends Fragment {
         return calendar.getTime(); // Return date set to midnight
     }
 
-    // Format duration from float (hours) into "X Jam X Menit" or "X Menit"
-    @SuppressLint("DefaultLocale")
-    public String formatDuration(float value) {
-        long hours = (long) value; // Get the whole number of hours
-        long minutes = Math.round((value - hours) * 60); // Convert the decimal part into minutes
+    private void showFormulaDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
 
-        // Return formatted string based on whether there are hours or minutes
-        if (hours == 0) {
-            return String.format("%d Menit", minutes); // Only display minutes if no hours
-        } else if (minutes == 0) {
-            return String.format("%d Jam", hours); // Only display hours if no minutes
-        } else {
-            return String.format("%d Jam %02d Menit", hours, minutes); // Display both hours and minutes
-        }
+        View dialogView = inflater.inflate(R.layout.dialog_formula_report_average_weighing, null);
+        builder.setView(dialogView)
+               .setTitle("Rumus Perhitungan")
+               .setPositiveButton("Tutup", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       dialog.dismiss();
+                   }
+               });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

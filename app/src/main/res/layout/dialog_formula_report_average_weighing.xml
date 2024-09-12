@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Formula 1: Durasi Penimbangan per Batch -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menghitung Durasi Penimbangan per Batch"
+            android:textStyle="bold"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            tools:ignore="HardcodedText" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Untuk menghitung durasi penimbangan dalam satu batch, gunakan rumus berikut:"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            tools:ignore="HardcodedText" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/asset_formula_durasi_batch"
+            android:contentDescription="Durasi Penimbangan per Batch"
+            tools:ignore="HardcodedText" />
+
+        <!-- Formula 2: Rata-Rata Durasi Penimbangan -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menghitung Rata-Rata Durasi Penimbangan"
+            android:textColor="?attr/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp"
+            tools:ignore="HardcodedText" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Untuk mendapatkan rata-rata durasi penimbangan dari semua batch, gunakan rumus berikut:"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            tools:ignore="HardcodedText" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/asset_formula_rata_rata_durasi"
+            android:contentDescription="Rata-Rata Durasi Penimbangan"
+            tools:ignore="HardcodedText" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Di mana n adalah jumlah batch, dan i adalah durasi penimbangan untuk batch ke-i."
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            tools:ignore="HardcodedText" />
+
+        <!-- Formula 3: Kecepatan Penimbangan Rata-Rata -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menghitung Kecepatan Penimbangan Rata-Rata"
+            android:textColor="?attr/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp"
+            tools:ignore="HardcodedText" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Untuk menghitung kecepatan penimbangan rata-rata, gunakan rumus berikut:"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            tools:ignore="HardcodedText" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/asset_formula_kecepatan"
+            android:contentDescription="Kecepatan Penimbangan Rata-Rata"
+            tools:ignore="HardcodedText" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Di mana: "
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            tools:ignore="HardcodedText" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Total Berat Padi adalah jumlah total padi yang ditimbang selama periode pengamatan."
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            tools:ignore="HardcodedText" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Total Durasi Penimbangan adalah total durasi penimbangan yang dihitung dari semua batch."
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+</ScrollView>

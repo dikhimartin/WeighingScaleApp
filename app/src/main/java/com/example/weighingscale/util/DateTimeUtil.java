@@ -216,4 +216,61 @@ public class DateTimeUtil {
         return startDay + " " + startMonth + " " + startYear + " - " + endDay + " " + endMonth + " " + endYear;
     }
 
+    /**
+     * Formats the given duration in milliseconds into a human-readable string with hours, minutes, and seconds.
+     * This is the default version that includes hours, minutes, and seconds by default.
+     *
+     * @param durationMillis The duration in milliseconds to be formatted.
+     * @return A human-readable string representing the duration in "X Jam Y Menit Z Detik".
+     */
+    public static String formatDuration(long durationMillis) {
+        return formatDuration(durationMillis, true, true, true); // Default: show hours, minutes, and seconds
+    }
+
+    /**
+     * Formats the given duration in milliseconds into a human-readable string.
+     * Allows customization to show only hours, minutes, or seconds.
+     *
+     * @param durationMillis The duration in milliseconds to be formatted.
+     * @param showHours Flag to include hours in the output (true to display hours).
+     * @param showMinutes Flag to include minutes in the output (true to display minutes).
+     * @param showSeconds Flag to include seconds in the output (true to display seconds).
+     * @return A human-readable string representing the duration.
+     */
+    public static String formatDuration(long durationMillis, boolean showHours, boolean showMinutes, boolean showSeconds) {
+        if (durationMillis <= 0) {
+            return "-"; // Return "-" if the duration is non-positive
+        }
+
+        // Calculate total seconds from milliseconds
+        long totalSeconds = durationMillis / 1000;
+        long minutes = totalSeconds / 60; // Total minutes
+        long seconds = totalSeconds % 60; // Remaining seconds
+        long hours = minutes / 60; // Total hours
+        minutes = minutes % 60; // Remaining minutes
+
+        // StringBuilder to build the output string
+        StringBuilder formattedDuration = new StringBuilder();
+
+        // Append hours if enabled
+        if (showHours && hours > 0) {
+            formattedDuration.append(hours).append(" Jam ");
+        }
+
+        // Append minutes if enabled
+        if (showMinutes && (minutes > 0 || hours > 0)) { // Show 0 minutes to keep format consistent if hours exist
+            formattedDuration.append(minutes).append(" Menit ");
+        }
+
+        // Append seconds if enabled
+        if (showSeconds && (seconds > 0 || (!showHours && !showMinutes))) { // Show seconds if no other units exist
+            formattedDuration.append(seconds).append(" Detik");
+        }
+
+        // Return the formatted string
+        return formattedDuration.toString().trim(); // Trim any trailing spaces
+    }
+
+
+
 }

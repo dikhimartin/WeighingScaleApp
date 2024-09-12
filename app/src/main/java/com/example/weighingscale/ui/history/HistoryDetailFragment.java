@@ -26,10 +26,12 @@ import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.LocationViewModel;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedAdapter;
+import com.example.weighingscale.util.DateTimeUtil;
 import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.InputDirectiveUtil;
 import com.example.weighingscale.util.SafeValueUtil;
 import com.example.weighingscale.util.ValidationUtil;
+import com.example.weighingscale.util.WeighingUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -163,14 +165,14 @@ public class HistoryDetailFragment extends Fragment {
         String startDateText = SafeValueUtil.getFormattedDate(currentBatch.start_date, "dd/MM/yyyy HH:mm:ss");
         String endDateText = (currentBatch.end_date != null) ? SafeValueUtil.getFormattedDate(currentBatch.end_date, "dd/MM/yyyy HH:mm:ss") : "-";
         String durationText = (currentBatch.start_date != null && currentBatch.end_date != null) ?
-        FormatterUtil.formatDuration(currentBatch.end_date.getTime() - currentBatch.start_date.getTime()) : "-";
+        DateTimeUtil.formatDuration(currentBatch.end_date.getTime() - currentBatch.start_date.getTime()) : "-";
 
         textStartDate.setText(startDateText);
         textEndDate.setText(endDateText);
         textDuration.setText(durationText);
 
         // Set total weight and price
-        textTotalWeight.setText(currentBatch.total_amount + " " + SafeValueUtil.getString(currentBatch.unit, "kg"));
+        textTotalWeight.setText(WeighingUtils.convertWeight(currentBatch.total_amount, currentBatch.unit));
         textTotalPrice.setText(SafeValueUtil.formatCurrency("Rp", currentBatch.total_price));
     }
 

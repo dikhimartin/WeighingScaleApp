@@ -6,8 +6,10 @@ import android.widget.TextView;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
+import com.example.weighingscale.util.DateTimeUtil;
 import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.SafeValueUtil;
+import com.example.weighingscale.util.WeighingUtils;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
@@ -55,7 +57,7 @@ public class MarkerViewReportAverage extends MarkerView {
 
         // Format data
         String textDatetime = SafeValueUtil.getFormattedDate(batch.datetime, "dd MMMM yyyy");
-        String durationFormat = FormatterUtil.formatDuration(batch.duration);
+        String durationFormat = DateTimeUtil.formatDuration(batch.duration);
         String textStartDate = SafeValueUtil.getFormattedDate(batch.start_date, "dd/MM/yyyy HH:mm:ss");
         String textEndDate = SafeValueUtil.getFormattedDate(batch.end_date, "dd/MM/yyyy HH:mm:ss");
         String weightFormatted = WeighingUtils.convertWeight(batch.total_amount, batch.unit);

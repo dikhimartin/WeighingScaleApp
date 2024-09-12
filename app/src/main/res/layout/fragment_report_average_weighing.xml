@@ -46,23 +46,100 @@
         app:layout_constraintTop_toBottomOf="@+id/text_date_range"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/text_average_speed"
+        app:layout_constraintBottom_toTopOf="@+id/summary_average_weighing"
         android:layout_marginTop="35dp"
-        app:layout_constraintHeight_percent="0.7"/>
+        app:layout_constraintHeight_percent="0.5"/>
 
-    <!-- TextView Average -->
-    <TextView
-        android:id="@+id/text_average_speed"
+    <TableLayout
+        android:id="@+id/summary_average_weighing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rata rata kecepatan : 1 Jam"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/barChart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/barChart"
+        android:padding="8dp"
+        android:layout_marginTop="10dp"
+        tools:ignore="MissingConstraints">
+
+        <!-- Rata-Rata Durasi Penimbangan -->
+        <TableRow tools:ignore="UselessParent">
+            <TextView
+                android:id="@+id/label_average_weighing_duration"
+                android:text="Rata-Rata Durasi Penimbangan"
+                android:textStyle="bold"
+                android:textColor="@color/brown"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText"/>
+            <TextView
+                android:text=" : "
+                android:textStyle="bold"
+                android:textColor="@color/brown"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText"/>
+        </TableRow>
+        <TableRow tools:ignore="UselessParent">
+            <TextView
+                android:id="@+id/value_average_weighing_duration"
+                android:textColor="@color/gold"
+                android:text="0 Jam"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText"/>
+        </TableRow>
+
+
+        <!-- Space -->
+        <TableRow>
+            <TextView
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText"/>
+        </TableRow>
+
+        <!--  Kecepatan Penimbangan Rata-Rata -->
+        <TableRow tools:ignore="UselessParent">
+            <TextView
+                android:id="@+id/label_average_weighing_speed"
+                android:text="Kecepatan Penimbangan Rata-Rata"
+                android:textStyle="bold"
+                android:textColor="@color/brown"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:text=" : "
+                android:textStyle="bold"
+                android:textColor="@color/brown"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText"/>
+        </TableRow>
+
+        <TextView
+                android:id="@+id/value_average_weighing_speed"
+                android:textColor="@color/gold"
+                android:text="0 Kg/Jam"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText"/>
+    </TableLayout>
+
+    <Button
+        android:id="@+id/button_show_formula"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lihat Rumus Perhitungan"
+        android:textAllCaps="false"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/sky_blue"
+        app:layout_constraintTop_toBottomOf="@+id/summary_average_weighing"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--    <color name="brown">#5B3F28</color>-->
+<!--    <color name="gold">#E7AD4B</color>-->
+<!--    <color name="black">#FF000000</color>-->
+<!--    <color name="white">#FFFFFFFF</color>-->
+<!--    <color name="amber">#FFB822</color>-->
+<!--    <color name="mint_green">#34BFA3</color>-->
+<!--    <color name="sky_blue">#36A3F7</color>-->
