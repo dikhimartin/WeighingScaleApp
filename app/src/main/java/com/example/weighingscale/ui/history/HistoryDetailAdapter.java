@@ -61,7 +61,7 @@ public class HistoryDetailAdapter extends ListAdapter<BatchDetail, HistoryDetail
 
         public void bind(BatchDetail batchDetail, Batch currentBatch) {
             String formattedDate = DateTimeUtil.formatDateTime(batchDetail.getDatetime(), "dd/MM/yyyy HH:mm");
-            String amountText = String.format(Locale.getDefault(), "%d %s", batchDetail.getAmount(), currentBatch != null ? currentBatch.unit : "Kg");
+            String amountText = String.format(Locale.getDefault(), "%.2f %s", batchDetail.getAmount(), currentBatch != null ? currentBatch.unit : "Kg");
             binding.textViewWeight.setText(amountText);
             binding.textViewDate.setText(formattedDate);
         }

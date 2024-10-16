@@ -6,25 +6,27 @@ import java.util.Objects;
 
 public class FormatterUtil {
 
-    /**
-     * Removes non-digit characters except the decimal point and converts the sanitized string to an integer.
-     * The result is floored to the nearest integer.
+     /**
+     * Converts the sanitized input string to a double for precision.
      *
      * @param input The input string to sanitize and convert.
-     * @return The floored integer value of the sanitized input.
+     * @return The double value of the sanitized input.
      * @throws NumberFormatException if the input cannot be converted to a valid number.
      */
-    public static int sanitizeAndConvertToInteger(String input) throws NumberFormatException {
-        // Remove non-digit characters except the decimal point
-        String sanitizedText = input.replaceAll("[^\\d.]", "");
+    public static double sanitizeAndConvertToDouble(String input) throws NumberFormatException {
+        // Remove all characters except digits, decimal points, and commas
+        String sanitizedText = input.replaceAll("[^\\d,\\.]", "");
 
-        // Check if the sanitized string is empty or only contains a decimal point
-        if (sanitizedText.isEmpty() || sanitizedText.equals(".")) {
+        // Replace commas with dots for standard decimal format
+        sanitizedText = sanitizedText.replace(",", ".");
+
+        // Check if the sanitized string is valid
+        if (sanitizedText.isEmpty() || sanitizedText.equals(".") || sanitizedText.equals(",")) {
             throw new NumberFormatException("Invalid input: " + input);
         }
 
-        // Parse the sanitized string to double, then convert to integer by flooring
-        return (int) Math.floor(Double.parseDouble(sanitizedText));
+        // Parse the sanitized string to a double
+        return Double.parseDouble(sanitizedText);
     }
 
      /**
@@ -44,5 +46,4 @@ public class FormatterUtil {
         // Combine the prefix and the formatted amount
         return prefix + " " + formattedAmount;
     }
-
 }

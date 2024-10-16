@@ -82,9 +82,9 @@ public class HomeFragment extends Fragment {
             public void onChanged(Integer status) {
                 if (status != null && status == StateConnecting.BLUETOOTH_CONNECTED) {
                     enable_auto_mode();
-                    sharedViewModel.getWeight().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                    sharedViewModel.getWeight().observe(getViewLifecycleOwner(), new Observer<Double>() {
                         @Override
-                        public void onChanged(Integer weight) {
+                        public void onChanged(Double weight) {
                             binding.textAmount.setText(String.valueOf(weight));
                         }
                     });
@@ -149,11 +149,11 @@ public class HomeFragment extends Fragment {
                             recyclerView.smoothScrollToPosition(0);
 
                             // Calculate total weight
-                            int totalWeight = 0;
+                            double totalWeight = 0;
                             for (BatchDetail detail : data) {
                                 totalWeight += detail.getAmount();
                             }
-                            String totalWeightText = String.format(Locale.getDefault(), "%d %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
+                            String totalWeightText = String.format(Locale.getDefault(), "%.2f %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
                             binding.textTotalWeight.setText(totalWeightText);
 
                             // Update item count
@@ -196,7 +196,7 @@ public class HomeFragment extends Fragment {
                             binding.editAmount.getText().toString();
 
         try {
-            int amount = FormatterUtil.sanitizeAndConvertToInteger(amountText);
+            double amount = FormatterUtil.sanitizeAndConvertToDouble(amountText);
             if (amount <= 0) throw new NumberFormatException();
 
             homeViewModel.insertBatchDetail(currentBatchID, amount, currentSetting);
@@ -233,7 +233,7 @@ public class HomeFragment extends Fragment {
         builder.setView(dialogView)
                 .setTitle("Mengubah nilai log")
                 .setPositiveButton("Ubah", (dialog, id) -> {
-                    int amount = FormatterUtil.sanitizeAndConvertToInteger(etAmount.getText().toString());
+                    double amount = FormatterUtil.sanitizeAndConvertToDouble(etAmount.getText().toString());
                     if (amount <= 0) throw new NumberFormatException();
 
                     // Update Batch Detail

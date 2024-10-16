@@ -3,6 +3,7 @@ package com.example.weighingscale;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -194,9 +195,13 @@ public class MainActivity extends AppCompatActivity {
                 switch (msg.what) {
                     case MESSAGE_READ:
                         // TODO : Baca timbangan
-                        String readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
-                        int weightValue = FormatterUtil.sanitizeAndConvertToInteger(readMessage);
-                        sharedViewModel.setWeight(weightValue);
+                        String readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8).trim();
+                        // Split the message if it contains multiple lines or transmissions
+                        String[] messages = readMessage.split("\\r?\\n"); // Split by line breaks
+                        for (String message : messages) {
+                            double weightValue = FormatterUtil.sanitizeAndConvertToDouble(message.trim());
+                            sharedViewModel.setWeight(weightValue);
+                        }
                         break;
                     case HANDLER_STATUS:
                          LogModelUtils.printObjectFields(msg);

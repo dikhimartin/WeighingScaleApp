@@ -62,7 +62,7 @@ public class LogAdapter extends ListAdapter<BatchDetail, LogAdapter.LogHolder> {
         String formattedDate = DateTimeUtil.formatDateTime(currentData.getDatetime(), "dd/MM/yyyy HH:mm");
 
         // Format the amount text including the unit
-        String amountText = String.format(Locale.getDefault(), "%d %s", currentData.getAmount(), currentSetting != null ? currentSetting.unit : "Kg");
+        String amountText = String.format(Locale.getDefault(), "%.2f %s", currentData.getAmount(), currentSetting != null ? currentSetting.unit : "Kg");
         holder.textViewWeight.setText(amountText);
         holder.textViewDate.setText(formattedDate);
 

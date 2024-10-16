@@ -19,7 +19,7 @@ public class BatchDetail {
     public String id;
     public String batch_id;
     public Date datetime;
-    public int amount;
+    public Double amount;
 
     // Constructor
     public BatchDetail() {
@@ -35,7 +35,7 @@ public class BatchDetail {
         return datetime;
     }
 
-    public int getAmount() {
+    public Double getAmount() {
         return amount;
     }
 }

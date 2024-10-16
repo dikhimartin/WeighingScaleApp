@@ -135,7 +135,7 @@ public class PDFUtil {
         // Baris 4: Total Harga
         summaryTable.addCell(createCell("Total Harga", TextAlignment.LEFT));
         summaryTable.addCell(createCell(":", TextAlignment.LEFT));
-        summaryTable.addCell(createCell(SafeValueUtil.formatCurrency("Rp.", batch.getTotalAmount() * batch.getRice_price()), TextAlignment.LEFT));
+        summaryTable.addCell(createCell(SafeValueUtil.formatCurrency("Rp.", Math.round(batch.getTotalAmount() * batch.getRice_price())), TextAlignment.LEFT));
 
         document.add(summaryTable);
     }

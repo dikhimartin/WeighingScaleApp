@@ -3,6 +3,7 @@ package com.example.weighingscale.ui.history;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,6 +173,7 @@ public class HistoryDetailFragment extends Fragment {
         textDuration.setText(durationText);
 
         // Set total weight and price
+        Log.d("AMOUNT_WEIGHT", "OUTSIDE Function : "+ String.valueOf(currentBatch.total_amount));
         textTotalWeight.setText(WeighingUtils.convertWeight(currentBatch.total_amount, currentBatch.unit));
         textTotalPrice.setText(SafeValueUtil.formatCurrency("Rp", currentBatch.total_price));
     }

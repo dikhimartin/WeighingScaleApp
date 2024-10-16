@@ -1,5 +1,7 @@
 package com.example.weighingscale.util;
 
+import android.util.Log;
+
 import com.example.weighingscale.data.dto.BatchDTO;
 
 import java.util.List;
@@ -60,19 +62,20 @@ public class WeighingUtils {
             default:
                 return "Invalid unit"; // Gracefully handle unsupported units
         }
+        Log.d("AMOUNT_WEIGHT", "IN Function : "+ String.valueOf(amountInKg));
 
         // Convert and format based on the amount in Kg
         if (amountInKg >= 1000) {
             // Convert to Tons if weight is 1000 Kg or more
             double tons = amountInKg / 1000;
-            return String.format(Locale.getDefault(), "%.2f Ton (%.0f Kg)", tons, amountInKg);
+            return String.format(Locale.getDefault(), "%.2f Ton (%.2f Kg)", tons, amountInKg);
         } else if (amountInKg >= 100) {
             // Convert to Kuintal if weight is 100 Kg or more but less than 1000 Kg
             double kuintal = amountInKg / 100;
-            return String.format(Locale.getDefault(), "%.2f Kuintal (%.0f Kg)", kuintal, amountInKg);
+            return String.format(Locale.getDefault(), "%.2f Kuintal (%.2f Kg)", kuintal, amountInKg);
         } else {
             // No conversion, just show the weight in Kg
-            return String.format(Locale.getDefault(), "%.0f Kg", amountInKg);
+            return String.format(Locale.getDefault(), "%.2f Kg", amountInKg);
         }
     }
 
