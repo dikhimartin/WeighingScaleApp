@@ -157,7 +157,7 @@ public class HomeFragment extends Fragment {
                             binding.textTotalWeight.setText(totalWeightText);
 
                             // Update item count
-                            String itemCountText = String.format(Locale.getDefault(), "%d karung (sak)", data.size());
+                            String itemCountText = String.format(Locale.getDefault(), "%d item", data.size());
                             binding.textTotalItems.setText(itemCountText);
 
                             binding.cardTotal.setVisibility(View.VISIBLE);
@@ -165,7 +165,7 @@ public class HomeFragment extends Fragment {
                         } else {
                             binding.cardTotal.setVisibility(View.GONE);
                             binding.finishButtonGroup.setVisibility(View.GONE);
-                            binding.textTotalItems.setText("0 karung (sak)");
+                            binding.textTotalItems.setText("0 item");
                         }
                     });
             } else {
@@ -385,7 +385,7 @@ public class HomeFragment extends Fragment {
     private void clearBatchDetails() {
         currentBatchID = null;
         binding.cardTotal.setVisibility(View.GONE);
-        binding.textTotalItems.setText("0 karung (sak)");
+        binding.textTotalItems.setText("0 item");
         binding.finishButtonGroup.setVisibility(View.GONE);
         binding.sectionMode.setVisibility(View.GONE);
         adapter.submitList(null);

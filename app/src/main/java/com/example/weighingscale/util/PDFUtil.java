@@ -122,15 +122,15 @@ public class PDFUtil {
         summaryTable.addCell(createCell(":", TextAlignment.LEFT));
         summaryTable.addCell(createCell(SafeValueUtil.formatCurrency("Rp.", batch.getRice_price()), TextAlignment.LEFT));
 
-        // Baris 2: Total Karung (sak)
-        summaryTable.addCell(createCell("Total Karung (sak)", TextAlignment.LEFT));
+        // Baris 2: Total Item
+        summaryTable.addCell(createCell("Total Item", TextAlignment.LEFT));
         summaryTable.addCell(createCell(":", TextAlignment.LEFT));
-        summaryTable.addCell(createCell(totalBags + " Karung (sak)", TextAlignment.LEFT));
+        summaryTable.addCell(createCell(totalBags + " Item", TextAlignment.LEFT));
 
         // Baris 3: Total Berat
         summaryTable.addCell(createCell("Total Berat", TextAlignment.LEFT));
         summaryTable.addCell(createCell(":", TextAlignment.LEFT));
-        summaryTable.addCell(createCell(batch.getTotalAmount() + " " + unit, TextAlignment.LEFT));
+        summaryTable.addCell(createCell(WeighingUtils.convertWeight(batch.getTotalAmount(), unit), TextAlignment.LEFT));
 
         // Baris 4: Total Harga
         summaryTable.addCell(createCell("Total Harga", TextAlignment.LEFT));
