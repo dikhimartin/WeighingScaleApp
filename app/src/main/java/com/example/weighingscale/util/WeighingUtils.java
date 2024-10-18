@@ -62,8 +62,6 @@ public class WeighingUtils {
             default:
                 return "Invalid unit"; // Gracefully handle unsupported units
         }
-        Log.d("AMOUNT_WEIGHT", "IN Function : "+ String.valueOf(amountInKg));
-
         // Convert and format based on the amount in Kg
         if (amountInKg >= 1000) {
             // Convert to Tons if weight is 1000 Kg or more

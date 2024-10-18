@@ -33,6 +33,7 @@ import com.example.weighingscale.ui.shared.SharedViewModel;
 import com.example.weighingscale.util.DateTimeUtil;
 import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.InputDirectiveUtil;
+import com.example.weighingscale.util.WeighingUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -153,7 +154,8 @@ public class HomeFragment extends Fragment {
                             for (BatchDetail detail : data) {
                                 totalWeight += detail.getAmount();
                             }
-                            String totalWeightText = String.format(Locale.getDefault(), "%.2f %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
+                            // String totalWeightText = String.format(Locale.getDefault(), "%.2f %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
+                            String totalWeightText = WeighingUtils.convertWeight(totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
                             binding.textTotalWeight.setText(totalWeightText);
 
                             // Update item count
