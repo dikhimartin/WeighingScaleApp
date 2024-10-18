@@ -14,7 +14,7 @@ public class Setting {
     public String pic_name;
     public String pic_phone_number;
     public long rice_price;
-    public String unit; // 'g', 'mg' or 'kg'
+    public String unit;
 
     // Constructor
     public Setting() {
