@@ -154,7 +154,8 @@ public class HomeFragment extends Fragment {
                             for (BatchDetail detail : data) {
                                 totalWeight += detail.getAmount();
                             }
-//                             String totalWeightText = String.format(Locale.getDefault(), "%.2f %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
+
+                            // String totalWeightText = String.format(Locale.getDefault(), "%.2f %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
                             String totalWeightText = WeighingUtils.convertWeight(totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
                             binding.textTotalWeight.setText(totalWeightText);
 

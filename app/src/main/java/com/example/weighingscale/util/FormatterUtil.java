@@ -8,29 +8,31 @@ import java.util.Objects;
 
 public class FormatterUtil {
 
-  /**
+    /**
      * Removes non-digit characters except the decimal point and converts the sanitized string to an integer.
-     * The result is floored to the nearest integer.
+     * The result is floored to the nearest integer, with decimal parts ignored.
      *
      * @param input The input string to sanitize and convert.
-     * @return The floored integer value of the sanitized input.
-     * @throws NumberFormatException if the input cannot be converted to a valid number.
+     * @return The integer value of the sanitized input, or 0 if the input is invalid.
      */
-    public static int sanitizeAndConvertToInteger(String input) throws NumberFormatException {
-       Log.d("log-scale", "Before : " + input);
+    public static int sanitizeAndConvertToInteger(String input) {
+        Log.d("log-scale", "Before : " + input);
 
-        // Remove non-digit characters except the decimal point
-        String sanitizedText = input.replaceAll("[^\\d.]", "");
+        // Ganti koma dengan titik untuk parsing yang benar
+        String sanitizedText = input.replaceAll(",", ".").replaceAll("[^\\d.]", "");
 
-        // Check if the sanitized string is empty or only contains a decimal point
+        // Cek apakah string yang disanitasi kosong atau hanya berisi titik desimal
         if (sanitizedText.isEmpty() || sanitizedText.equals(".")) {
-            throw new NumberFormatException("Invalid input: " + input);
+            Log.d("log-scale", "Invalid input: " + input + ". Returning 0.");
+            return 0;
         }
 
-        Log.d("log-scale ", "After : " + (int) Math.floor(Double.parseDouble(sanitizedText)));
+        // Ambil bagian integer dengan parsing menjadi double dan casting ke integer
+        int result = (int) Double.parseDouble(sanitizedText);
 
-        // Parse the sanitized string to double, then convert to integer by flooring
-        return (int) Math.floor(Double.parseDouble(sanitizedText));
+        Log.d("log-scale", "After : " + result);
+
+        return result;
     }
 
     /**
