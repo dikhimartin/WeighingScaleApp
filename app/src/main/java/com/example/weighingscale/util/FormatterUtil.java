@@ -8,6 +8,31 @@ import java.util.Objects;
 
 public class FormatterUtil {
 
+  /**
+     * Removes non-digit characters except the decimal point and converts the sanitized string to an integer.
+     * The result is floored to the nearest integer.
+     *
+     * @param input The input string to sanitize and convert.
+     * @return The floored integer value of the sanitized input.
+     * @throws NumberFormatException if the input cannot be converted to a valid number.
+     */
+    public static int sanitizeAndConvertToInteger(String input) throws NumberFormatException {
+       Log.d("log-scale", "Before : " + input);
+
+        // Remove non-digit characters except the decimal point
+        String sanitizedText = input.replaceAll("[^\\d.]", "");
+
+        // Check if the sanitized string is empty or only contains a decimal point
+        if (sanitizedText.isEmpty() || sanitizedText.equals(".")) {
+            throw new NumberFormatException("Invalid input: " + input);
+        }
+
+        Log.d("log-scale ", "After : " + (int) Math.floor(Double.parseDouble(sanitizedText)));
+
+        // Parse the sanitized string to double, then convert to integer by flooring
+        return (int) Math.floor(Double.parseDouble(sanitizedText));
+    }
+
     /**
      * Converts the sanitized input string to a double for precision.
      *

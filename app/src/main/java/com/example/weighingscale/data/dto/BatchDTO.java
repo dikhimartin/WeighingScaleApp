@@ -11,7 +11,7 @@ public class BatchDTO extends Batch {
     public String delivery_destination_province_name;
     public String delivery_destination_city_type;
     public String delivery_destination_city_name;
-    public double total_amount;
+    public int total_amount;
     public long total_price;
 
     // Constructor that calls the superclass constructor
@@ -20,7 +20,7 @@ public class BatchDTO extends Batch {
     }
 
     // Additional Getter Methods for the new fields if needed
-    public double getTotalAmount() {
+    public int getTotalAmount() {
         return total_amount;
     }
 

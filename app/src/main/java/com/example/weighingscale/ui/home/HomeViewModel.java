@@ -41,7 +41,7 @@ public class HomeViewModel extends AndroidViewModel {
         batchRepository.insert(batch);
     }
 
-    public void insertBatchDetail(String batchId, double amount, Setting setting) {
+    public void insertBatchDetail(String batchId, int amount, Setting setting) {
         BatchDetail batchDetail = new BatchDetail();
         batchDetail.batch_id = batchId;
         batchDetail.datetime = new Date();
