@@ -1,5 +1,7 @@
 # WeighingScale Application
 
+[![wakatime](https://wakatime.com/badge/user/6107bfd2-2e56-4e0a-b828-3e2ef709217d/project/9394bb88-21f9-4a45-82a3-9fcd6a4cd593.svg)](https://wakatime.com/badge/user/6107bfd2-2e56-4e0a-b828-3e2ef709217d/project/9394bb88-21f9-4a45-82a3-9fcd6a4cd593)
+
 ## Overview
 
 **WeighingScale** is an Android application designed to integrate a digital scale with a smartphone to streamline and optimize rice harvest management. It leverages Bluetooth technology (via NodeMCU ESP32) to connect with the weighing scale device, enabling real-time data acquisition, processing, and visualization. The app also allows users to store batch data, generate reports, and export them as PDF files.
@@ -81,3 +83,11 @@ The project uses the following key dependencies:
 ├── settings.gradle              # Project settings
 └── README.md                    # Project documentation
 ```
+
+
+
+## Releases
+
+You can download the latest APK from the [Releases page](https://github.com/dikhimartin/WeighingScaleApp/releases).
+
+- **Latest Release**: [Version 1.0.1](https://github.com/dikhimartin/WeighingScaleApp/releases/tag/v1.0.1)
