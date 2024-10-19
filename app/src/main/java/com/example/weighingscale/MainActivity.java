@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                         // Split the message if it contains multiple lines or transmissions
                         String[] messages = readMessage.split("\\r?\\n"); // Split by line breaks
                         for (String message : messages) {
-                            double weightValue = FormatterUtil.sanitizeAndConvertToDouble(message.trim());
+                            int weightValue = FormatterUtil.sanitizeAndConvertToInteger(message.trim());
                             sharedViewModel.setWeight(weightValue);
                         }
                         break;
