@@ -30,11 +30,11 @@ git clone https://github.com/yourusername/weighingscale.git
 
 ### Building the Project
 
-1. Open Android Studio and load the project directory (`WeighingScale`).
-2. Make sure you have the necessary **Gradle** configurations and dependencies set up:
+1. **Open Android Studio** and load the project directory (`WeighingScale`).
+2. Ensure you have the necessary **Gradle** configurations and dependencies set up:
    - MPAndroidChart (`v3.1.0`)
    - iTextPDF (`libs.itextpdf`)
-3. Sync the project to download all required dependencies.
+3. **Sync the project** to download all required dependencies.
 4. Once synced, build the project by clicking **Build > Make Project** or using the shortcut `Ctrl+F9`.
 
 ### Running the Application
