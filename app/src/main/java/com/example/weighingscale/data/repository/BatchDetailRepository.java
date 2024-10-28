@@ -9,19 +9,24 @@ import com.example.weighingscale.data.local.database.dao.BatchDetailDao;
 import com.example.weighingscale.data.model.BatchDetail;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BatchDetailRepository {
     private final BatchDetailDao batchDetailDao;
-    private final LiveData<List<BatchDetail>> listBatchDetail;
+    private final ExecutorService executorService;
 
     public BatchDetailRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
         batchDetailDao = database.batchDetailDao();
-        listBatchDetail = batchDetailDao.getDatas();
+        executorService = Executors.newSingleThreadExecutor();
     }
 
-    public LiveData<List<BatchDetail>> getDatas() {
-        return listBatchDetail;
+    public void getDatas(Callback<List<BatchDetail>> callback) {
+        executorService.execute(() -> {
+            List<BatchDetail> batches = batchDetailDao.getDatas();
+            callback.onResult(batches);
+        });
     }
 
     public LiveData<List<BatchDetail>> getDatasByBatchID(String batchId) {
@@ -38,5 +43,9 @@ public class BatchDetailRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             batchDetailDao.update(batchDetail);
         });
+    }
+
+    public interface Callback<T> {
+        void onResult(T result);
     }
 }

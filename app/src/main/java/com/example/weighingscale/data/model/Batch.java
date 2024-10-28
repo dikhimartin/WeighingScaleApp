@@ -32,7 +32,6 @@ public class Batch {
     public String unit;
     public long rice_price;
     public String weighing_location_id;
-    public String weighing_location_geo;
     public String delivery_destination_id;
     public String truck_driver_name;
     public String truck_driver_phone_number;
