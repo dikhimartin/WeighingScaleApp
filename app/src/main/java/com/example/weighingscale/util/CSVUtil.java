@@ -154,4 +154,5 @@ public class CSVUtil {
         bufferedWriter.write(detailLine);
         bufferedWriter.newLine();
     }
+
 }

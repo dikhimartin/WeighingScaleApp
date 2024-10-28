@@ -210,7 +210,7 @@ public class HomeFragment extends Fragment {
             int amount = FormatterUtil.sanitizeAndConvertToInteger(amountText);
             if (amount <= 0) throw new NumberFormatException();
 
-            batchDetailViewModel.insert(currentBatchID, amount, currentSetting);
+            batchDetailViewModel.insert(currentBatchID, amount);
             Toast.makeText(requireContext(), "Log sudah disimpan", Toast.LENGTH_SHORT).show();
             resetAmount();
         } catch (NumberFormatException e) {

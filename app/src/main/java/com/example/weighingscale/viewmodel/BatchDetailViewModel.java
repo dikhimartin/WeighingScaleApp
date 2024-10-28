@@ -12,6 +12,7 @@ import com.example.weighingscale.data.repository.BatchDetailRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class BatchDetailViewModel extends AndroidViewModel {
     private final BatchDetailRepository batchDetailRepository;
@@ -29,11 +30,15 @@ public class BatchDetailViewModel extends AndroidViewModel {
         return batchDetailRepository.getDatasByBatchID(batchId);
     }
 
-    public void insert(String batchId, int amount, Setting setting) {
+    public void insert(String batchId, int amount) {
         BatchDetail batchDetail = new BatchDetail();
         batchDetail.batch_id = batchId;
         batchDetail.datetime = new Date();
         batchDetail.amount = amount;
+        batchDetailRepository.insert(batchDetail);
+    }
+
+    public void importData(BatchDetail batchDetail) {
         batchDetailRepository.insert(batchDetail);
     }
 

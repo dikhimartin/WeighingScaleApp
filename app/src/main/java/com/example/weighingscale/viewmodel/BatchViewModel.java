@@ -45,6 +45,10 @@ public class BatchViewModel extends AndroidViewModel {
         batchRepository.insert(batch);
     }
 
+    public void importData(Batch batch) {
+        batchRepository.insert(batch);
+    }
+    
     public void update(Batch batch) {
         batchRepository.update(batch);
     }

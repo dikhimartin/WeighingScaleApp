@@ -2,18 +2,21 @@ package com.example.weighingscale;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
-import com.example.weighingscale.ui.history.HistoryViewModel;
 import com.example.weighingscale.util.CSVUtil;
 import com.example.weighingscale.util.FormatterUtil;
+import com.example.weighingscale.util.ImportUtil;
 import com.example.weighingscale.util.LogModelUtils;
 import com.example.weighingscale.util.ShareUtil;
+import com.example.weighingscale.util.ValidationUtil;
 import com.example.weighingscale.viewmodel.BatchDetailViewModel;
 import com.example.weighingscale.viewmodel.BatchViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -49,18 +52,23 @@ import com.example.weighingscale.util.ConnectedThread;
 import com.example.weighingscale.viewmodel.SharedViewModel;
 import com.example.weighingscale.state.StateConnecting;
 
-import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ENABLE_BT = 1;
     public static final int MESSAGE_READ = 2;
     public static final int HANDLER_STATUS = 3;
     public static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 100;
+    private static final int REQUEST_CODE_IMPORT_CSV = 101;
 
     private SharedViewModel sharedViewModel;
     private BatchViewModel batchViewModel;
@@ -181,39 +189,16 @@ public class MainActivity extends AppCompatActivity {
            handleExport(csvUtil);
            return true;
 
+        } else if (id == R.id.action_import) {
+           handleImport();
+           return true;
+
         } else if (id == R.id.action_device) {
             handleDeviceConnection(navController);
             return true;
 
         } else {
             return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void handleExport(CSVUtil csvUtil) {
-        // Check if storage permission is granted before exporting
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            File csvFile = csvUtil.generateCSV(this);
-
-            if (csvFile != null) {
-                ShareUtil shareUtil = new ShareUtil();
-                shareUtil.shareFile(this, csvFile); // Membagikan file
-            }
-        } else {
-            Toast.makeText(this, "Storage permission is required to export data", Toast.LENGTH_SHORT).show();
-            checkStoragePermission();
-        }
-    }
-
-    private void handleDeviceConnection(NavController navController) {
-        if (!mBluetoothUtil.isBluetoothEnabled()) {
-            bluetoothOn();
-        } else if (stateConnecting.getStatus() == StateConnecting.BLUETOOTH_CONNECTED) {
-            // Do nothing if already connected
-            return;
-        } else {
-            // Show device list fragment to connect
-            navController.navigate(R.id.navigation_device);
         }
     }
 
@@ -272,14 +257,61 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent Data) {
-        super.onActivityResult(requestCode, resultCode, Data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
                 set_indicator_bt_enable();
             } else {
                 set_indicator_bt_disable();
             }
+        } else if (requestCode == REQUEST_CODE_IMPORT_CSV && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                // Create an instance of ImportUtil with the necessary ViewModels and context
+                ImportUtil importUtil = new ImportUtil(batchViewModel, batchDetailViewModel, this);
+                try {
+                    // Call the importCSV method from ImportUtil
+                    importUtil.importCSV(uri);
+                } catch (IOException e) {
+                    Toast.makeText(this, "Gagal mengimpor CSV", Toast.LENGTH_SHORT).show();
+                    Log.e("CSVImportError", "Error importing CSV file", e);
+                }
+            }
+        }
+    }
+
+    private void handleExport(CSVUtil csvUtil) {
+        // Check if storage permission is granted before exporting
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            File csvFile = csvUtil.generateCSV(this);
+            if (csvFile != null) {
+                ShareUtil shareUtil = new ShareUtil();
+                shareUtil.shareFile(this, csvFile);
+            }
+
+        } else {
+            Toast.makeText(this, "Storage permission is required to export data", Toast.LENGTH_SHORT).show();
+            checkStoragePermission();
+        }
+    }
+
+    private void handleImport() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("text/csv");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(Intent.createChooser(intent, "Pilih file CSV"), REQUEST_CODE_IMPORT_CSV);
+    }
+
+    private void handleDeviceConnection(NavController navController) {
+        if (!mBluetoothUtil.isBluetoothEnabled()) {
+            bluetoothOn();
+        } else if (stateConnecting.getStatus() == StateConnecting.BLUETOOTH_CONNECTED) {
+            // Do nothing if already connected
+            return;
+        } else {
+            // Show device list fragment to connect
+            navController.navigate(R.id.navigation_device);
         }
     }
 

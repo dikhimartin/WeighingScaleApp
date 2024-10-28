@@ -106,7 +106,4 @@ public interface BatchDao {
 
     @Delete
     void delete(Batch batch);
-
-    @Query("DELETE FROM Batch")
-    void deleteAll();
 }

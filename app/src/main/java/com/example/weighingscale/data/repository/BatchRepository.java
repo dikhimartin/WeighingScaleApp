@@ -84,9 +84,6 @@ public class BatchRepository {
             // Fetch batch and its details in a single transaction
             Batch batch = batchDao.getBatchByID(batchID);
             if (batch != null) {
-                // Fetch batch details
-                List<BatchDetail> details = batchDetailDao.getBatchDetailsByBatchID(batchID);
-
                 // Calculate duration
                 long durationMillis = 0;
                 if (batch.start_date != null) {
@@ -104,16 +101,20 @@ public class BatchRepository {
         });
     }
 
-    public void delete(Batch batch) {
-        AppDatabase.databaseWriteExecutor.execute(() -> batchDao.delete(batch));
+   public void delete(Batch batch) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            batchDetailDao.deleteByBatchID(batch.id);
+            batchDao.delete(batch);
+        });
     }
 
     public void deleteByIds(List<String> ids) {
-        AppDatabase.databaseWriteExecutor.execute(() -> batchDao.deleteByIDs(ids));
-    }
-
-    public void deleteAll() {
-        AppDatabase.databaseWriteExecutor.execute(batchDao::deleteAll);
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            for (String batchId : ids) {
+                batchDetailDao.deleteByBatchID(batchId);
+            }
+            batchDao.deleteByIDs(ids);
+        });
     }
 
     // Method to get Comparator based on sortOrder
