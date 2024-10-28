@@ -1,4 +1,4 @@
-package com.example.weighingscale.viewmodel;
+package com.example.weighingscale.ui.setting;
 
 import android.app.Application;
 
