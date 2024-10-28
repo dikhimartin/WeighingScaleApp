@@ -4,8 +4,10 @@ import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Utility class for validation and error handling in forms.
@@ -17,9 +19,10 @@ public class ValidationUtil {
     }
 
     /**
-     * Sets an error message on a given view if it is an instance of EditText.
+     * Sets an error message on a given view if it is an instance of EditText or TextView.
      *
      * @param view The view to set the error on.
+     * @param context The application context.
      * @param errorMessageResId The resource ID of the error message string.
      */
     public static void setFieldError(View view, Context context, int errorMessageResId) {
@@ -36,12 +39,33 @@ public class ValidationUtil {
     }
 
     /**
-     * Checks if the provided string can be parsed into a numeric value.
+     * Checks if the provided string can be parsed into a numeric value (specifically Long).
      *
      * @param str The string to check.
-     * @return true if the string is numeric, false otherwise.
+     * @return true if the string is a valid numeric value, false otherwise.
      */
-    public static boolean isNumeric(String str) {
+    public static boolean isLongNumeric(String str) {
+        if (str == null) {
+            return false;
+        }
+        try {
+            Long.parseLong(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the provided string can be parsed into a numeric value (specifically Float).
+     *
+     * @param str The string to check.
+     * @return true if the string is a valid numeric value, false otherwise.
+     */
+    public static boolean isFloatNumeric(String str) {
+        if (str == null) {
+            return false;
+        }
         try {
             Float.parseFloat(str);
             return true;
@@ -50,7 +74,7 @@ public class ValidationUtil {
         }
     }
 
-     /**
+    /**
      * Checks if the provided text is empty or null.
      *
      * @param text The text to check.
@@ -108,5 +132,20 @@ public class ValidationUtil {
      */
     public static boolean isValueEmpty(Long number) {
         return number == null || number == 0L;
+    }
+
+    /**
+     * Checks if the provided string is a valid UUID.
+     *
+     * @param str The string to check.
+     * @return true if the string is a valid UUID, false otherwise.
+     */
+    public static boolean isValidUUID(String str) {
+        try {
+            UUID.fromString(str);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 }

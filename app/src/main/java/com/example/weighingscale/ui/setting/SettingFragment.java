@@ -17,10 +17,11 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.model.Setting;
-import com.example.weighingscale.ui.home.HomeViewModel;
 import com.example.weighingscale.ui.shared.SharedAdapter;
 import com.example.weighingscale.util.InputDirectiveUtil;
 import com.example.weighingscale.util.ValidationUtil;
+import com.example.weighingscale.viewmodel.BatchViewModel;
+import com.example.weighingscale.viewmodel.SettingViewModel;
 
 public class SettingFragment extends Fragment {
 
@@ -34,8 +35,8 @@ public class SettingFragment extends Fragment {
         settingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
         View root = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        // Init instance HomeViewModel
-        HomeViewModel homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        // Init instance BatchViewModel
+        BatchViewModel batchViewModel = new ViewModelProvider(requireActivity()).get(BatchViewModel.class);
 
         // Initialize views
         etPicName = root.findViewById(R.id.et_pic_name);
@@ -54,7 +55,7 @@ public class SettingFragment extends Fragment {
         });
 
         // Observe active batch and disable input if needed
-        homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
+        batchViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
             if (batch != null) {
                 root.findViewById(R.id.til_unit).setVisibility(View.GONE);
                 root.findViewById(R.id.til_rice_price).setVisibility(View.GONE);

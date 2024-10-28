@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
@@ -24,7 +25,10 @@ import com.itextpdf.layout.property.UnitValue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class PDFUtil {
     public static File generatePDF(Context context, BatchDTO batch, List<BatchDetail> batchDetails) {
@@ -53,12 +57,15 @@ public class PDFUtil {
         return pdfFile;
     }
 
-    private static File createPdfFile(Context context, String batchId) throws FileNotFoundException {
+    private static File createPdfFile(Context context, String batchId) {
         File dir = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "ExportedPDFs");
-        if (!dir.exists()) {
-            dir.mkdirs();
+        if (!dir.exists() && !dir.mkdirs()) {
+            Log.e("PDFUtil", "Gagal membuat direktori: " + dir.getAbsolutePath());
+            return null;
         }
-        return new File(dir, "Nota_Penimbangan_" + batchId + ".pdf");
+        String currentDate = new SimpleDateFormat("dd_MM_yyyy", Locale.getDefault()).format(new Date());
+        String fileName = "Nota_Penimbangan_" + currentDate + "_" + batchId + ".pdf";
+        return new File(dir, fileName);
     }
 
     private static void addTitle(Document document, String title) throws IOException {
@@ -66,7 +73,7 @@ public class PDFUtil {
                 .setFont(PdfFontFactory.createFont("Helvetica-Bold"))
                 .setTextAlignment(TextAlignment.CENTER)
                 .setFontSize(16));
-        document.add(new Paragraph("").setMarginBottom(25f)); // Menambahkan jarak setelah judul
+        document.add(new Paragraph("").setMarginBottom(25f));
     }
 
     private static void addHeaderTable(Document document, BatchDTO batch) {
@@ -181,16 +188,5 @@ public class PDFUtil {
             return "-";
         }
         return "Provinsi " + provinceName + "\n" + cityType + " " + cityName;
-    }
-
-    public static void sharePDF(Context context, File pdfFile) {
-        Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", pdfFile);
-
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("application/pdf");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        context.startActivity(Intent.createChooser(shareIntent, "Share PDF using"));
     }
 }

@@ -3,6 +3,7 @@ package com.example.weighingscale.data.local.database.dao;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface BatchDetailDao {
 
     @Query("SELECT * FROM BatchDetail ORDER BY datetime DESC")
-    LiveData<List<BatchDetail>> getDatas();
+    List<BatchDetail> getDatas();
 
     @Query("SELECT * FROM BatchDetail WHERE batch_id = :batchId ORDER BY datetime DESC")
     LiveData<List<BatchDetail>> getDatasByBatchID(String batchId);
@@ -22,9 +23,12 @@ public interface BatchDetailDao {
     @Query("SELECT * FROM BatchDetail WHERE batch_id = :batchId ORDER BY datetime DESC")
     List<BatchDetail> getBatchDetailsByBatchID(String batchId); // Changed from LiveData to direct query
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(BatchDetail batchDetail);
 
     @Update
     void update(BatchDetail batchDetail);
+
+    @Query("DELETE FROM BatchDetail WHERE batch_id = :batchId")
+    void deleteByBatchID(String batchId);
 }
