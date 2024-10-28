@@ -3,7 +3,6 @@ package com.example.weighingscale.ui.history;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,17 +21,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.AddressDTO;
 import com.example.weighingscale.data.dto.BatchDTO;
-import com.example.weighingscale.ui.setting.SettingViewModel;
 import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.LocationViewModel;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
 import com.example.weighingscale.ui.shared.SharedAdapter;
 import com.example.weighingscale.util.DateTimeUtil;
-import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.InputDirectiveUtil;
 import com.example.weighingscale.util.SafeValueUtil;
 import com.example.weighingscale.util.ValidationUtil;
 import com.example.weighingscale.util.WeighingUtils;
+import com.example.weighingscale.viewmodel.BatchDetailViewModel;
+import com.example.weighingscale.viewmodel.BatchViewModel;
+import com.example.weighingscale.viewmodel.SettingViewModel;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -62,9 +62,10 @@ public class HistoryDetailFragment extends Fragment {
     private TextView textDeliveryDestinationCity;
 
     private BatchDTO currentBatch;
-    private HistoryViewModel historyViewModel;
     private LocationViewModel locationViewModel;
     private SettingViewModel settingViewModel;
+    private BatchViewModel batchViewModel;
+    private BatchDetailViewModel batchDetailViewModel;
 
     @Nullable
     @Override
@@ -102,9 +103,10 @@ public class HistoryDetailFragment extends Fragment {
     }
 
     private void initializeViewModel() {
-        historyViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
         locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
         settingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
+        batchViewModel = new ViewModelProvider(this).get(BatchViewModel.class);
+        batchDetailViewModel = new ViewModelProvider(this).get(BatchDetailViewModel.class);
     }
 
     private void setupMode(View view) {
@@ -112,7 +114,7 @@ public class HistoryDetailFragment extends Fragment {
         if (args != null && args.containsKey("batch_id")) {
             String batchID = args.getString("batch_id");
             assert batchID != null;
-             historyViewModel.getBatchByID(batchID).observe(getViewLifecycleOwner(), batchWithCity -> {
+             batchViewModel.getBatchByID(batchID).observe(getViewLifecycleOwner(), batchWithCity -> {
                 if (batchWithCity != null) {
                     currentBatch = batchWithCity;
                     populateBatch();
@@ -187,7 +189,7 @@ public class HistoryDetailFragment extends Fragment {
 
         HistoryDetailAdapter adapter = new HistoryDetailAdapter(requireContext(), currentBatch);
         recyclerView.setAdapter(adapter);
-        historyViewModel.getBatchDetails(batchID).observe(getViewLifecycleOwner(), data -> {
+        batchDetailViewModel.getBatchDetails(batchID).observe(getViewLifecycleOwner(), data -> {
             adapter.submitList(data);
             int totalItems = data.size();
             textTotalItems.setText(totalItems +" "+ getString(R.string.bag));
@@ -303,7 +305,7 @@ public class HistoryDetailFragment extends Fragment {
                 }
 
                 // Save the updated batch through ViewModel
-                historyViewModel.updateBatch(batch);
+                batchViewModel.update(batch);
                 Toast.makeText(requireContext(), "Data batch muatan telah diubah", Toast.LENGTH_SHORT).show();
             })
             .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss())

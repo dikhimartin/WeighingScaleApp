@@ -3,6 +3,7 @@ package com.example.weighingscale.util;
 import android.util.Log;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -90,5 +91,25 @@ public class FormatterUtil {
 
         // Combine the prefix and the formatted amount
         return prefix + " " + formattedAmount;
+    }
+
+    /**
+     * Parses a string value into a Date object.
+     *
+     * @param value The string representation of the date (timestamp).
+     * @return The parsed Date object, or null if the input is empty.
+     */
+    public static Date parseDate(String value) {
+        return value.isEmpty() ? null : new Date(Long.parseLong(value));
+    }
+
+    /**
+     * Parses a string value into a long (duration).
+     *
+     * @param value The string representation of the duration.
+     * @return The parsed duration as a long, or 0 if the input is empty.
+     */
+    public static long parseLong(String value) {
+        return value.isEmpty() ? 0 : Long.parseLong(value);
     }
 }

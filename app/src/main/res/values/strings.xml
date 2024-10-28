@@ -85,4 +85,6 @@
     <string name="apply">Terapkan</string>
     <string name="choose_date_range">Pilih rentang tanggal</string>
     <string name="sort">Urut</string>
+    <string name="action_export">Ekspor Data</string>
+    <string name="action_import">Impor Data</string>
 </resources>
