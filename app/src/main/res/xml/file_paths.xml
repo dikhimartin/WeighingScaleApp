@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-path name="exported_csvs" path="Android/data/com.example.weighingscale/files/Documents/ExportedCSVs/"/>
-    <external-path name="exported_pdfs" path="Android/data/com.example.weighingscale/files/Documents/ExportedPDFs/"/>
+    <external-path name="my_files" path="Android/data/com.example.weighingscale/files/Documents/ExportedPDFs/"/>
 </paths>

@@ -8,7 +8,11 @@ import java.util.UUID;
 
 import java.util.Date;
 
-@Entity(tableName = "BatchDetail")
+@Entity(tableName = "BatchDetail",
+        foreignKeys = @ForeignKey(entity = Batch.class,
+                parentColumns = "id",
+                childColumns = "batch_id",
+                onDelete = ForeignKey.CASCADE))
 public class BatchDetail {
     @PrimaryKey
     @NonNull

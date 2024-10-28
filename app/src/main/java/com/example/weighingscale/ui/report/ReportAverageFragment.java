@@ -19,7 +19,6 @@ import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.util.DateTimeUtil;
 import com.example.weighingscale.util.WeighingUtils;
-import com.example.weighingscale.viewmodel.BatchViewModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -34,7 +33,6 @@ import java.util.Locale;
 
 public class ReportAverageFragment extends Fragment {
     private ReportViewModel reportViewModel;
-    private BatchViewModel batchViewModel;
     private BarChart barChart;
     private Button filterButton, buttonShowFormula;
     private TextView dateTextView, durationTextView, speedTextView;
@@ -73,7 +71,6 @@ public class ReportAverageFragment extends Fragment {
     // Set up the ViewModel to interact with data
     private void setupViewModel() {
         reportViewModel = new ViewModelProvider(this).get(ReportViewModel.class);
-        batchViewModel = new ViewModelProvider(this).get(BatchViewModel.class);
     }
 
     // Configure the filter button to open the filter fragment and apply date filters
@@ -121,7 +118,7 @@ public class ReportAverageFragment extends Fragment {
         dateTextView.setText(DateTimeUtil.formatDateRange(startDate, endDate));
 
         // Fetch and observe all batches within the selected date range and update the chart
-        batchViewModel.getBatch(null, startDate, endDate, null)
+        reportViewModel.getAllBatch(null, startDate, endDate, null)
             .observe(getViewLifecycleOwner(), this::setupChart);
     }
 
