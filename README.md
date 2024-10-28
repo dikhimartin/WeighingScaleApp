@@ -90,4 +90,4 @@ The project uses the following key dependencies:
 
 You can download the latest APK from the [Releases page](https://github.com/dikhimartin/WeighingScaleApp/releases).
 
-- **Latest Release**: [Version 1.0.2](https://github.com/dikhimartin/WeighingScaleApp/releases/tag/v1.0.2)
+- **Latest Release**: [Version 1.0.2](https://github.com/dikhimartin/WeighingScaleApp/releases/tag/v.1.0.2)
