@@ -22,7 +22,7 @@ public interface BatchDao {
     @Query("SELECT b.id, b.pic_name, b.pic_phone_number, b.datetime, b.start_date, b.end_date, " +
            "b.duration, b.unit, b.rice_price, SUM(IFNULL(bd.amount, 0)) AS total_amount, " +
            "SUM(IFNULL(bd.amount, 0)) * b.rice_price AS total_price, b.weighing_location_id, " +
-           "b.delivery_destination_id, b.truck_driver_name, " +
+           "b.weighing_location_geo, b.delivery_destination_id, b.truck_driver_name, " +
            "b.truck_driver_phone_number, b.status, wlp.name AS weighing_location_province_name, " +
            "wlc.name AS weighing_location_city_name, wlc.type AS weighing_location_city_type, " +
            "ddp.name AS delivery_destination_province_name, ddc.name AS delivery_destination_city_name, " +
@@ -60,6 +60,7 @@ public interface BatchDao {
         "    SUM(IFNULL(bd.amount, 0)) AS total_amount, " +
         "    SUM(IFNULL(bd.amount, 0)) * b.rice_price AS total_price, " +
         "    b.weighing_location_id, " +
+        "    b.weighing_location_geo, " +
         "    b.delivery_destination_id, " +
         "    b.truck_driver_name, " +
         "    b.truck_driver_phone_number, " +
@@ -82,9 +83,6 @@ public interface BatchDao {
     )
     LiveData<BatchDTO> getDataByID(String id);
 
-    @Query("SELECT * FROM Batch")
-    List<Batch> getAllBatch();
-
     @Query("SELECT * FROM Batch WHERE status = 1 LIMIT 1")
     LiveData<Batch> getActiveBatch();
 
@@ -106,4 +104,7 @@ public interface BatchDao {
 
     @Delete
     void delete(Batch batch);
+
+    @Query("DELETE FROM Batch")
+    void deleteAll();
 }

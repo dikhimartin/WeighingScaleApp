@@ -20,10 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 public class HistoryViewModel extends AndroidViewModel {
+    private final BatchRepository batchRepository;
+    private final BatchDetailRepository batchDetailRepository;
     private final MutableLiveData<Map<String, Object>> filters = new MutableLiveData<>(new HashMap<>());
 
     public HistoryViewModel(@NonNull Application application) {
         super(application);
+        batchRepository = new BatchRepository(application);
+        batchDetailRepository = new BatchDetailRepository(application);
     }
 
     public void setFilter(String key, Object value) {
@@ -37,5 +41,33 @@ public class HistoryViewModel extends AndroidViewModel {
     public Object getFilter(String key) {
         Map<String, Object> currentFilters = filters.getValue();
         return (currentFilters != null) ? currentFilters.get(key) : null;
+    }
+
+    // Data model
+    public LiveData<List<BatchDTO>> getAllBatch(@Nullable String searchQuery, @Nullable Date startDate, @Nullable Date endDate, @Nullable String sortOrder) {
+        if (searchQuery != null && searchQuery.trim().isEmpty()) {
+            searchQuery = null;
+        }
+        return batchRepository.getDatas(searchQuery, startDate, endDate, sortOrder);
+    }
+
+    public LiveData<BatchDTO> getBatchByID(String id) {
+        return batchRepository.getDataByID(id);
+    }
+
+    public LiveData<List<BatchDetail>> getBatchDetails(String id) {
+        return batchDetailRepository.getDatasByBatchID(id);
+    }
+
+    public void updateBatch(Batch batch) {
+        batchRepository.update(batch);
+    }
+
+    public void deleteBatch(Batch batch) {
+        batchRepository.delete(batch);
+    }
+
+    public void deleteBatchByIds(List<String> ids) {
+        batchRepository.deleteByIds(ids);
     }
 }

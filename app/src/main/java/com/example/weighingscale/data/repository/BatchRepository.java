@@ -17,26 +17,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class BatchRepository {
     private final BatchDao batchDao;
     private final BatchDetailDao batchDetailDao;
-    private final ExecutorService executorService;
 
     public BatchRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
         batchDao = database.batchDao();
         batchDetailDao = database.batchDetailDao();
-        executorService = Executors.newSingleThreadExecutor();
-    }
-
-    public void getAllBatch(Callback<List<Batch>> callback) {
-        executorService.execute(() -> {
-            List<Batch> batches = batchDao.getAllBatch();
-            callback.onResult(batches);
-        });
     }
 
     public LiveData<List<BatchDTO>> getDatas(String searchQuery, Date startDate, Date endDate, @Nullable String sortOrder) {
@@ -84,6 +73,9 @@ public class BatchRepository {
             // Fetch batch and its details in a single transaction
             Batch batch = batchDao.getBatchByID(batchID);
             if (batch != null) {
+                // Fetch batch details
+                List<BatchDetail> details = batchDetailDao.getBatchDetailsByBatchID(batchID);
+
                 // Calculate duration
                 long durationMillis = 0;
                 if (batch.start_date != null) {
@@ -101,20 +93,16 @@ public class BatchRepository {
         });
     }
 
-   public void delete(Batch batch) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            batchDetailDao.deleteByBatchID(batch.id);
-            batchDao.delete(batch);
-        });
+    public void delete(Batch batch) {
+        AppDatabase.databaseWriteExecutor.execute(() -> batchDao.delete(batch));
     }
 
     public void deleteByIds(List<String> ids) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            for (String batchId : ids) {
-                batchDetailDao.deleteByBatchID(batchId);
-            }
-            batchDao.deleteByIDs(ids);
-        });
+        AppDatabase.databaseWriteExecutor.execute(() -> batchDao.deleteByIDs(ids));
+    }
+
+    public void deleteAll() {
+        AppDatabase.databaseWriteExecutor.execute(batchDao::deleteAll);
     }
 
     // Method to get Comparator based on sortOrder
@@ -134,9 +122,5 @@ public class BatchRepository {
                 }
             };
         }
-    }
-
-    public interface Callback<T> {
-        void onResult(T result);
     }
 }
