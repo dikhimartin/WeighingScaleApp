@@ -25,15 +25,17 @@ import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.data.model.Setting;
 import com.example.weighingscale.databinding.FragmentHomeBinding;
 import com.example.weighingscale.state.StateConnecting;
-import com.example.weighingscale.ui.setting.SettingViewModel;
 import com.example.weighingscale.ui.shared.EntityAdapter;
 import com.example.weighingscale.ui.shared.LocationViewModel;
 import com.example.weighingscale.ui.shared.SelectOptionWrapper;
-import com.example.weighingscale.ui.shared.SharedViewModel;
+import com.example.weighingscale.viewmodel.SharedViewModel;
 import com.example.weighingscale.util.DateTimeUtil;
 import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.InputDirectiveUtil;
 import com.example.weighingscale.util.WeighingUtils;
+import com.example.weighingscale.viewmodel.BatchDetailViewModel;
+import com.example.weighingscale.viewmodel.BatchViewModel;
+import com.example.weighingscale.viewmodel.SettingViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -47,10 +49,13 @@ import java.util.Objects;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private HomeViewModel homeViewModel;
     private SharedViewModel sharedViewModel;
     private SettingViewModel settingViewModel;
     private LocationViewModel locationViewModel;
+
+    private BatchViewModel batchViewModel;
+    private BatchDetailViewModel batchDetailViewModel;
+
     private LogAdapter adapter;
 
     private String currentBatchID = null;
@@ -62,9 +67,6 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Init instance HomeViewModel
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-
         // Init instance SharedViewModel
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
@@ -73,6 +75,12 @@ public class HomeFragment extends Fragment {
 
         // Init instance locationViewModel
         locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
+
+        // Init instance BatchViewModel
+        batchViewModel = new ViewModelProvider(requireActivity()).get(BatchViewModel.class);
+
+        // Init instance BatchDetailViewModel
+        batchDetailViewModel = new ViewModelProvider(requireActivity()).get(BatchDetailViewModel.class);
 
         // Observer Log List
         setupRecyclerView(root);
@@ -111,7 +119,7 @@ public class HomeFragment extends Fragment {
                             .setTitle("Selesaikan batch muatan")
                             .setMessage("Apakah kamu yakin ingin menyelesaikan batch muatan ini ?")
                             .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                homeViewModel.completeBatch(currentBatchID);
+                                batchViewModel.completeBatch(currentBatchID);
                                 Toast.makeText(requireContext(), "Batch muatan sudah selesai", Toast.LENGTH_SHORT).show();
                                 navigateToHistory();
                             })
@@ -138,12 +146,12 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         // Observe active batch
-        homeViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
+        batchViewModel.getActiveBatch().observe(getViewLifecycleOwner(), batch -> {
             if (batch != null) {
                     currentBatchID = batch.id;
                     active_batch();
                     binding.sectionMode.setVisibility(View.VISIBLE);
-                    homeViewModel.getBatchDetails(currentBatchID).observe(getViewLifecycleOwner(), data -> {
+                    batchDetailViewModel.getBatchDetails(currentBatchID).observe(getViewLifecycleOwner(), data -> {
                         adapter.submitList(data);
 
                         if (data != null && !data.isEmpty()) {
@@ -202,7 +210,7 @@ public class HomeFragment extends Fragment {
             int amount = FormatterUtil.sanitizeAndConvertToInteger(amountText);
             if (amount <= 0) throw new NumberFormatException();
 
-            homeViewModel.insertBatchDetail(currentBatchID, amount, currentSetting);
+            batchDetailViewModel.insert(currentBatchID, amount, currentSetting);
             Toast.makeText(requireContext(), "Log sudah disimpan", Toast.LENGTH_SHORT).show();
             resetAmount();
         } catch (NumberFormatException e) {
@@ -241,7 +249,7 @@ public class HomeFragment extends Fragment {
 
                     // Update Batch Detail
                     batchDetail.amount = amount;
-                    homeViewModel.updateBatchDetail(batchDetail);
+                    batchDetailViewModel.update(batchDetail);
 
                     Toast.makeText(requireContext(), "Nilai telah diubah", Toast.LENGTH_SHORT).show();
                 })
@@ -328,7 +336,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 // Insert the batch into ViewModel and notify user
-                homeViewModel.insertBatch(batch);
+                batchViewModel.insert(batch);
                 Toast.makeText(requireContext(), "Batch muatan sudah aktif", Toast.LENGTH_SHORT).show();
             })
             .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss())

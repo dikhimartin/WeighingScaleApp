@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.util.PDFUtil;
+import com.example.weighingscale.viewmodel.BatchDetailViewModel;
+import com.example.weighingscale.viewmodel.BatchViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
@@ -31,6 +33,9 @@ import java.util.List;
 public class HistoryFragment extends Fragment {
 
     private HistoryViewModel historyViewModel;
+    private BatchViewModel batchViewModel;
+    private BatchDetailViewModel batchDetailViewModel;
+
     private HistoryAdapter adapter;
     private RecyclerView recyclerView;
     private EditText searchField;
@@ -117,7 +122,7 @@ public class HistoryFragment extends Fragment {
         historyViewModel.setFilter("start_date", startDate);
         historyViewModel.setFilter("end_date", endDate);
         historyViewModel.setFilter("search_query", searchQuery);
-        historyViewModel.getAllBatch("%" + searchQuery + "%", startDate, endDate, isSortAsc ? "ASC" : "DESC").observe(getViewLifecycleOwner(), batches -> {
+        batchViewModel.getAllBatch("%" + searchQuery + "%", startDate, endDate, isSortAsc ? "ASC" : "DESC").observe(getViewLifecycleOwner(), batches -> {
             adapter.submitList(batches);
             toggleEmptyState(batches.isEmpty());
         });
@@ -128,7 +133,7 @@ public class HistoryFragment extends Fragment {
         Date startDate = (Date) historyViewModel.getFilter("start_date");
         Date endDate = (Date) historyViewModel.getFilter("end_date");
         // Fetch sorted data by calling ViewModel method with sort order DESC by default
-        historyViewModel.getAllBatch("%" + searchQuery + "%", startDate, endDate, isSortAsc ? "ASC" : "DESC")
+        batchViewModel.getAllBatch("%" + searchQuery + "%", startDate, endDate, isSortAsc ? "ASC" : "DESC")
             .observe(getViewLifecycleOwner(), batches -> {
                 adapter.submitList(batches);
                 toggleEmptyState(batches.isEmpty());
@@ -155,7 +160,7 @@ public class HistoryFragment extends Fragment {
 
             @Override
             public void onExportClick(BatchDTO batch) {
-                historyViewModel.getBatchDetails(batch.getID()).observe(getViewLifecycleOwner(), batchDetails -> {
+                batchDetailViewModel.getBatchDetails(batch.getID()).observe(getViewLifecycleOwner(), batchDetails -> {
                     File pdfFile = PDFUtil.generatePDF(requireContext(), batch, batchDetails);
                     if (pdfFile != null) {
                         PDFUtil.sharePDF(requireContext(), pdfFile);
@@ -169,7 +174,7 @@ public class HistoryFragment extends Fragment {
                     .setTitle("Hapus data")
                     .setMessage("Apakah kamu yakin ingin menghapus data ini ?")
                     .setPositiveButton(R.string.yes, (dialog, which) -> {
-                        historyViewModel.deleteBatch(batch);
+                        batchViewModel.delete(batch);
                         Snackbar.make(requireView(), batch.getPicName() + " " + getString(R.string.deleted), Snackbar.LENGTH_SHORT).show();
                     })
                     .setNegativeButton(R.string.no, null)
@@ -196,7 +201,11 @@ public class HistoryFragment extends Fragment {
 
     private void setupViewModel() {
         historyViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
-        historyViewModel.getAllBatch(null, null, null, null).observe(getViewLifecycleOwner(), batches -> {
+
+        batchViewModel = new ViewModelProvider(requireActivity()).get(BatchViewModel.class);
+        batchDetailViewModel = new ViewModelProvider(requireActivity()).get(BatchDetailViewModel.class);
+
+        batchViewModel.getAllBatch(null, null, null, null).observe(getViewLifecycleOwner(), batches -> {
             HistoryAdapter adapter = (HistoryAdapter) ((RecyclerView) requireView().findViewById(R.id.recycler_view)).getAdapter();
             if (adapter != null) {
                 adapter.submitList(batches);
@@ -223,7 +232,7 @@ public class HistoryFragment extends Fragment {
                 .setTitle(R.string.delete_selected_data_title)
                 .setMessage(R.string.delete_selected_data_message)
                 .setPositiveButton(R.string.yes, (dialog, which) -> {
-                    historyViewModel.deleteBatchByIds(selectedIds);
+                    batchViewModel.deleteByIds(selectedIds);
                     adapter.clearSelectedItems();
                     updateDeleteAllButtonVisibility();
                     isSelectionMode = false;

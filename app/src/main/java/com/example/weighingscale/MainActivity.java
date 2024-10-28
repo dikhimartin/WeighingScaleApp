@@ -3,11 +3,11 @@ package com.example.weighingscale;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.weighingscale.ui.history.HistoryViewModel;
 import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.LogModelUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,8 +26,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.weighingscale.databinding.ActivityMainBinding;
 
-import java.util.Objects;
-
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
@@ -38,12 +36,11 @@ import android.widget.Toast;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.example.weighingscale.util.BluetoothUtil;
 import com.example.weighingscale.util.ConnectedThread;
-import com.example.weighingscale.ui.shared.SharedViewModel;
+import com.example.weighingscale.viewmodel.SharedViewModel;
 import com.example.weighingscale.state.StateConnecting;
 
 import java.io.IOException;
@@ -56,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 100;
 
     private SharedViewModel sharedViewModel;
+    private HistoryViewModel historyViewModel;
+
     private BluetoothUtil mBluetoothUtil;
     private Handler mHandler;
     private ConnectedThread mConnectedThread;
@@ -71,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize ViewModels
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+
+        // Init instance HomeViewModel
+        historyViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
+
         stateConnecting = new StateConnecting();
 
         // Binding layout
@@ -159,6 +162,12 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             navController.navigate(R.id.navigation_setting);
             return true;
+        } else if (id == R.id.action_export) {
+//            exportDataToCSV();
+            return true;
+        } else if (id == R.id.action_import) {
+//            importDataFromCSV();
+            return true;
         } else if (id == R.id.action_device) {
             if (!mBluetoothUtil.isBluetoothEnabled()) {
                 bluetoothOn();
@@ -173,6 +182,47 @@ public class MainActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+//    private void exportDataToCSV() {
+//        File csvFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "BatchData.csv");
+//        try (FileWriter writer = new FileWriter(csvFile)) {
+//            // Write header
+//            writer.append("BatchID,PicName,PicPhone,Datetime,StartDate,EndDate,Duration,Unit,RicePrice,LocationID,DriverName,DriverPhone,Status\n");
+//
+//            // Write Batch data
+//            List<Batch> batches = homeViewModel.getAllBatches();
+//            for (Batch batch : batches) {
+//                writer.append(batch.getID()).append(",")
+//                      .append(batch.getPicName()).append(",")
+//                      .append(batch.getPicPhoneNumber()).append(",")
+//                      .append(String.valueOf(batch.getDatetime())).append(",")
+//                      .append(String.valueOf(batch.getStartDate())).append(",")
+//                      .append(String.valueOf(batch.getEndDate())).append(",")
+//                      .append(String.valueOf(batch.duration)).append(",")
+//                      .append(batch.getUnit()).append(",")
+//                      .append(String.valueOf(batch.getRice_price())).append(",")
+//                      .append(batch.getWeighing_location_id()).append(",")
+//                      .append(batch.getTruck_driver_name()).append(",")
+//                      .append(batch.getTruck_driver_phone_number()).append(",")
+//                      .append(String.valueOf(batch.status)).append("\n");
+//            }
+//
+//            // Write BatchDetail data
+//            writer.append("\nBatchDetailID,BatchID,Datetime,Amount\n");
+//            List<BatchDetail> details = batchDetailRepository.getAllBatchDetails();
+//            for (BatchDetail detail : details) {
+//                writer.append(detail.getID()).append(",")
+//                      .append(detail.getBatch_id()).append(",")
+//                      .append(String.valueOf(detail.getDatetime())).append(",")
+//                      .append(String.valueOf(detail.getAmount())).append("\n");
+//            }
+//            writer.flush();
+//            Toast.makeText(this, "Export successful", Toast.LENGTH_SHORT).show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            Toast.makeText(this, "Export failed", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     @Override
     public boolean onSupportNavigateUp() {
