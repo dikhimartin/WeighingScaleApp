@@ -73,7 +73,7 @@ public class ReportAverageFragment extends Fragment {
     // Set up the ViewModel to interact with data
     private void setupViewModel() {
         reportViewModel = new ViewModelProvider(this).get(ReportViewModel.class);
-        reportViewModel = new ViewModelProvider(this).get(ReportViewModel.class);
+        batchViewModel = new ViewModelProvider(this).get(BatchViewModel.class);
     }
 
     // Configure the filter button to open the filter fragment and apply date filters
