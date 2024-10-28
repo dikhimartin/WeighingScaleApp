@@ -22,7 +22,11 @@ public class BatchViewModel extends AndroidViewModel {
         batchRepository =  new BatchRepository(application);
     }
 
-    public LiveData<List<BatchDTO>> getAllBatch(@Nullable String searchQuery, @Nullable Date startDate, @Nullable Date endDate, @Nullable String sortOrder) {
+    public LiveData<List<Batch>> getAllBatch() {
+        return batchRepository.getAllBatch();
+    }
+
+    public LiveData<List<BatchDTO>> getBatch(@Nullable String searchQuery, @Nullable Date startDate, @Nullable Date endDate, @Nullable String sortOrder) {
         if (searchQuery != null && searchQuery.trim().isEmpty()) {
             searchQuery = null;
         }

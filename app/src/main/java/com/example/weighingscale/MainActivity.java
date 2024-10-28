@@ -7,9 +7,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.weighingscale.data.model.Batch;
+import com.example.weighingscale.data.model.BatchDetail;
 import com.example.weighingscale.ui.history.HistoryViewModel;
+import com.example.weighingscale.util.CSVUtil;
 import com.example.weighingscale.util.FormatterUtil;
 import com.example.weighingscale.util.LogModelUtils;
+import com.example.weighingscale.util.ShareUtil;
+import com.example.weighingscale.viewmodel.BatchDetailViewModel;
+import com.example.weighingscale.viewmodel.BatchViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.Manifest;
@@ -43,8 +49,12 @@ import com.example.weighingscale.util.ConnectedThread;
 import com.example.weighingscale.viewmodel.SharedViewModel;
 import com.example.weighingscale.state.StateConnecting;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ENABLE_BT = 1;
@@ -53,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 100;
 
     private SharedViewModel sharedViewModel;
-    private HistoryViewModel historyViewModel;
+    private BatchViewModel batchViewModel;
+    private BatchDetailViewModel batchDetailViewModel;
 
     private BluetoothUtil mBluetoothUtil;
     private Handler mHandler;
@@ -71,8 +82,11 @@ public class MainActivity extends AppCompatActivity {
         // Initialize ViewModels
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
-        // Init instance HomeViewModel
-        historyViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
+        // Init instance BatchViewModel
+        batchViewModel = new ViewModelProvider(this).get(BatchViewModel.class);
+
+        // Init instance BatchDetailViewModel
+        batchDetailViewModel = new ViewModelProvider(this).get(BatchDetailViewModel.class);
 
         stateConnecting = new StateConnecting();
 
@@ -157,72 +171,51 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        CSVUtil csvUtil = new CSVUtil(batchViewModel, batchDetailViewModel);
         int id = item.getItemId();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         if (id == R.id.action_settings) {
             navController.navigate(R.id.navigation_setting);
             return true;
         } else if (id == R.id.action_export) {
-//            exportDataToCSV();
-            return true;
-        } else if (id == R.id.action_import) {
-//            importDataFromCSV();
-            return true;
+           handleExport(csvUtil);
+           return true;
+
         } else if (id == R.id.action_device) {
-            if (!mBluetoothUtil.isBluetoothEnabled()) {
-                bluetoothOn();
-            }else if (stateConnecting.getStatus() == StateConnecting.BLUETOOTH_CONNECTED){
-                return true;
-            }else{
-                // Show device list fragment to connect
-                navController.navigate(R.id.navigation_device);
-            }
+            handleDeviceConnection(navController);
             return true;
+
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
-//    private void exportDataToCSV() {
-//        File csvFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "BatchData.csv");
-//        try (FileWriter writer = new FileWriter(csvFile)) {
-//            // Write header
-//            writer.append("BatchID,PicName,PicPhone,Datetime,StartDate,EndDate,Duration,Unit,RicePrice,LocationID,DriverName,DriverPhone,Status\n");
-//
-//            // Write Batch data
-//            List<Batch> batches = homeViewModel.getAllBatches();
-//            for (Batch batch : batches) {
-//                writer.append(batch.getID()).append(",")
-//                      .append(batch.getPicName()).append(",")
-//                      .append(batch.getPicPhoneNumber()).append(",")
-//                      .append(String.valueOf(batch.getDatetime())).append(",")
-//                      .append(String.valueOf(batch.getStartDate())).append(",")
-//                      .append(String.valueOf(batch.getEndDate())).append(",")
-//                      .append(String.valueOf(batch.duration)).append(",")
-//                      .append(batch.getUnit()).append(",")
-//                      .append(String.valueOf(batch.getRice_price())).append(",")
-//                      .append(batch.getWeighing_location_id()).append(",")
-//                      .append(batch.getTruck_driver_name()).append(",")
-//                      .append(batch.getTruck_driver_phone_number()).append(",")
-//                      .append(String.valueOf(batch.status)).append("\n");
-//            }
-//
-//            // Write BatchDetail data
-//            writer.append("\nBatchDetailID,BatchID,Datetime,Amount\n");
-//            List<BatchDetail> details = batchDetailRepository.getAllBatchDetails();
-//            for (BatchDetail detail : details) {
-//                writer.append(detail.getID()).append(",")
-//                      .append(detail.getBatch_id()).append(",")
-//                      .append(String.valueOf(detail.getDatetime())).append(",")
-//                      .append(String.valueOf(detail.getAmount())).append("\n");
-//            }
-//            writer.flush();
-//            Toast.makeText(this, "Export successful", Toast.LENGTH_SHORT).show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Toast.makeText(this, "Export failed", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    private void handleExport(CSVUtil csvUtil) {
+        // Check if storage permission is granted before exporting
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            File csvFile = csvUtil.generateCSV(this);
+
+            if (csvFile != null) {
+                ShareUtil shareUtil = new ShareUtil();
+                shareUtil.shareFile(this, csvFile); // Membagikan file
+            }
+        } else {
+            Toast.makeText(this, "Storage permission is required to export data", Toast.LENGTH_SHORT).show();
+            checkStoragePermission();
+        }
+    }
+
+    private void handleDeviceConnection(NavController navController) {
+        if (!mBluetoothUtil.isBluetoothEnabled()) {
+            bluetoothOn();
+        } else if (stateConnecting.getStatus() == StateConnecting.BLUETOOTH_CONNECTED) {
+            // Do nothing if already connected
+            return;
+        } else {
+            // Show device list fragment to connect
+            navController.navigate(R.id.navigation_device);
+        }
+    }
 
     @Override
     public boolean onSupportNavigateUp() {

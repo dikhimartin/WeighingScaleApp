@@ -28,6 +28,10 @@ public class BatchRepository {
         batchDetailDao = database.batchDetailDao();
     }
 
+     public LiveData<List<Batch>> getAllBatch(){
+       return batchDao.getAllBatch();
+    }
+
     public LiveData<List<BatchDTO>> getDatas(String searchQuery, Date startDate, Date endDate, @Nullable String sortOrder) {
         LiveData<List<BatchDTO>> data = batchDao.getDatas(
                 searchQuery,

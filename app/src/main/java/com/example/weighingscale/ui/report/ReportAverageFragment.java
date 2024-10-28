@@ -121,7 +121,7 @@ public class ReportAverageFragment extends Fragment {
         dateTextView.setText(DateTimeUtil.formatDateRange(startDate, endDate));
 
         // Fetch and observe all batches within the selected date range and update the chart
-        batchViewModel.getAllBatch(null, startDate, endDate, null)
+        batchViewModel.getBatch(null, startDate, endDate, null)
             .observe(getViewLifecycleOwner(), this::setupChart);
     }
 
