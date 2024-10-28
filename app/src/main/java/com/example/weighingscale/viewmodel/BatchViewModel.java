@@ -41,14 +41,10 @@ public class BatchViewModel extends AndroidViewModel {
         return batchRepository.getActiveBatch();
     }
 
-    public void insert(Batch batch) {
-        batchRepository.insert(batch);
-    }
-
     public void importData(Batch batch) {
         batchRepository.insert(batch);
     }
-    
+
     public void update(Batch batch) {
         batchRepository.update(batch);
     }
@@ -59,6 +55,10 @@ public class BatchViewModel extends AndroidViewModel {
 
     public void deleteByIds(List<String> ids) {
         batchRepository.deleteByIds(ids);
+    }
+
+    public void openBatch(Batch batch) {
+        batchRepository.openBatch(batch);
     }
 
     public void completeBatch(String batchId) {

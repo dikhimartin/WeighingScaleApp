@@ -10,7 +10,6 @@ import com.example.weighingscale.data.local.database.AppDatabase;
 import com.example.weighingscale.data.local.database.dao.BatchDao;
 import com.example.weighingscale.data.local.database.dao.BatchDetailDao;
 import com.example.weighingscale.data.model.Batch;
-import com.example.weighingscale.data.model.BatchDetail;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,8 +66,6 @@ public class BatchRepository {
 
     public void insert(Batch batch) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            batchDao.forceCompleteBatch(); // Complete any existing active batch
-            batch.status = 1; // Set the new batch as active
             batchDao.insert(batch);
         });
     }
@@ -76,6 +73,14 @@ public class BatchRepository {
     public void update(Batch batch) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             batchDao.update(batch);
+        });
+    }
+
+    public void openBatch(Batch batch) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            batchDao.forceCompleteBatch(); // Complete any existing active batch
+            batch.status = 1; // Set the new batch as active
+            batchDao.insert(batch);
         });
     }
 

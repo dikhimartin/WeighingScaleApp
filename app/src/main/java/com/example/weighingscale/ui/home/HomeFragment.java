@@ -336,7 +336,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 // Insert the batch into ViewModel and notify user
-                batchViewModel.insert(batch);
+                batchViewModel.openBatch(batch);
                 Toast.makeText(requireContext(), "Batch muatan sudah aktif", Toast.LENGTH_SHORT).show();
             })
             .setNegativeButton("Batal", (dialog, id) -> dialog.dismiss())

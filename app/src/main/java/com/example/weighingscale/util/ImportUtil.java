@@ -144,6 +144,7 @@ public class ImportUtil {
             batch.delivery_destination_id = columns[10];
             batch.truck_driver_name = columns[11];
             batch.truck_driver_phone_number = columns[12];
+            Log.d("LOG_BATCH", "Batch -> Status : " + columns[13]);
             batch.status = Integer.parseInt(columns[13]);
             batchList.add(batch);  // Add valid Batch to list
         } else {
@@ -158,6 +159,7 @@ public class ImportUtil {
      */
     private void insertBatchData(List<Batch> batchList) {
         for (Batch batch : batchList) {
+            Log.d("LOG_BATCH", "Batch -> Status (After) : " + batch.status);
             if (ValidationUtil.isValidUUID(batch.id)) {
                 batchViewModel.importData(batch);
             }
