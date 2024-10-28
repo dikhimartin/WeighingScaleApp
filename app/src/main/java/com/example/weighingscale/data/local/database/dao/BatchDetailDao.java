@@ -14,7 +14,7 @@ import java.util.List;
 public interface BatchDetailDao {
 
     @Query("SELECT * FROM BatchDetail ORDER BY datetime DESC")
-    LiveData<List<BatchDetail>> getDatas();
+    List<BatchDetail> getDatas();
 
     @Query("SELECT * FROM BatchDetail WHERE batch_id = :batchId ORDER BY datetime DESC")
     LiveData<List<BatchDetail>> getDatasByBatchID(String batchId);

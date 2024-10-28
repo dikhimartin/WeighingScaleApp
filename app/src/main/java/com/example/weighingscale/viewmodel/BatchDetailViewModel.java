@@ -21,8 +21,8 @@ public class BatchDetailViewModel extends AndroidViewModel {
         batchDetailRepository = new BatchDetailRepository(application);
     }
 
-    public LiveData<List<BatchDetail>> getAllBatchDetail() {
-        return batchDetailRepository.getDatas();
+    public void getAllBatchDetail(BatchDetailRepository.Callback<List<BatchDetail>> callback) {
+        batchDetailRepository.getDatas(callback);
     }
 
     public LiveData<List<BatchDetail>> getBatchDetails(String batchId) {

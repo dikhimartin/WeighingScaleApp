@@ -22,8 +22,8 @@ public class BatchViewModel extends AndroidViewModel {
         batchRepository =  new BatchRepository(application);
     }
 
-    public LiveData<List<Batch>> getAllBatch() {
-        return batchRepository.getAllBatch();
+    public void getAllBatch(BatchRepository.Callback<List<Batch>> callback) {
+        batchRepository.getAllBatch(callback);
     }
 
     public LiveData<List<BatchDTO>> getBatch(@Nullable String searchQuery, @Nullable Date startDate, @Nullable Date endDate, @Nullable String sortOrder) {

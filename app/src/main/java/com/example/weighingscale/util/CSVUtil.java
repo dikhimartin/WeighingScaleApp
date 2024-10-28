@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import com.example.weighingscale.data.model.Batch;
 import com.example.weighingscale.data.model.BatchDetail;
+import com.example.weighingscale.data.repository.BatchDetailRepository;
+import com.example.weighingscale.data.repository.BatchRepository;
 import com.example.weighingscale.viewmodel.BatchDetailViewModel;
 import com.example.weighingscale.viewmodel.BatchViewModel;
 
@@ -16,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class CSVUtil {
@@ -51,94 +54,95 @@ public class CSVUtil {
     }
 
     private void writeCSVFile(File csvFile) {
-        BufferedWriter bufferedWriter;
         try {
-            bufferedWriter = new BufferedWriter(new FileWriter(csvFile));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(csvFile));
 
             // Write Batch section
-            BufferedWriter finalBufferedWriter = bufferedWriter;
-            batchViewModel.getAllBatch().observeForever(batches -> {
-                try {
-                    if (batches != null && !batches.isEmpty()) {
-                        // Write Batch header
-                        finalBufferedWriter.write("BatchID,PICName,PICPhoneNumber,DateTime,StartDate,EndDate,Duration,Unit,RicePrice,WeighingLocationID,DeliveryDestinationID,TruckDriverName,TruckDriverPhoneNumber,Status");
-                        finalBufferedWriter.newLine();
-
-                        // Write Batch data
-                        for (Batch batch : batches) {
-                            writeBatchData(finalBufferedWriter, batch);
-                        }
-
-                        // Add a separator line for BatchDetail section
-                        finalBufferedWriter.newLine();
-                        finalBufferedWriter.write("BatchDetail Section");
-                        finalBufferedWriter.newLine();
-                    }
-                } catch (IOException e) {
-                    Log.e("CSVWriteError", "Error writing Batch data", e);
-                }
-            });
-
-            // Write BatchDetail section
-            BufferedWriter finalBufferedWriter1 = bufferedWriter;
-            batchDetailViewModel.getAllBatchDetail().observeForever(batchDetails -> {
-                try {
-                    if (batchDetails != null && !batchDetails.isEmpty()) {
-                        // Write BatchDetail header
-                        finalBufferedWriter1.write("BatchID,DetailID,DateTime,Amount");
-                        finalBufferedWriter1.newLine();
-
-                        // Write BatchDetail data
-                        for (BatchDetail detail : batchDetails) {
-                            writeBatchDetailData(finalBufferedWriter1, detail);
-                        }
-                    }
-                } catch (IOException e) {
-                    Log.e("CSVWriteError", "Error writing BatchDetail data", e);
-                } finally {
+            batchViewModel.getAllBatch(new BatchRepository.Callback<List<Batch>>() {
+                @Override
+                public void onResult(List<Batch> batches) {
                     try {
-                        finalBufferedWriter1.close();
+                        // Write Batch header regardless of data presence
+                        bufferedWriter.write("BatchID,PICName,PICPhoneNumber,DateTime,StartDate,EndDate,Duration,Unit,RicePrice,WeighingLocationID,DeliveryDestinationID,TruckDriverName,TruckDriverPhoneNumber,Status");
+                        bufferedWriter.newLine();
+
+                        if (batches != null && !batches.isEmpty()) {
+                            for (Batch batch : batches) {
+                                writeBatchData(bufferedWriter, batch);
+                            }
+                        }
+
+                        // Write separator and BatchDetail section header
+                        bufferedWriter.newLine();
+                        bufferedWriter.write("BatchDetail Section");
+                        bufferedWriter.newLine();
+
+                        // Fetch and write BatchDetail data
+                        writeBatchDetailSection(bufferedWriter);
+
                     } catch (IOException e) {
-                        Log.e("CSVWriteError", "Error closing BufferedWriter", e);
+                        Log.e("CSVWriteError", "Error writing Batch section", e);
                     }
                 }
             });
+
         } catch (IOException e) {
             Log.e("CSVWriteError", "Error creating CSV file", e);
         }
     }
 
+    // Method to write BatchDetail data in a clean structure
+    private void writeBatchDetailSection(BufferedWriter bufferedWriter) {
+        batchDetailViewModel.getAllBatchDetail(new BatchDetailRepository.Callback<List<BatchDetail>>() {
+            @Override
+            public void onResult(List<BatchDetail> batchDetails) {
+                try {
+                    // Write BatchDetail header regardless of data presence
+                    bufferedWriter.write("BatchID,DetailID,DateTime,Amount");
+                    bufferedWriter.newLine();
+
+                    if (batchDetails != null && !batchDetails.isEmpty()) {
+                        for (BatchDetail detail : batchDetails) {
+                            writeBatchDetailData(bufferedWriter, detail);
+                        }
+                    }
+
+                } catch (IOException e) {
+                    Log.e("CSVWriteError", "Error writing BatchDetail section", e);
+                } finally {
+                    // Close BufferedWriter after all data is written
+                    try {
+                        bufferedWriter.close();
+                    } catch (IOException e) {
+                        Log.e("CSVWriteError", "Error closing BufferedWriter", e);
+                    }
+                }
+            }
+        });
+    }
+
     // Function to write Batch data
     private void writeBatchData(BufferedWriter bufferedWriter, Batch batch) throws IOException {
-        String id = SafeValueUtil.getString(batch.id, "");
-        String picName = SafeValueUtil.getString(batch.pic_name, "");
-        String picPhoneNumber = SafeValueUtil.getString(batch.pic_phone_number, "");
-        String datetime = (batch.datetime != null) ? String.valueOf(batch.datetime.getTime()) : "";
-        String startDate = (batch.start_date != null) ? String.valueOf(batch.start_date.getTime()) : "";
-        String endDate = (batch.end_date != null) ? String.valueOf(batch.end_date.getTime()) : "";
-        String duration = String.valueOf(batch.duration);
-        String unit = SafeValueUtil.getString(batch.unit, "");
-        String ricePrice = String.valueOf(batch.rice_price);
-        String weighingLocationId = SafeValueUtil.getString(batch.weighing_location_id, "");
-        String deliveryDestinationId = SafeValueUtil.getString(batch.delivery_destination_id, "");
-        String truckDriverName = SafeValueUtil.getString(batch.truck_driver_name, "");
-        String truckDriverPhoneNumber = SafeValueUtil.getString(batch.truck_driver_phone_number, "");
-        String status = String.valueOf(batch.status);
-        String lineBuilder = id + "," +
-                picName + "," +
-                picPhoneNumber + "," +
-                datetime + "," +
-                startDate + "," +
-                endDate + "," +
-                duration + "," +
-                unit + "," +
-                ricePrice + "," +
-                weighingLocationId + "," +
-                deliveryDestinationId + "," +
-                truckDriverName + "," +
-                truckDriverPhoneNumber + "," +
-                status;
-        bufferedWriter.write(lineBuilder);
+        String datetime = batch.datetime != null ? String.valueOf(batch.datetime.getTime()) : "";
+        String startDate = batch.start_date != null ? String.valueOf(batch.start_date.getTime()) : "";
+        String endDate = batch.end_date != null ? String.valueOf(batch.end_date.getTime()) : "";
+
+        String line = SafeValueUtil.getString(batch.id, "") + "," +
+                      SafeValueUtil.getString(batch.pic_name,"") + "," +
+                      SafeValueUtil.getString(batch.pic_phone_number,"") + "," +
+                      datetime + "," +
+                      startDate + "," +
+                      endDate + "," +
+                      batch.duration + "," +
+                      SafeValueUtil.getString(batch.unit,"") + "," +
+                      batch.rice_price + "," +
+                      SafeValueUtil.getString(batch.weighing_location_id,"") + "," +
+                      SafeValueUtil.getString(batch.delivery_destination_id,"") + "," +
+                      SafeValueUtil.getString(batch.truck_driver_name,"") + "," +
+                      SafeValueUtil.getString(batch.truck_driver_phone_number,"") + "," +
+                      batch.status;
+        bufferedWriter.write(line);
+        Log.d("APATU line :", line);
         bufferedWriter.newLine();
     }
 

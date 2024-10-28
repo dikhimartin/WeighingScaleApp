@@ -83,7 +83,7 @@ public interface BatchDao {
     LiveData<BatchDTO> getDataByID(String id);
 
     @Query("SELECT * FROM Batch")
-    LiveData<List<Batch>> getAllBatch();
+    List<Batch> getAllBatch();
 
     @Query("SELECT * FROM Batch WHERE status = 1 LIMIT 1")
     LiveData<Batch> getActiveBatch();

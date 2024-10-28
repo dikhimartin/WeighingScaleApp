@@ -17,19 +17,26 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BatchRepository {
     private final BatchDao batchDao;
     private final BatchDetailDao batchDetailDao;
+    private final ExecutorService executorService;
 
     public BatchRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
         batchDao = database.batchDao();
         batchDetailDao = database.batchDetailDao();
+        executorService = Executors.newSingleThreadExecutor();
     }
 
-     public LiveData<List<Batch>> getAllBatch(){
-       return batchDao.getAllBatch();
+    public void getAllBatch(Callback<List<Batch>> callback) {
+        executorService.execute(() -> {
+            List<Batch> batches = batchDao.getAllBatch();
+            callback.onResult(batches);
+        });
     }
 
     public LiveData<List<BatchDTO>> getDatas(String searchQuery, Date startDate, Date endDate, @Nullable String sortOrder) {
@@ -126,5 +133,9 @@ public class BatchRepository {
                 }
             };
         }
+    }
+
+    public interface Callback<T> {
+        void onResult(T result);
     }
 }
