@@ -142,7 +142,6 @@ public class CSVUtil {
                       SafeValueUtil.getString(batch.truck_driver_phone_number,"") + "," +
                       batch.status;
         bufferedWriter.write(line);
-        Log.d("APATU line :", line);
         bufferedWriter.newLine();
     }
 
