@@ -50,7 +50,6 @@ public class ConnectedThread extends Thread {
                             .sendToTarget();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
                 break;
             }
         }
