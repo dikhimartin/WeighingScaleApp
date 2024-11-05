@@ -33,16 +33,17 @@ public class WeighingUtils {
      *
      * @param totalAmount - the weight of the rice in the original unit
      * @param unit - the unit of the weight (can be "kg", "kuintal", "ton")
+     * @param showKilogram - optional parameter to display weight in kilograms; defaults to true
      * @return - a formatted string displaying the weight in a higher unit like "Kuintal" or "Ton",
      *           followed by the original weight in kilograms (Kg), or an error message for unsupported units.
      *
      * Example outputs:
-     * - "1 Kuintal (100 Kg)" if totalAmount is 100 and unit is "kg".
-     * - "1.5 Kuintal (150 Kg)" if totalAmount is 150 and unit is "kg".
-     * - "1 Ton (1000 Kg)" if totalAmount is 1000 and unit is "kg".
+     * - "1 Kuintal (100 Kg)" if totalAmount is 100 and unit is "kg" with showKilogram == true.
+     * - "1.5 Kuintal" if totalAmount is 150 and unit is "kuintal" with showKilogram == false.
+     * - "1 Ton (1000 Kg)" if totalAmount is 1000 and unit is "kg" with showKilogram == true.
      * - "Invalid unit" for unsupported units.
      */
-    public static String convertWeight(double totalAmount, String unit) {
+    public static String convertWeight(double totalAmount, String unit, boolean showKilogram) {
         if (unit == null || unit.isEmpty()) {
             return "Invalid unit"; // Handle empty or null unit input gracefully
         }
@@ -62,18 +63,23 @@ public class WeighingUtils {
             default:
                 return "Invalid unit"; // Gracefully handle unsupported units
         }
+
         // Convert and format based on the amount in Kg
         if (amountInKg >= 1000) {
             // Convert to Tons if weight is 1000 Kg or more
             double tons = amountInKg / 1000;
-            return String.format(Locale.getDefault(), "%.2f Ton (%.2f Kg)", tons, amountInKg);
+            return showKilogram
+                ? String.format(Locale.getDefault(), "%.2f Ton (%.0f Kg)", tons, amountInKg)
+                : String.format(Locale.getDefault(), "%.2f Ton", tons);
         } else if (amountInKg >= 100) {
             // Convert to Kuintal if weight is 100 Kg or more but less than 1000 Kg
             double kuintal = amountInKg / 100;
-            return String.format(Locale.getDefault(), "%.2f Kuintal (%.2f Kg)", kuintal, amountInKg);
+            return showKilogram
+                ? String.format(Locale.getDefault(), "%.2f Kuintal (%.0f Kg)", kuintal, amountInKg)
+                : String.format(Locale.getDefault(), "%.2f Kuintal", kuintal);
         } else {
             // No conversion, just show the weight in Kg
-            return String.format(Locale.getDefault(), "%.2f Kg", amountInKg);
+            return String.format(Locale.getDefault(), "%.0f Kg", amountInKg);
         }
     }
 

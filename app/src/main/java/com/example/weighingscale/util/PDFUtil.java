@@ -137,7 +137,7 @@ public class PDFUtil {
         // Baris 3: Total Berat
         summaryTable.addCell(createCell("Total Berat", TextAlignment.LEFT));
         summaryTable.addCell(createCell(":", TextAlignment.LEFT));
-        summaryTable.addCell(createCell(WeighingUtils.convertWeight(batch.getTotalAmount(), unit), TextAlignment.LEFT));
+        summaryTable.addCell(createCell(WeighingUtils.convertWeight(batch.getTotalAmount(), unit, true), TextAlignment.LEFT));
 
         // Baris 4: Total Harga
         summaryTable.addCell(createCell("Total Harga", TextAlignment.LEFT));

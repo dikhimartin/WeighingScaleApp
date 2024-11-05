@@ -60,7 +60,7 @@ public class MarkerViewReportAverage extends MarkerView {
         String durationFormat = DateTimeUtil.formatDuration(batch.duration);
         String textStartDate = SafeValueUtil.getFormattedDate(batch.start_date, "dd/MM/yyyy HH:mm:ss");
         String textEndDate = SafeValueUtil.getFormattedDate(batch.end_date, "dd/MM/yyyy HH:mm:ss");
-        String weightFormatted = WeighingUtils.convertWeight(batch.total_amount, batch.unit);
+        String weightFormatted = WeighingUtils.convertWeight(batch.total_amount, batch.unit, false);
 
         // Set locations
         String weighingLocationCity = getNonEmptyText(setLocationText(
