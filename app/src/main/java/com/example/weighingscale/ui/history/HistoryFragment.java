@@ -62,35 +62,6 @@ public class HistoryFragment extends Fragment {
         setupDeleteAllButton();
         setupFilterButton();
         setupSortButton();
-
-        // Obtain ViewModel
-        BatchViewModel batchViewModel = new ViewModelProvider(this).get(BatchViewModel.class);
-        batchViewModel.getAllBatch(new BatchRepository.Callback<List<Batch>>() {
-            @Override
-            public void onResult(List<Batch> batches) {
-                Log.d("APATU START :", batches.toString());
-                if (batches != null) {
-                    for (Batch batch : batches) {
-                        String line = batch.id + "," +
-                                batch.pic_name + "," +
-                                batch.pic_phone_number + "," +
-                                batch.datetime + "," +
-                                batch.start_date + "," +
-                                batch.end_date + "," +
-                                batch.duration + "," +
-                                batch.unit + "," +
-                                batch.rice_price + "," +
-                                batch.weighing_location_id + "," +
-                                batch.delivery_destination_id + "," +
-                                batch.truck_driver_name + "," +
-                                batch.truck_driver_phone_number + "," +
-                                batch.status;
-                        Log.d("APATU :", line);
-                    }
-                }
-            }
-        });
-
         return view;
     }
 

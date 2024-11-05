@@ -175,7 +175,7 @@ public class HistoryDetailFragment extends Fragment {
         textDuration.setText(durationText);
 
         // Set total weight and price
-        textTotalWeight.setText(WeighingUtils.convertWeight(currentBatch.total_amount, currentBatch.unit));
+        textTotalWeight.setText(WeighingUtils.convertWeight(currentBatch.total_amount, currentBatch.unit, true));
         textTotalPrice.setText(SafeValueUtil.formatCurrency("Rp", currentBatch.total_price));
     }
 

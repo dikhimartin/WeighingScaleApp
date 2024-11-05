@@ -163,8 +163,7 @@ public class HomeFragment extends Fragment {
                                 totalWeight += detail.getAmount();
                             }
 
-                            // String totalWeightText = String.format(Locale.getDefault(), "%.2f %s", totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
-                            String totalWeightText = WeighingUtils.convertWeight(totalWeight, currentSetting != null ? currentSetting.unit : "Kg");
+                            String totalWeightText = WeighingUtils.convertWeight(totalWeight, currentSetting != null ? currentSetting.unit : "Kg", true);
                             binding.textTotalWeight.setText(totalWeightText);
 
                             // Update item count

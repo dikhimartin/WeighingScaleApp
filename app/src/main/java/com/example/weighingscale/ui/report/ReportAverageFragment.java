@@ -143,7 +143,7 @@ public class ReportAverageFragment extends Fragment {
         float averageSpeed = WeighingUtils.calculateAverageSpeed(batchList);
 
         durationTextView.setText(DateTimeUtil.formatDuration(averageDuration, true, true, false));
-        speedTextView.setText(String.format(Locale.getDefault(), "%s /jam", WeighingUtils.convertWeight(averageSpeed, "kg")));
+        speedTextView.setText(String.format(Locale.getDefault(), "%s /jam", WeighingUtils.convertWeight(averageSpeed, "kg", true)));
     }
 
     // Convert the batch list to bar chart entries representing the duration in hours

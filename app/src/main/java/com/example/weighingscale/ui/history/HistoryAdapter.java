@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weighingscale.R;
 import com.example.weighingscale.data.dto.BatchDTO;
 import com.example.weighingscale.util.DateTimeUtil;
+import com.example.weighingscale.util.WeighingUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,8 +57,7 @@ public class HistoryAdapter extends ListAdapter<BatchDTO, HistoryAdapter.History
         BatchDTO currentData = getItem(position);
         holder.textViewTitle.setText(currentData.getTitle());
         holder.textViewDateTime.setText(DateTimeUtil.formatDateTime(currentData.start_date, "dd MMMM yyyy HH:mm"));
-        holder.textViewTotalWeight.setText(String.format("%d %s", currentData.getTotalAmount(), currentData.getUnit()));
-
+        holder.textViewTotalWeight.setText(WeighingUtils.convertWeight(currentData.getTotalAmount(), currentData.getUnit(), false));
         holder.itemView.setBackgroundColor(selectedItems.contains(currentData.getID()) ?
                 holder.itemView.getResources().getColor(R.color.selectedItem) :
                 holder.itemView.getResources().getColor(R.color.defaultItem));

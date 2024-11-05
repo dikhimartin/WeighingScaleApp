@@ -24,10 +24,24 @@ public class BatchDTO extends Batch {
         return total_amount;
     }
 
-    // You can also add methods to format or retrieve titles based on these fields
-    public String getTitle() {
-        return (weighing_location_city_type != null && weighing_location_city_name != null)
-            ? String.format("%s %s", weighing_location_city_type, weighing_location_city_name)
-            : pic_name;
+    // Getter title
+     public String getTitle() {
+        String weighingLocation = (weighing_location_city_name != null)
+            ? weighing_location_city_name
+            : null;
+
+        String deliveryDestination = (delivery_destination_city_name != null)
+            ? delivery_destination_city_name
+            : null;
+
+        if (weighingLocation != null && deliveryDestination != null) {
+            return weighingLocation + " - " + deliveryDestination;
+        } else if (weighingLocation != null) {
+            return weighingLocation;
+        } else if (deliveryDestination != null) {
+            return deliveryDestination;
+        } else {
+            return pic_name != null ? pic_name : "Unknown";
+        }
     }
 }
