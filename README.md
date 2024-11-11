@@ -4,90 +4,77 @@
 
 ## Overview
 
-**WeighingScale** is an Android application designed to integrate a digital scale with a smartphone to streamline and optimize rice harvest management. It leverages Bluetooth technology (via NodeMCU ESP32) to connect with the weighing scale device, enabling real-time data acquisition, processing, and visualization. The app also allows users to store batch data, generate reports, and export them as PDF files.
+**WeighingScale** is an Android application developed to digitalize and optimize agricultural weighing processes, specifically for rice harvest management. By integrating with a digital weighing scale over Bluetooth, the app provides real-time, accurate measurements directly to a smartphone. The system uses the NodeMCU ESP32 microcontroller for reliable Bluetooth communication, with alternatives such as Arduino and HC-06 also considered for varying power and connectivity needs.
 
 ## Features
 
-- **Bluetooth Integration**: Connect and manage communication with a Bluetooth-enabled digital scale.
-- **Batch Management**: Capture batch data, including PIC, destination, and weighing details.
-- **Real-Time Visualization**: Use charts to display weight and batch summaries using **MPAndroidChart**.
-- **Export Reports**: Generate and export reports in PDF format using **iTextPDF**.
+1. **Bluetooth Connectivity**: The app connects to digital scales via **NodeMCU ESP32** or other Bluetooth modules (e.g., HC-06, Arduino).
+2. **Batch Management**: Supports detailed data entry for each weighing session, including responsible personnel (PIC), destination, weight, and pricing.
+3. **Real-Time Data Visualization**: Displays batch summaries and weight statistics using **MPAndroidChart**.
+4. **Data Export**: Exports batch histories and reports in **PDF format** with **iTextPDF**, and supports data backup in **CSV format** for easy transfer and recovery.
+5. **Customizable Units and Pricing**: Adjusts units of weight and harvest pricing per kg for flexible data handling.
 
 ## Prerequisites
 
-- Android Studio installed
-- Minimum SDK version: 21
-- Compile SDK version: 34
-- NodeMCU ESP32 for scale connection
+- **Android Studio** (version 4.0 or higher)
+- **Android SDK**: Minimum SDK 21, Compile SDK 34
+- **Bluetooth-enabled Weighing Device** with compatible microcontroller (e.g., NodeMCU ESP32)
 
 ## Getting Started
 
-### Cloning the Repository
+### Installation
 
-To get started, clone this repository to your local machine using:
+To clone the repository:
 
 ```bash
 git clone https://github.com/yourusername/weighingscale.git
 ```
 
-### Building the Project
-
-1. **Open Android Studio** and load the project directory (`WeighingScale`).
-2. Ensure you have the necessary **Gradle** configurations and dependencies set up:
-   - MPAndroidChart (`v3.1.0`)
-   - iTextPDF (`libs.itextpdf`)
-3. **Sync the project** to download all required dependencies.
-4. Once synced, build the project by clicking **Build > Make Project** or using the shortcut `Ctrl+F9`.
+1. **Open in Android Studio**: Import the project directory (`WeighingScale`).
+2. **Sync Dependencies**:
+   - MPAndroidChart (`v3.1.0`) for data charts
+   - iTextPDF (`libs.itextpdf`) for report generation
+3. **Build**: Click **Build > Make Project** or use `Ctrl+F9` to compile the project.
 
 ### Running the Application
 
-1. Connect your Android device or start an emulator.
-2. To install and run the app, click **Run > Run 'app'** or use the shortcut `Shift+F10`.
-3. The app will launch, and you can start interacting with the Bluetooth scale and managing batch data.
+1. Connect an Android device or start an emulator.
+2. Install the app by clicking **Run > Run 'app'** or pressing `Shift+F10`.
+3. Begin using the app to manage and record weighing data directly from the Bluetooth-connected scale.
 
-### Releasing the App
-
-To prepare a release version of the application:
+### Building a Release Version
 
 1. Go to **Build > Generate Signed Bundle / APK**.
-2. Select **APK** and click **Next**.
-3. If you do not have a key yet, create one by providing the required information.
-4. Choose the release variant and proceed with the build.
-5. The signed APK will be generated in the `/app/release` directory.
+2. Select **APK** and follow the prompts to create a signed release version.
+3. The APK will be saved in `/app/release`.
 
-### Permissions
+## Permissions
 
-The following permissions are requested by the app for Bluetooth connectivity and file management:
+The following permissions are required for Bluetooth operations and file management:
 
-- `BLUETOOTH`, `BLUETOOTH_ADMIN`, `BLUETOOTH_CONNECT`, `BLUETOOTH_SCAN`
-- `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`
-- `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE`
+- Bluetooth: `BLUETOOTH`, `BLUETOOTH_ADMIN`, `BLUETOOTH_CONNECT`, `BLUETOOTH_SCAN`
+- Location: `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`
+- Storage: `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE`
 
-### Dependencies
+## Dependencies
 
-The project uses the following key dependencies:
+- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart): For live charting and visual data summaries.
+- [iTextPDF](https://github.com/itext/itextpdf): For PDF report generation and export.
 
-- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart): For real-time charting and data visualization.
-- [iTextPDF](https://github.com/itext/itextpdf): To generate and export PDF reports.
-
-### Directory Structure
+## Directory Structure
 
 ```bash
 .
 ├── app
-│   ├── build                    # Build output directory
+│   ├── build                    # Compiled code
 │   ├── src                      # Source files (Java and XML layouts)
-│   └── proguard-rules.pro        # Proguard configuration
-├── gradle                       # Gradle wrapper
-├── build.gradle                 # Project-level build file
+│   └── proguard-rules.pro        # Proguard configuration for release
+├── gradle                       # Gradle wrapper files
+├── build.gradle                 # Module build file
 ├── settings.gradle              # Project settings
 └── README.md                    # Project documentation
 ```
 
-
-
 ## Releases
 
-You can download the latest APK from the [Releases page](https://github.com/dikhimartin/WeighingScaleApp/releases).
-
-- **Latest Release**: [Version 1.0.2](https://github.com/dikhimartin/WeighingScaleApp/releases/tag/v.1.0.2)
+Download the latest APK from the [Releases page](https://github.com/dikhimartin/WeighingScaleApp/releases).
