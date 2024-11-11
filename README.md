@@ -1,5 +1,7 @@
 # WeighingScale Application
 
+<img src="https://dikhimartin.vercel.app/assets/img/portfolio/paradigm-scales/logo.svg">
+
 [![wakatime](https://wakatime.com/badge/user/6107bfd2-2e56-4e0a-b828-3e2ef709217d/project/9394bb88-21f9-4a45-82a3-9fcd6a4cd593.svg)](https://wakatime.com/@6107bfd2-2e56-4e0a-b828-3e2ef709217d/projects/xcuvhnfvba)
 
 ## Overview
