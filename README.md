@@ -29,7 +29,7 @@
 To clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/weighingscale.git
+git clone https://github.com/dikhimartin/WeighingScaleApp.git
 ```
 
 1. **Open in Android Studio**: Import the project directory (`WeighingScale`).
